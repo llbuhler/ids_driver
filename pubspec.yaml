@@ -1,0 +1,35 @@
+name: ids_driver
+description: A new Flutter project.
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: '>=2.19.2 <3.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.2
+  firebase_core: ^2.1.1
+  firebase_auth: ^4.1.1
+  firebase_storage: ^11.0.4
+  cloud_firestore: ^4.0.4
+  firebase_messaging: ^14.2.5
+  flutter_local_notifications: ^13.0.0
+  http: ^0.13.5
+  intl: ^0.17.0
+  # toggle_switch: ^2.0.1
+  camera: ^0.10.0+4
+  path_provider: ^2.0.11
+  android_path_provider: ^0.3.0
+  camera_web: ^0.3.0+1
+  slider_button: ^2.0.0
+  toggle_switch: ^2.0.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+
+flutter:
+  uses-material-design: true
