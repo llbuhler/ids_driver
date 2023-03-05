@@ -10,7 +10,7 @@ class DeliveryArray extends StatefulWidget {
   const DeliveryArray(this.idx, this.count, this.callback, {super.key});
   final int idx;
   final int count;
-  final VoidCallback? callback;
+  final Function(String) callback;
 
   @override
   State<DeliveryArray> createState() => DeliveryArrayState();
@@ -21,6 +21,17 @@ class DeliveryArrayState extends State<DeliveryArray> {
   int boxes = 0;
   int bags = 0;
   int tubs = 0;
+
+  @override
+  initState() {
+    super.initState();
+    // variables.myStops[widget.idx]['pallets'] = int.parse(variables.tableStops[widget.idx]['pallets']);
+    // variables.myStops[widget.idx]['boxes'] = variables.tableStops[widget.idx]['boxes'];
+    // variables.myStops[widget.idx]['bags'] = variables.tableStops[widget.idx]['bags'];
+    // variables.myStops[widget.idx]['tubs'] = variables.tableStops[widget.idx]['tubs'];
+    variables.myStops[widget.idx]['request'] = variables.tableStops[widget.idx]['request'];
+    variables.myStops[widget.idx]['note'] = variables.tableStops[widget.idx]['note'];
+  }
 
   List<Map<String, dynamic>> template = [];
 
@@ -41,13 +52,13 @@ class DeliveryArrayState extends State<DeliveryArray> {
       }
     }
     updateOk = rtn;
-    widget.callback!();
+    widget.callback(rtn.toString());
   }
 
   @override
   Widget build(BuildContext context) {
     return Column(children: [
-      SizedBox(height: 20),
+      const SizedBox(height: 20),
       Container(
         height: 135,
         width: SizeConfig.screenWidth - 40,
@@ -143,8 +154,7 @@ class DeliveryArrayState extends State<DeliveryArray> {
                     SizedBox(
                       height: 100,
                       width: (SizeConfig.screenWidth - 40) / 4,
-                      child: Padding(
-                          padding: const EdgeInsets.only(top: 3), child: Text('Boxes', style: const TextStyle(fontSize: 15), textAlign: TextAlign.center)),
+                      child: const Padding(padding: EdgeInsets.only(top: 3), child: Text('Boxes', style: TextStyle(fontSize: 15), textAlign: TextAlign.center)),
                     ),
                     Padding(
                         padding: EdgeInsets.only(top: 10, left: ((SizeConfig.screenWidth - 40) / 4) / 4 - 5),
@@ -153,7 +163,7 @@ class DeliveryArrayState extends State<DeliveryArray> {
                               setState(() {
                                 variables.myStops[widget.idx]['boxes']++;
                               });
-                              Verified;
+                              Verified();
                             },
                             icon: const Icon(
                               Icons.expand_less,
@@ -181,7 +191,7 @@ class DeliveryArrayState extends State<DeliveryArray> {
                                   variables.myStops[widget.idx]['boxes'] = 0;
                                 }
                               });
-                              Verified;
+                              Verified();
                             },
                             icon: const Icon(Icons.expand_more, size: 34))),
                   ])),
@@ -196,8 +206,7 @@ class DeliveryArrayState extends State<DeliveryArray> {
                     SizedBox(
                       height: 100,
                       width: (SizeConfig.screenWidth - 40) / 4,
-                      child: Padding(
-                          padding: const EdgeInsets.only(top: 3), child: Text('Bags', style: const TextStyle(fontSize: 15), textAlign: TextAlign.center)),
+                      child: const Padding(padding: EdgeInsets.only(top: 3), child: Text('Bags', style: TextStyle(fontSize: 15), textAlign: TextAlign.center)),
                     ),
                     Padding(
                         padding: EdgeInsets.only(top: 10, left: ((SizeConfig.screenWidth - 40) / 4) / 4 - 5),
@@ -206,7 +215,7 @@ class DeliveryArrayState extends State<DeliveryArray> {
                               setState(() {
                                 variables.myStops[widget.idx]['bags']++;
                               });
-                              Verified;
+                              Verified();
                             },
                             icon: const Icon(
                               Icons.expand_less,
@@ -235,7 +244,7 @@ class DeliveryArrayState extends State<DeliveryArray> {
                                   variables.myStops[widget.idx]['bags'] = 0;
                                 }
                               });
-                              Verified;
+                              Verified();
                             },
                             icon: const Icon(Icons.expand_more, size: 34))),
                     // ),
@@ -251,8 +260,7 @@ class DeliveryArrayState extends State<DeliveryArray> {
                     SizedBox(
                       height: 100,
                       width: (SizeConfig.screenWidth - 40) / 4,
-                      child: Padding(
-                          padding: const EdgeInsets.only(top: 3), child: Text('Tubs', style: const TextStyle(fontSize: 15), textAlign: TextAlign.center)),
+                      child: const Padding(padding: EdgeInsets.only(top: 3), child: Text('Tubs', style: TextStyle(fontSize: 15), textAlign: TextAlign.center)),
                     ),
                     Padding(
                         padding: EdgeInsets.only(top: 10, left: ((SizeConfig.screenWidth - 40) / 4) / 4 - 5),
@@ -261,7 +269,7 @@ class DeliveryArrayState extends State<DeliveryArray> {
                               setState(() {
                                 variables.myStops[widget.idx]['tubs']++;
                               });
-                              Verified;
+                              Verified();
                             },
                             icon: const Icon(
                               Icons.expand_less,
@@ -290,10 +298,9 @@ class DeliveryArrayState extends State<DeliveryArray> {
                                   variables.myStops[widget.idx]['tubs'] = 0;
                                 }
                               });
-                              Verified;
+                              Verified();
                             },
                             icon: const Icon(Icons.expand_more, size: 34))),
-                    // ),
                   ])),
             ]),
           ),

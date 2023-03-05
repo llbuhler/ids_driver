@@ -11,6 +11,7 @@ class variables {
   static List<Map<String, dynamic>> tableworking = [];
   static List<Map<String, dynamic>> tablecurrentEmployee = [];
   static List<Map<String, dynamic>> myStops = [];
+  static List<Map<String, dynamic>> tableMulti = [];
 
   static bool isLoggedin = false;
 }

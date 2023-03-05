@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:ids_driver/Subs/SizeConfig.dart';
 import 'package:ids_driver/variables.dart';
 import '../Subs/dbFirebasek.dart';

@@ -35,7 +35,7 @@ loadTable() {
 }
 
 // ignore: non_constant_identifier_names
-int Test = 2;
+int Test = 1;
 TextEditingController logEmail = TextEditingController();
 TextEditingController logPass = TextEditingController();
 
@@ -255,7 +255,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     height: 50,
                     width: SizeConfig.screenWidth - 30,
                     child: ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
+                        //await db.getMulii(variables.tableMulti);
                         Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -264,7 +265,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Color(Clrs.blue),
-                        foregroundColor: Color(Clrs.red),
+                        foregroundColor: Color(Clrs.ltred),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20.0),
                           side: BorderSide(color: Color(Clrs.dkblue), width: 2.0),
@@ -293,7 +294,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Color(Clrs.blue),
-                        foregroundColor: Color(Clrs.ltred),
+                        foregroundColor: Color(Clrs.white),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20.0),
                           side: BorderSide(color: Color(Clrs.dkblue), width: 2.0),
@@ -533,7 +534,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                           variables.isLoggedin = false;
                                         }
                                         variables.isLoggedin ? await getAllTables() : const SizedBox.shrink();
-                                        UpdateTokens();
+                                        //UpdateTokens();
                                         // variables.tablecurrentEmployee.clear();
                                         // int i = 0;
                                         // for (i = 0; i < variables.tableEmps.length; i++) {
@@ -575,6 +576,7 @@ class _MyHomePageState extends State<MyHomePage> {
     await db.getDrivers(variables.tableDrivers, '');
     await db.getstops(variables.tableStops, '', variables.tablecurrentEmployee[0]['Employee_ID'], false);
     await db.getsettings(variables.tableMySettings, '', variables.tablecurrentEmployee[0]['Employee_ID']);
+    await db.getMulii(variables.tableMulti);
   }
 }
 
