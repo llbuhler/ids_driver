@@ -35,7 +35,7 @@ loadTable() {
 }
 
 // ignore: non_constant_identifier_names
-int Test = 1;
+int Test = 0;
 TextEditingController logEmail = TextEditingController();
 TextEditingController logPass = TextEditingController();
 
@@ -265,7 +265,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Color(Clrs.blue),
-                        foregroundColor: Color(Clrs.ltred),
+                        foregroundColor: Color(Clrs.white),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20.0),
                           side: BorderSide(color: Color(Clrs.dkblue), width: 2.0),
