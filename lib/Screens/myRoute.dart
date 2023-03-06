@@ -149,45 +149,62 @@ class StopItemState extends State<StopItem> {
   Widget build(BuildContext context) {
     Future getMainCompany(int idx) async {
       //await db.getMulii(multi);
-
       String time = SubRoutine.getTime(DateTime.now(), false, true);
       String date = SubRoutine.getDate(DateTime.now());
       variables.myStops.clear();
-      variables.myStops.add({
-        'recordid': variables.tableStops[idx]['recordid'],
-        'company': variables.tableStops[idx]['company'],
-        'deliverydriver': variables.tableStops[idx]['driver'],
-        'deliverydate': date,
-        'statustime': time,
-        'status': variables.tableStops[idx]['status'],
-        'pallets': variables.tableStops[idx]['pallets'],
-        'boxes': variables.tableStops[idx]['boxes'],
-        'bags': variables.tableStops[idx]['bags'],
-        'tubs': variables.tableStops[idx]['tubs'],
-        'request': variables.tableStops[idx]['request'],
-        'note': variables.tableStops[idx]['note'],
-      });
-
-      //if (variables.tableStops[idx]['multi'].toString() == 'true') {
-      for (var e in variables.tableMulti) {
-        if (e['parent'] == variables.myStops[0]['recordid']) {
-          print(e['company']);
-          variables.myStops.add({
-            'recordid': e['recordid'],
-            'company': e['company'],
-            'deliverydriver': variables.tableStops[widget.idx]['driver'],
-            'deliverydate': date,
-            'statustime': time,
-            'status': 'Picked Up',
-            'pallets': 0,
-            'boxes': 0,
-            'bags': 0,
-            'tubs': 0,
-            'request': '',
-          });
-        }
+      try {
+        variables.myStops.add({
+          'recordid': variables.tableStops[idx]['recordid'],
+          'company': variables.tableStops[idx]['company'],
+          'deliverydriver': variables.tableStops[idx]['driver'],
+          'deliverydate': date,
+          'statustime': time,
+          'status': variables.tableStops[idx]['status'],
+          'pallets': int.parse(variables.tableStops[idx]['pallets']),
+          'boxes': int.parse(variables.tableStops[idx]['boxes']),
+          'bags': int.parse(variables.tableStops[idx]['bags']),
+          'tubs': int.parse(variables.tableStops[idx]['tubs']),
+          'request': variables.tableStops[idx]['request'],
+          'note': variables.tableStops[idx]['note'],
+        });
+      } catch (e) {
+        variables.myStops.add({
+          'recordid': variables.tableStops[idx]['recordid'],
+          'company': variables.tableStops[idx]['company'],
+          'deliverydriver': variables.tableStops[idx]['driver'],
+          'deliverydate': date,
+          'statustime': time,
+          'status': variables.tableStops[idx]['status'],
+          'pallets': int.parse(variables.tableStops[idx]['pallets']),
+          'boxes': int.parse(variables.tableStops[idx]['boxes']),
+          'bags': int.parse(variables.tableStops[idx]['bags']),
+          'tubs': int.parse(variables.tableStops[idx]['tubs']),
+          'request': variables.tableStops[idx]['request'],
+          'note': variables.tableStops[idx]['note'],
+        });
       }
-      stopCount = variables.myStops.length;
+      if (variables.tableStops[idx]['multi'].toString() == 'true') {
+        for (var e in variables.tableMulti) {
+          if (e['parent'] == variables.myStops[0]['recordid']) {
+            print(e['company']);
+            variables.myStops.add({
+              'recordid': e['recordid'],
+              'company': e['company'],
+              'deliverydriver': variables.tableStops[widget.idx]['driver'],
+              'deliverydate': '',
+              'statustime': '',
+              'status': 'Picked Up',
+              'pallets': 0,
+              'boxes': 0,
+              'bags': 0,
+              'tubs': 0,
+              'request': '',
+              'note': '',
+            });
+          }
+        }
+        stopCount = variables.myStops.length;
+      }
     }
 
     return Material(
@@ -352,7 +369,8 @@ class StopItemState extends State<StopItem> {
                                           onPressed: () async {
                                             //if (btnpickup == 1) {
                                             await getMainCompany(widget.idx);
-                                            print('Picked Up pressed');
+                                            print('Count ' + stopCount.toString());
+                                            print(variables.myStops.toString());
                                             setState(() {
                                               btnpending = 1;
                                               btnpickup = 2;
