@@ -1,4 +1,4 @@
-// ignore_for_file: file_names
+// ignore_for_file: file_names, avoid_web_libraries_in_flutter
 
 import 'dart:html' as fct;
 
@@ -112,7 +112,7 @@ class StopItemState extends State<StopItem> {
 
   fct.FunctionStringCallback? isValid(String s) {
     setState(() {
-      print('callback Called');
+      // print('callback Called');
       btnupdate = s == 'true' ? 1 : 0;
     });
     return null;
@@ -135,11 +135,13 @@ class StopItemState extends State<StopItem> {
   TextEditingController tnote = TextEditingController();
   TextEditingController trequest = TextEditingController();
 
-  int btnpending = 2;
+  int btnpending = 0;
+  int btnclosed = 1;
   int btndelivered = 1;
   int btnpickup = 1;
   int btncancel = 1;
   int btnupdate = 0;
+  int btnnone = 1;
 
   List<Map<String, dynamic>> multi = [];
 
@@ -186,7 +188,6 @@ class StopItemState extends State<StopItem> {
       if (variables.tableStops[idx]['multi'].toString() == 'true') {
         for (var e in variables.tableMulti) {
           if (e['parent'] == variables.myStops[0]['recordid']) {
-            print(e['company']);
             variables.myStops.add({
               'recordid': e['recordid'],
               'company': e['company'],
@@ -208,39 +209,408 @@ class StopItemState extends State<StopItem> {
     }
 
     return Material(
-        child: variables.tableStops[widget.idx]['type'] != 'DDU'
-            ? Padding(
-                padding: const EdgeInsets.only(top: 15, right: 20),
-                child: InkWell(
+      child: variables.tableStops[widget.idx]['type'] != 'DDU'
+          ? Padding(
+              padding: const EdgeInsets.only(top: 15, right: 20),
+              child: InkWell(
+                  onTap: () async {
+                    if (variables.tableStops[widget.idx]['status'] != 'Picked Up') {
+                      await getMainCompany(widget.idx);
+                      setState(() {
+                        btnpending = 1;
+                        btnpickup = 2;
+                        btnupdate = 0;
+                        expand = !expand;
+                      });
+                    }
+                  },
+                  child: Column(children: [
+                    Container(
+                      height: expand
+                          ? btnpickup == 2
+                              ? 700 + 140 * stopCount.toDouble() //variables.myStops.length.toDouble()
+                              : 184
+                          : 104,
+                      width: SizeConfig.screenWidth - 20,
+                      decoration: BoxDecoration(
+                        color: getBackColor(widget.idx, true),
+                        borderRadius: const BorderRadius.only(
+                          topRight: Radius.circular(20.0), // expand
+
+                          bottomRight: Radius.circular(20.0),
+                        ),
+                        border: Border.all(color: Color(variables.tableStops[widget.idx]['multi'] == 'true' ? Clrs.laser : Clrs.blue), width: 2.0),
+                      ),
+                      child: Column(children: [
+                        Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                          SizedBox(
+                            height: 100,
+                            width: (SizeConfig.screenWidth - 20) * 0.422,
+                            child: Column(mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.start, children: [
+                              SizedBox(
+                                height: 30,
+                                width: ((SizeConfig.screenWidth - 20) * 0.422) - 15,
+                                child: FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  child: Text(
+                                    variables.tableStops[widget.idx]['type'],
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      color: getBackColor(widget.idx, false),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 30,
+                                width: ((SizeConfig.screenWidth - 20) * 0.422) - 15,
+                                child: FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  child: Text(
+                                    variables.tableStops[widget.idx]['status'],
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      color: getstatusColor(widget.idx),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 30,
+                                width: ((SizeConfig.screenWidth - 20) * 0.422) - 15,
+                                child: FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  child: Text(
+                                    '${variables.tableStops[widget.idx]['start']} ${variables.tableStops[widget.idx]['end']}',
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      color: getBackColor(widget.idx, false),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ]),
+                          ),
+                          SizedBox(
+                              height: 100,
+                              width: (SizeConfig.screenWidth - 20) * 0.566,
+                              child: Column(mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.start, children: [
+                                SizedBox(
+                                  height: 30,
+                                  width: ((SizeConfig.screenWidth - 20) * 0.422) - 15,
+                                  child: FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    child: Text(
+                                      variables.tableStops[widget.idx]['company'],
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        color: getBackColor(widget.idx, false),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 30,
+                                  width: ((SizeConfig.screenWidth - 20) * 0.422) - 15,
+                                  child: FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    child: Text(
+                                      variables.tableStops[widget.idx]['street'].toString().isNotEmpty ? variables.tableStops[widget.idx]['street'] : ' ',
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        color: getBackColor(widget.idx, false),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 30, // 'My Route'
+                                  width: ((SizeConfig.screenWidth - 20) * 0.422) - 15,
+                                  child: FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    child: Text(
+                                      (variables.tableStops[widget.idx]['city'].toString().isNotEmpty ? variables.tableStops[widget.idx]['city'] : ' ') +
+                                          ', ' +
+                                          (variables.tableStops[widget.idx]['state'].toString().isNotEmpty ? variables.tableStops[widget.idx]['state'] : ' '),
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        color: getBackColor(widget.idx, false),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ])),
+                        ]),
+                        expand
+                            ? Padding(
+                                padding: const EdgeInsets.only(bottom: 20),
+                                child: Container(
+                                  height: 490 + (140.00 * stopCount),
+                                  width: SizeConfig.screenWidth,
+                                  decoration: BoxDecoration(
+                                    color: Color(Clrs.ltblue),
+                                    borderRadius: const BorderRadius.only(bottomRight: Radius.circular(20)),
+                                  ),
+                                  child: Column(children: [
+                                    Padding(
+                                        padding: const EdgeInsets.symmetric(vertical: 10),
+                                        // child:
+                                        // SizedBox(
+                                        //     height: 180 * count.toDouble(),
+                                        //     width: SizeConfig.screenWidth,
+                                        child: Column(children: [
+                                          DeliveryArray(0, stopCount, isValid),
+                                          stopCount > 1 ? DeliveryArray(1, stopCount, isValid) : const SizedBox.shrink(),
+                                          stopCount > 2 ? DeliveryArray(2, stopCount, isValid) : const SizedBox.shrink(),
+                                          stopCount > 3 ? DeliveryArray(3, stopCount, isValid) : const SizedBox.shrink(),
+                                          stopCount > 4 ? DeliveryArray(4, stopCount, isValid) : const SizedBox.shrink(),
+                                          stopCount > 5 ? DeliveryArray(5, stopCount, isValid) : const SizedBox.shrink(),
+                                          Padding(
+                                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                                              child: SizedBox(
+                                                height: 100,
+                                                width: SizeConfig.screenWidth - 60,
+                                                child: TextField(
+                                                  controller: trequest,
+                                                  maxLines: 5,
+                                                  decoration: const InputDecoration(
+                                                      labelText: 'Request',
+                                                      enabledBorder: OutlineInputBorder(
+                                                        borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                                                        borderSide: BorderSide(width: 2.0, color: Colors.black),
+                                                      ),
+                                                      focusedBorder: OutlineInputBorder(
+                                                        borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                                                        borderSide: BorderSide(width: 2.0, color: Colors.black),
+                                                      )),
+                                                  onTap: () {},
+                                                ),
+                                              )),
+                                        ])),
+                                    Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                                        child: SizedBox(
+                                          height: 100,
+                                          width: SizeConfig.screenWidth - 60,
+                                          child: TextField(
+                                            controller: tnote,
+                                            maxLines: 5,
+                                            decoration: const InputDecoration(
+                                                labelText: 'Note',
+                                                enabledBorder: OutlineInputBorder(
+                                                  borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                                                  borderSide: BorderSide(width: 2.0, color: Colors.black),
+                                                ),
+                                                focusedBorder: OutlineInputBorder(
+                                                  borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                                                  borderSide: BorderSide(width: 2.0, color: Colors.black),
+                                                )),
+                                            onTap: () {},
+                                          ),
+                                        )),
+                                    const SizedBox(height: 20),
+                                    expand
+                                        ? Padding(
+                                            padding: const EdgeInsets.only(bottom: 20),
+                                            child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+                                              SizedBox(
+                                                  height: 60,
+                                                  width: ((SizeConfig.screenWidth - 80)) / 2,
+                                                  child: ElevatedButton(
+                                                    onPressed: () {
+                                                      setState(() {
+                                                        if (btnclosed == 1) {
+                                                          btnclosed = 2;
+                                                          btnnone = 1;
+                                                          btnupdate = 1;
+                                                        } else if (btnclosed == 2) {
+                                                          btnclosed = 1;
+                                                          btnupdate = 0;
+                                                        }
+                                                      });
+                                                    },
+                                                    style: ElevatedButton.styleFrom(
+                                                        backgroundColor: getBtnColor(btnclosed, true, false),
+                                                        foregroundColor: getBtnColor(btnclosed, false, false),
+                                                        textStyle: const TextStyle(fontSize: 25),
+                                                        shape: RoundedRectangleBorder(
+                                                          borderRadius: BorderRadius.circular(30.0),
+                                                        )),
+                                                    child: const Text('Closed'),
+                                                  )),
+                                              SizedBox(
+                                                  height: 60,
+                                                  width: ((SizeConfig.screenWidth - 50)) / 2,
+                                                  child: ElevatedButton(
+                                                    onPressed: () async {
+                                                      setState(() {
+                                                        if (btnnone == 1) {
+                                                          btnclosed = 1;
+                                                          btnnone = 2;
+                                                          btnupdate = 1;
+                                                        } else if (btnnone == 2) {
+                                                          btnnone = 1;
+                                                          btnupdate = 0;
+                                                        }
+                                                      });
+                                                    },
+                                                    style: ElevatedButton.styleFrom(
+                                                        backgroundColor: getBtnColor(btnnone, true, false),
+                                                        foregroundColor: getBtnColor(btnnone, false, false),
+                                                        textStyle: const TextStyle(fontSize: 25),
+                                                        shape: RoundedRectangleBorder(
+                                                          borderRadius: BorderRadius.circular(30.0),
+                                                        )),
+                                                    child: const Text('Nothing'),
+                                                  )),
+                                            ]))
+                                        : const SizedBox.shrink(),
+                                    Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+                                      Container(
+                                          height: 60,
+                                          width: ((SizeConfig.screenWidth - 80)) / 2,
+                                          color: Color(Clrs.ltblue),
+                                          child: ElevatedButton(
+                                            onPressed: () async {
+                                              setState(() {
+                                                btnpending = 2;
+                                                btnpickup = 1;
+                                                btnupdate = 0;
+                                                btncancel = 1;
+                                                expand = false;
+                                              });
+                                            },
+                                            style: ElevatedButton.styleFrom(
+                                                backgroundColor: getBtnColor(btncancel, true, true),
+                                                foregroundColor: getBtnColor(btncancel, false, true),
+                                                textStyle: const TextStyle(fontSize: 25),
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(30.0),
+                                                )),
+                                            child: const Text('Cancel'),
+                                          )),
+                                      SizedBox(
+                                          height: 60,
+                                          width: ((SizeConfig.screenWidth - 50)) / 2,
+                                          child: ElevatedButton(
+                                            onPressed: () async {
+                                              if (btnupdate == 1) {
+                                                setState(() {
+                                                  btnupdate = 2;
+                                                });
+                                                // Update Local db
+                                                variables.tableStops[widget.idx]['pallets'] = variables.myStops[0]['pallets'];
+                                                variables.tableStops[widget.idx]['boxes'] = variables.myStops[0]['boxes'];
+                                                variables.tableStops[widget.idx]['bags'] = variables.myStops[0]['bags'];
+                                                variables.tableStops[widget.idx]['tubs'] = variables.myStops[0]['tubs'];
+                                                variables.tableStops[widget.idx]['request'] = variables.myStops[0]['request'];
+                                                variables.tableStops[widget.idx]['note'] = variables.myStops[0]['note'];
+                                                variables.tableStops[widget.idx]['status'] = btnclosed == 2
+                                                    ? 'Late'
+                                                    : btnnone == 2
+                                                        ? 'Picked Up'
+                                                        : 'Picked Up';
+                                                // Update multi if needed
+                                                if (variables.myStops.length > 1) {
+                                                  for (int x = 1; x < variables.myStops.length; x++) {
+                                                    List<Map<String, dynamic>> lst = [];
+                                                    lst.add({
+                                                      'recordid': variables.myStops[x]['recordid'],
+                                                      'status': 'Picked Up',
+                                                      'time': SubRoutine.getTime(DateTime.now(), false, true),
+                                                      'deliverydate': SubRoutine.getDate(DateTime.now()),
+                                                      'pallets': variables.myStops[x]['pallets'],
+                                                      'boxes': variables.myStops[x]['boxes'],
+                                                      'bags': variables.myStops[x]['bags'],
+                                                      'tubs': variables.myStops[x]['tubs'],
+                                                    });
+                                                    await db.dbUpdate(lst, 'Multi', 'recordid');
+                                                  }
+                                                }
+                                                // update remote db
+                                                List<Map<String, dynamic>> lst = [];
+                                                lst.add({
+                                                  'recordid': variables.myStops[0]['recordid'],
+                                                  'status': btnclosed == 2
+                                                      ? 'Late'
+                                                      : btnnone == 2
+                                                          ? 'Picked Up'
+                                                          : 'Picked Up',
+                                                  'statustime': SubRoutine.getTime(DateTime.now(), false, true),
+                                                  'deliverydate': SubRoutine.getDate(DateTime.now()),
+                                                  'pallets': variables.myStops[0]['pallets'].toString(),
+                                                  'boxes': variables.myStops[0]['boxes'].toString(),
+                                                  'bags': variables.myStops[0]['bags'].toString(),
+                                                  'tubs': variables.myStops[0]['tubs'].toString(),
+                                                });
+                                                await db.dbUpdate(lst, 'Stops', 'recordid');
+                                                if (variables.myStops.length > 1) {}
+                                                setState(() {
+                                                  btnupdate = 1;
+
+                                                  expand = false;
+                                                });
+                                              }
+                                            },
+                                            style: ElevatedButton.styleFrom(
+                                                backgroundColor: getBtnColor(btnupdate, true, false),
+                                                foregroundColor: getBtnColor(btnupdate, false, false),
+                                                textStyle: const TextStyle(fontSize: 25),
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(30.0),
+                                                )),
+                                            child: const Text('Save'),
+                                          )),
+                                    ])
+                                  ]),
+                                ),
+                              )
+                            : const SizedBox.shrink(),
+                      ]),
+                    ),
+                    widget.idx == variables.tableStops.length - 1
+                        ? Container(
+                            height: 500,
+                            width: SizeConfig.screenWidth,
+                            color: Color(Clrs.transparent),
+                          )
+                        : const SizedBox.shrink(),
+                  ])))
+          : Padding(
+              padding: const EdgeInsets.only(top: 15, left: 20),
+              child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+                InkWell(
                     onTap: () {
-                      if (variables.tableStops[widget.idx]['status'] != 'Picked Up') {
+                      if (variables.tableStops[widget.idx]['status'] != 'Delivered') {
                         setState(() {
+                          // btndelivered = 2;
+                          btnupdate = 0;
                           expand = !expand;
-                          //print(SizeConfig.screenWidth - 20);
                         });
                       }
                     },
                     child: Column(children: [
                       Container(
                         height: expand
-                            ? btnpickup == 2
-                                ? 700 + 140 * stopCount.toDouble() //variables.myStops.length.toDouble()
-                                : 184
-                            : 104,
+                            //  ? btndelivered == 2
+                            ? 514
+                            // : 180,
+                            : 124,
                         width: SizeConfig.screenWidth - 20,
                         decoration: BoxDecoration(
                           color: getBackColor(widget.idx, true),
                           borderRadius: const BorderRadius.only(
-                            topRight: Radius.circular(20.0),
-                            bottomRight: Radius.circular(20.0),
+                            topLeft: Radius.circular(20.0),
+                            bottomLeft: Radius.circular(20.0),
                           ),
-                          border: Border.all(color: Color(variables.tableStops[widget.idx]['multi'] == 'true' ? Clrs.laser : Clrs.blue), width: 2.0),
+                          border: Border.all(color: Color(Clrs.blue), width: 2.0),
                         ),
                         child: Column(children: [
                           Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                            SizedBox(
+                            Container(
                               height: 100,
                               width: (SizeConfig.screenWidth - 20) * 0.422,
+                              color: Color(Clrs.transparent),
                               child: Column(mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.start, children: [
                                 SizedBox(
                                   height: 30,
@@ -319,7 +689,7 @@ class StopItemState extends State<StopItem> {
                                     ),
                                   ),
                                   SizedBox(
-                                    height: 30, // 'My Route'
+                                    height: 30,
                                     width: ((SizeConfig.screenWidth - 20) * 0.422) - 15,
                                     child: FittedBox(
                                       fit: BoxFit.scaleDown,
@@ -336,221 +706,184 @@ class StopItemState extends State<StopItem> {
                                   ),
                                 ])),
                           ]),
+                          //
                           expand
                               ? Padding(
-                                  padding: const EdgeInsets.only(bottom: 20),
-                                  child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-                                    SizedBox(
-                                        height: 60,
-                                        width: ((SizeConfig.screenWidth - 80)) / 2,
-                                        child: ElevatedButton(
-                                          onPressed: () {
-                                            if (btnpending == 1) {
-                                              setState(() {
-                                                btnpending = 2;
-                                                btnpickup = 1;
-                                                btnupdate = 0;
-                                              });
-                                            }
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                              backgroundColor: getBtnColor(btnpending, true, false),
-                                              foregroundColor: getBtnColor(btnpending, false, false),
-                                              textStyle: const TextStyle(fontSize: 25),
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(30.0),
-                                              )),
-                                          child: const Text('Pending'),
-                                        )),
-                                    SizedBox(
-                                        height: 60,
-                                        width: ((SizeConfig.screenWidth - 50)) / 2,
-                                        child: ElevatedButton(
-                                          onPressed: () async {
-                                            //if (btnpickup == 1) {
-                                            await getMainCompany(widget.idx);
-                                            print('Count ' + stopCount.toString());
-                                            print(variables.myStops.toString());
-                                            setState(() {
-                                              btnpending = 1;
-                                              btnpickup = 2;
-                                              btnupdate = 0;
-                                            });
-                                            //}
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                              backgroundColor: getBtnColor(btnpickup, true, false),
-                                              foregroundColor: getBtnColor(btnpickup, false, false),
-                                              textStyle: const TextStyle(fontSize: 25),
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(30.0),
-                                              )),
-                                          child: const Text('Picked Up'),
-                                        )),
-                                  ]))
-                              : const SizedBox.shrink(),
-                          expand && btnpickup == 2
-                              ? Padding(
-                                  padding: const EdgeInsets.only(bottom: 20),
-                                  child: Container(
-                                    height: 490 + (140.00 * stopCount),
-                                    width: SizeConfig.screenWidth,
-                                    decoration: BoxDecoration(
-                                      color: Color(Clrs.ltblue),
-                                      borderRadius: const BorderRadius.only(bottomRight: Radius.circular(20)),
-                                    ),
-                                    child: Column(children: [
-                                      Padding(
-                                          padding: const EdgeInsets.symmetric(vertical: 10),
-                                          // child:
-                                          // SizedBox(
-                                          //     height: 180 * count.toDouble(),
-                                          //     width: SizeConfig.screenWidth,
-                                          child: Column(children: [
-                                            DeliveryArray(0, stopCount, isValid as Function(String p1)),
-                                            stopCount > 1 ? DeliveryArray(1, stopCount, isValid as Function(String p1)) : const SizedBox.shrink(),
-                                            stopCount > 2 ? DeliveryArray(2, stopCount, isValid as Function(String p1)) : const SizedBox.shrink(),
-                                            stopCount > 3 ? DeliveryArray(3, stopCount, isValid as Function(String p1)) : const SizedBox.shrink(),
-                                            stopCount > 4 ? DeliveryArray(4, stopCount, isValid as Function(String p1)) : const SizedBox.shrink(),
-                                            stopCount > 5 ? DeliveryArray(5, stopCount, isValid as Function(String p1)) : const SizedBox.shrink(),
-                                            Padding(
-                                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                                                child: SizedBox(
-                                                  height: 100,
-                                                  width: SizeConfig.screenWidth - 60,
-                                                  child: TextField(
-                                                    controller: trequest,
-                                                    maxLines: 5,
-                                                    decoration: const InputDecoration(
-                                                        labelText: 'Request',
-                                                        enabledBorder: OutlineInputBorder(
-                                                          borderRadius: BorderRadius.all(Radius.circular(30.0)),
-                                                          borderSide: BorderSide(width: 2.0, color: Colors.black),
-                                                        ),
-                                                        focusedBorder: OutlineInputBorder(
-                                                          borderRadius: BorderRadius.all(Radius.circular(30.0)),
-                                                          borderSide: BorderSide(width: 2.0, color: Colors.black),
-                                                        )),
-                                                    onTap: () {},
-                                                  ),
-                                                )),
-                                          ])),
-                                      Padding(
-                                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                                          child: SizedBox(
-                                            height: 100,
-                                            width: SizeConfig.screenWidth - 60,
-                                            child: TextField(
-                                              controller: tnote,
-                                              maxLines: 5,
-                                              decoration: const InputDecoration(
-                                                  labelText: 'Note',
-                                                  enabledBorder: OutlineInputBorder(
-                                                    borderRadius: BorderRadius.all(Radius.circular(30.0)),
-                                                    borderSide: BorderSide(width: 2.0, color: Colors.black),
-                                                  ),
-                                                  focusedBorder: OutlineInputBorder(
-                                                    borderRadius: BorderRadius.all(Radius.circular(30.0)),
-                                                    borderSide: BorderSide(width: 2.0, color: Colors.black),
-                                                  )),
-                                              onTap: () {},
-                                            ),
+                                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                                  child: SizedBox(
+                                    height: 100,
+                                    width: SizeConfig.screenWidth - 60,
+                                    child: TextField(
+                                      controller: trequest,
+                                      maxLines: 5,
+                                      decoration: const InputDecoration(
+                                          labelText: 'Request',
+                                          enabledBorder: OutlineInputBorder(
+                                            borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                                            borderSide: BorderSide(width: 2.0, color: Colors.black),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                                            borderSide: BorderSide(width: 2.0, color: Colors.black),
                                           )),
-                                      const SizedBox(height: 20),
-                                      Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-                                        Container(
-                                            height: 60,
-                                            width: ((SizeConfig.screenWidth - 80)) / 2,
-                                            color: Color(Clrs.ltblue),
-                                            child: ElevatedButton(
-                                              onPressed: () async {
-                                                setState(() {
-                                                  btnpending = 2;
-                                                  btnpickup = 1;
-                                                  btnupdate = 0;
-                                                  btncancel = 1;
-                                                  expand = false;
-                                                });
-                                              },
-                                              style: ElevatedButton.styleFrom(
-                                                  backgroundColor: getBtnColor(btncancel, true, true),
-                                                  foregroundColor: getBtnColor(btncancel, false, true),
-                                                  textStyle: const TextStyle(fontSize: 25),
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius: BorderRadius.circular(30.0),
-                                                  )),
-                                              child: const Text('Cancel'),
-                                            )),
-                                        SizedBox(
-                                            height: 60,
-                                            width: ((SizeConfig.screenWidth - 50)) / 2,
-                                            child: ElevatedButton(
-                                              onPressed: () async {
-                                                if (btnupdate == 1) {
-                                                  setState(() {
-                                                    btnupdate = 2;
-                                                  });
-                                                  // Update Local db
-                                                  variables.tableStops[widget.idx]['pallets'] = variables.myStops[0]['pallets'];
-                                                  variables.tableStops[widget.idx]['boxes'] = variables.myStops[0]['boxes'];
-                                                  variables.tableStops[widget.idx]['bags'] = variables.myStops[0]['bags'];
-                                                  variables.tableStops[widget.idx]['tubs'] = variables.myStops[0]['tubs'];
-                                                  variables.tableStops[widget.idx]['request'] = variables.myStops[0]['request'];
-                                                  variables.tableStops[widget.idx]['note'] = variables.myStops[0]['note'];
-                                                  variables.tableStops[widget.idx]['status'] = 'Picked Up';
-                                                  // Update multi if needed
-                                                  if (variables.myStops.length > 1) {
-                                                    for (int x = 1; x < variables.myStops.length; x++) {
-                                                      List<Map<String, dynamic>> lst = [];
-                                                      lst.add({
-                                                        'recordid': variables.myStops[x]['recordid'],
-                                                        'status': 'Picked Up',
-                                                        'time': SubRoutine.getTime(DateTime.now(), false, true),
-                                                        'deliverydate': SubRoutine.getDate(DateTime.now()),
-                                                        'pallets': variables.myStops[x]['pallets'],
-                                                        'boxes': variables.myStops[x]['boxes'],
-                                                        'bags': variables.myStops[x]['bags'],
-                                                        'tubs': variables.myStops[x]['tubs'],
-                                                      });
-                                                      await db.dbUpdate(lst, 'Multi', 'recordid');
-                                                    }
-                                                  }
-                                                  // update remote db
-                                                  List<Map<String, dynamic>> lst = [];
-                                                  lst.add({
-                                                    'recordid': variables.myStops[0]['recordid'],
-                                                    'status': 'Picked Up',
-                                                    'statustime': SubRoutine.getTime(DateTime.now(), false, true),
-                                                    'deliverydate': SubRoutine.getDate(DateTime.now()),
-                                                    'pallets': variables.myStops[0]['pallets'],
-                                                    'boxes': variables.myStops[0]['boxes'],
-                                                    'bags': variables.myStops[0]['bags'],
-                                                    'tubs': variables.myStops[0]['tubs'],
-                                                  });
-                                                  await db.dbUpdate(lst, 'Stops', 'recordid');
-                                                  if (variables.myStops.length > 1) {
-                                                    print('Multi need processing');
-                                                  }
-                                                  setState(() {
-                                                    btnupdate = 1;
+                                      onTap: () {},
+                                    ),
+                                  ))
+                              : const SizedBox.shrink(),
+                          expand //&& btndelivered == 2
+                              ? Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                                  child: SizedBox(
+                                    height: 100,
+                                    width: SizeConfig.screenWidth - 60,
+                                    child: TextField(
+                                      controller: tnote,
+                                      maxLines: 5,
+                                      decoration: const InputDecoration(
+                                          labelText: 'Note',
+                                          enabledBorder: OutlineInputBorder(
+                                            borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                                            borderSide: BorderSide(width: 2.0, color: Colors.black),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                                            borderSide: BorderSide(width: 2.0, color: Colors.black),
+                                          )),
+                                      onTap: () {},
+                                    ),
+                                  ))
+                              : const SizedBox.shrink(),
+                          expand
+                              ? Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+                                  SizedBox(
+                                      height: 60,
+                                      width: ((SizeConfig.screenWidth - 80)) / 2,
+                                      child: ElevatedButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            if (btnclosed == 1) {
+                                              btnclosed = 2;
+                                              btnupdate = 1;
 
-                                                    expand = false;
-                                                  });
-                                                }
-                                              },
-                                              style: ElevatedButton.styleFrom(
-                                                  backgroundColor: getBtnColor(btnupdate, true, false),
-                                                  foregroundColor: getBtnColor(btnupdate, false, false),
-                                                  textStyle: const TextStyle(fontSize: 25),
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius: BorderRadius.circular(30.0),
-                                                  )),
-                                              child: const Text('Update'),
+                                              btndelivered = 1;
+                                            } else {
+                                              btnclosed = 1;
+                                              btnupdate = 0;
+                                            }
+                                          });
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                            backgroundColor: getBtnColor(btnclosed, true, false),
+                                            foregroundColor: getBtnColor(btnclosed, false, false),
+                                            textStyle: const TextStyle(fontSize: 25),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(30.0),
                                             )),
-                                      ])
-                                    ]),
-                                  ),
-                                )
+                                        child: const Text('Closed'),
+                                      )),
+                                  const SizedBox(height: 20),
+                                  SizedBox(
+                                      height: 60,
+                                      width: ((SizeConfig.screenWidth - 50)) / 2,
+                                      child: ElevatedButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            if (btndelivered == 1) {
+                                              btnpending = 1;
+                                              btndelivered = 2;
+                                              btnclosed = 1;
+                                              btnupdate = 1;
+                                            } else {
+                                              btnpending = 1;
+                                              btndelivered = 1;
+                                              btnupdate = 0;
+                                            }
+                                          });
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                            backgroundColor: getBtnColor(btndelivered, true, false),
+                                            foregroundColor: getBtnColor(btndelivered, false, false),
+                                            textStyle: const TextStyle(fontSize: 25),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(30.0),
+                                            )),
+                                        child: const Text('Delivered'),
+                                      )),
+                                ])
+                              : const SizedBox.shrink(),
+                          const SizedBox(height: 20),
+                          expand //&& btndelivered == 2
+                              ? Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+                                  SizedBox(
+                                      height: 60,
+                                      width: ((SizeConfig.screenWidth - 80)) / 2,
+                                      child: ElevatedButton(
+                                        onPressed: () async {
+                                          setState(() {
+                                            btnpending = 2;
+                                            btndelivered = 1;
+                                            btnupdate = 0;
+                                            btncancel = 2;
+                                            expand = false;
+                                          });
+                                          await Future.delayed(
+                                            const Duration(seconds: 2),
+                                          );
+                                          setState(() {
+                                            btncancel = 1;
+                                            expand = false;
+                                          });
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                            backgroundColor: getBtnColor(btncancel, true, true),
+                                            foregroundColor: getBtnColor(btncancel, false, true),
+                                            textStyle: const TextStyle(fontSize: 25),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(30.0),
+                                            )),
+                                        child: const Text('Cancel'),
+                                      )),
+                                  SizedBox(
+                                      height: 60,
+                                      width: ((SizeConfig.screenWidth - 50)) / 2,
+                                      child: ElevatedButton(
+                                        onPressed: () async {
+                                          setState(() {
+                                            btnupdate = 2;
+                                          });
+                                          // update local db
+                                          variables.tableStops[widget.idx]['status'] = 'Delivered';
+                                          variables.tableStops[widget.idx]['deliverydate'] = SubRoutine.getDate(DateTime.now());
+                                          variables.tableStops[widget.idx]['statustime'] = SubRoutine.getTime(DateTime.now(), false, true);
+                                          variables.tableStops[widget.idx]['request'] = trequest.text;
+                                          variables.tableStops[widget.idx]['note'] = tnote.text;
+                                          // update remote db
+                                          List<Map<String, dynamic>> lst = [];
+                                          lst.add({
+                                            'recordid': variables.tableStops[widget.idx]['recordid'],
+                                            'status': variables.tableStops[widget.idx]['status'],
+                                            'deliverydate': variables.tableStops[widget.idx]['deliverydate'],
+                                            'statustime': variables.tableStops[widget.idx]['statustime'],
+                                            'request': variables.tableStops[widget.idx]['request'],
+                                            'note': variables.tableStops[widget.idx]['note'],
+                                          });
+                                          await db.dbUpdate(lst, 'Stops', 'recordid');
+
+                                          setState(() {
+                                            btnupdate = 1;
+                                            expand = false;
+                                          });
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                            backgroundColor: getBtnColor(btnupdate, true, false),
+                                            foregroundColor: getBtnColor(btnupdate, false, false),
+                                            textStyle: const TextStyle(fontSize: 25),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(30.0),
+                                            )),
+                                        child: const Text('Save'),
+                                      )),
+                                ])
                               : const SizedBox.shrink(),
                         ]),
                       ),
@@ -561,310 +894,10 @@ class StopItemState extends State<StopItem> {
                               color: Color(Clrs.transparent),
                             )
                           : const SizedBox.shrink(),
-                    ])))
-            : Padding(
-                padding: const EdgeInsets.only(top: 15, left: 20),
-                child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-                  InkWell(
-                      onTap: () {
-                        if (variables.tableStops[widget.idx]['status'] != 'Delivered') {
-                          setState(() {
-                            expand = !expand;
-                          });
-                        }
-                      },
-                      child: Column(children: [
-                        Container(
-                          height: expand
-                              ? btndelivered == 2
-                                  ? 514
-                                  : 180
-                              : 104,
-                          width: SizeConfig.screenWidth - 20,
-                          decoration: BoxDecoration(
-                            color: getBackColor(widget.idx, true),
-                            borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(20.0),
-                              bottomLeft: Radius.circular(20.0),
-                            ),
-                            border: Border.all(color: Color(Clrs.blue), width: 2.0),
-                          ),
-                          child: Column(children: [
-                            Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                              Container(
-                                height: 100,
-                                width: (SizeConfig.screenWidth - 20) * 0.422,
-                                color: Color(Clrs.transparent),
-                                child: Column(mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.start, children: [
-                                  SizedBox(
-                                    height: 30,
-                                    width: ((SizeConfig.screenWidth - 20) * 0.422) - 15,
-                                    child: FittedBox(
-                                      fit: BoxFit.scaleDown,
-                                      child: Text(
-                                        variables.tableStops[widget.idx]['type'],
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                          color: getBackColor(widget.idx, false),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 30,
-                                    width: ((SizeConfig.screenWidth - 20) * 0.422) - 15,
-                                    child: FittedBox(
-                                      fit: BoxFit.scaleDown,
-                                      child: Text(
-                                        variables.tableStops[widget.idx]['status'],
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                          color: getstatusColor(widget.idx),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 30,
-                                    width: ((SizeConfig.screenWidth - 20) * 0.422) - 15,
-                                    child: FittedBox(
-                                      fit: BoxFit.scaleDown,
-                                      child: Text(
-                                        '${variables.tableStops[widget.idx]['start']} ${variables.tableStops[widget.idx]['end']}',
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                          color: getBackColor(widget.idx, false),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ]),
-                              ),
-                              SizedBox(
-                                  height: 100,
-                                  width: (SizeConfig.screenWidth - 20) * 0.566,
-                                  child: Column(mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.start, children: [
-                                    SizedBox(
-                                      height: 30,
-                                      width: ((SizeConfig.screenWidth - 20) * 0.422) - 15,
-                                      child: FittedBox(
-                                        fit: BoxFit.scaleDown,
-                                        child: Text(
-                                          variables.tableStops[widget.idx]['company'],
-                                          style: TextStyle(
-                                            fontSize: 20,
-                                            color: getBackColor(widget.idx, false),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 30,
-                                      width: ((SizeConfig.screenWidth - 20) * 0.422) - 15,
-                                      child: FittedBox(
-                                        fit: BoxFit.scaleDown,
-                                        child: Text(
-                                          variables.tableStops[widget.idx]['street'].toString().isNotEmpty ? variables.tableStops[widget.idx]['street'] : ' ',
-                                          style: TextStyle(
-                                            fontSize: 20,
-                                            color: getBackColor(widget.idx, false),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 30,
-                                      width: ((SizeConfig.screenWidth - 20) * 0.422) - 15,
-                                      child: FittedBox(
-                                        fit: BoxFit.scaleDown,
-                                        child: Text(
-                                          (variables.tableStops[widget.idx]['city'].toString().isNotEmpty ? variables.tableStops[widget.idx]['city'] : ' ') +
-                                              ', ' +
-                                              (variables.tableStops[widget.idx]['state'].toString().isNotEmpty
-                                                  ? variables.tableStops[widget.idx]['state']
-                                                  : ' '),
-                                          style: TextStyle(
-                                            fontSize: 20,
-                                            color: getBackColor(widget.idx, false),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ])),
-                            ]),
-                            expand
-                                ? Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-                                    SizedBox(
-                                        height: 60,
-                                        width: ((SizeConfig.screenWidth - 80)) / 2,
-                                        child: ElevatedButton(
-                                          onPressed: () {
-                                            setState(() {
-                                              btnpending = 2;
-                                              btndelivered = 1;
-                                              btnupdate = 0;
-                                            });
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                              backgroundColor: getBtnColor(btnpending, true, false),
-                                              foregroundColor: getBtnColor(btnpending, false, false),
-                                              textStyle: const TextStyle(fontSize: 25),
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(30.0),
-                                              )),
-                                          child: const Text('Pending'),
-                                        )),
-                                    SizedBox(
-                                        height: 60,
-                                        width: ((SizeConfig.screenWidth - 50)) / 2,
-                                        child: ElevatedButton(
-                                          onPressed: () {
-                                            setState(() {
-                                              btnpending = 1;
-                                              btndelivered = 2;
-                                              btnupdate = 1;
-                                            });
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                              backgroundColor: getBtnColor(btndelivered, true, false),
-                                              foregroundColor: getBtnColor(btndelivered, false, false),
-                                              textStyle: const TextStyle(fontSize: 25),
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(30.0),
-                                              )),
-                                          child: const Text('Delivered'),
-                                        )),
-                                  ])
-                                : const SizedBox.shrink(),
-                            expand && btndelivered == 2
-                                ? Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                                    child: SizedBox(
-                                      height: 100,
-                                      width: SizeConfig.screenWidth - 60,
-                                      child: TextField(
-                                        controller: trequest,
-                                        maxLines: 5,
-                                        decoration: const InputDecoration(
-                                            labelText: 'Request',
-                                            enabledBorder: OutlineInputBorder(
-                                              borderRadius: BorderRadius.all(Radius.circular(30.0)),
-                                              borderSide: BorderSide(width: 2.0, color: Colors.black),
-                                            ),
-                                            focusedBorder: OutlineInputBorder(
-                                              borderRadius: BorderRadius.all(Radius.circular(30.0)),
-                                              borderSide: BorderSide(width: 2.0, color: Colors.black),
-                                            )),
-                                        onTap: () {},
-                                      ),
-                                    ))
-                                : const SizedBox.shrink(),
-                            expand && btndelivered == 2
-                                ? Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                                    child: SizedBox(
-                                      height: 100,
-                                      width: SizeConfig.screenWidth - 60,
-                                      child: TextField(
-                                        controller: tnote,
-                                        maxLines: 5,
-                                        decoration: const InputDecoration(
-                                            labelText: 'Note',
-                                            enabledBorder: OutlineInputBorder(
-                                              borderRadius: BorderRadius.all(Radius.circular(30.0)),
-                                              borderSide: BorderSide(width: 2.0, color: Colors.black),
-                                            ),
-                                            focusedBorder: OutlineInputBorder(
-                                              borderRadius: BorderRadius.all(Radius.circular(30.0)),
-                                              borderSide: BorderSide(width: 2.0, color: Colors.black),
-                                            )),
-                                        onTap: () {},
-                                      ),
-                                    ))
-                                : const SizedBox.shrink(),
-                            expand && btndelivered == 2
-                                ? Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-                                    SizedBox(
-                                        height: 60,
-                                        width: ((SizeConfig.screenWidth - 80)) / 2,
-                                        child: ElevatedButton(
-                                          onPressed: () async {
-                                            setState(() {
-                                              btnpending = 2;
-                                              btndelivered = 1;
-                                              btnupdate = 0;
-                                              btncancel = 2;
-                                            });
-                                            await Future.delayed(
-                                              const Duration(seconds: 2),
-                                            );
-                                            setState(() {
-                                              btncancel = 1;
-                                              expand = false;
-                                            });
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                              backgroundColor: getBtnColor(btncancel, true, true),
-                                              foregroundColor: getBtnColor(btncancel, false, true),
-                                              textStyle: const TextStyle(fontSize: 25),
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(30.0),
-                                              )),
-                                          child: const Text('Cancel'),
-                                        )),
-                                    SizedBox(
-                                        height: 60,
-                                        width: ((SizeConfig.screenWidth - 50)) / 2,
-                                        child: ElevatedButton(
-                                          onPressed: () async {
-                                            setState(() {
-                                              btnupdate = 2;
-                                            });
-                                            // update local db
-                                            variables.tableStops[widget.idx]['status'] = 'Delivered';
-                                            variables.tableStops[widget.idx]['deliverydate'] = SubRoutine.getDate(DateTime.now());
-                                            variables.tableStops[widget.idx]['statustime'] = SubRoutine.getTime(DateTime.now(), false, true);
-                                            variables.tableStops[widget.idx]['request'] = trequest.text;
-                                            variables.tableStops[widget.idx]['note'] = tnote.text;
-                                            // update remote db
-                                            List<Map<String, dynamic>> lst = [];
-                                            lst.add({
-                                              'recordid': variables.tableStops[widget.idx]['recordid'],
-                                              'status': variables.tableStops[widget.idx]['status'],
-                                              'deliverydate': variables.tableStops[widget.idx]['deliverydate'],
-                                              'statustime': variables.tableStops[widget.idx]['statustime'],
-                                              'request': variables.tableStops[widget.idx]['request'],
-                                              'note': variables.tableStops[widget.idx]['note'],
-                                            });
-                                            await db.dbUpdate(lst, 'Stops', 'recordid');
-
-                                            setState(() {
-                                              btnupdate = 1;
-                                              expand = false;
-                                            });
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                              backgroundColor: getBtnColor(btnupdate, true, false),
-                                              foregroundColor: getBtnColor(btnupdate, false, false),
-                                              textStyle: const TextStyle(fontSize: 25),
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(30.0),
-                                              )),
-                                          child: const Text('Update'),
-                                        )),
-                                  ])
-                                : const SizedBox.shrink(),
-                          ]),
-                        ),
-                        widget.idx == variables.tableStops.length - 1
-                            ? Container(
-                                height: 500,
-                                width: SizeConfig.screenWidth,
-                                color: Color(Clrs.transparent),
-                              )
-                            : const SizedBox.shrink(),
-                      ])),
-                ])));
+                    ])),
+              ])),
+      // : const SizedBox.shrink(),
+    );
   }
 
   Color getBtnColor(int button, bool backColor, bool cancel) {

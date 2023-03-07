@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:slider_button/slider_button.dart';
 import 'package:ids_driver/Subs/SizeConfig.dart';
-import 'package:ids_driver/Subs/SubRoutines.dart';
 import 'package:ids_driver/Subs/localColors.dart';
 import 'package:ids_driver/Subs/dbFirebasek.dart';
 import 'package:toggle_switch/toggle_switch.dart';
@@ -19,7 +17,6 @@ class _SettingsState extends State<Settings> {
   bool showSettings = false;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     tdelay.text = variables.tableMySettings[0]['updatedelay'].toString();
   }
@@ -56,6 +53,7 @@ class _SettingsState extends State<Settings> {
                   variables.tableMySettings[0]['recordid'] = variables.tablecurrentEmployee[0]['Employee_ID'];
 
                   await db.dbUpdate(variables.tableMySettings, 'Settings', 'recordid');
+                  // ignore: use_build_context_synchronously
                   Navigator.pop(context);
                 },
                 icon: Icon(
@@ -80,7 +78,7 @@ class _SettingsState extends State<Settings> {
           Expanded(
             child: ListView(children: [
               Padding(
-                  padding: EdgeInsets.only(top: 20, left: 15, right: 15),
+                  padding: const EdgeInsets.only(top: 20, left: 15, right: 15),
                   child: SizedBox(
                     height: 40,
                     child: ToggleSwitch(
@@ -104,7 +102,7 @@ class _SettingsState extends State<Settings> {
                     ),
                   )),
               Padding(
-                  padding: EdgeInsets.only(top: 20, left: 15, right: 15),
+                  padding: const EdgeInsets.only(top: 20, left: 15, right: 15),
                   child: SizedBox(
                     height: 40,
                     child: ToggleSwitch(
@@ -128,7 +126,7 @@ class _SettingsState extends State<Settings> {
                     ),
                   )),
               Padding(
-                padding: EdgeInsets.only(top: 20, left: 15, right: 15),
+                padding: const EdgeInsets.only(top: 20, left: 15, right: 15),
                 child: SizedBox(
                   height: 40,
                   width: 240,
@@ -156,7 +154,7 @@ class _SettingsState extends State<Settings> {
                 ),
               ),
               Padding(
-                  padding: EdgeInsets.only(top: 20, left: 15, right: 15),
+                  padding: const EdgeInsets.only(top: 20, left: 15, right: 15),
                   child: SizedBox(
                     height: 40,
                     child: ToggleSwitch(
@@ -180,7 +178,7 @@ class _SettingsState extends State<Settings> {
                     ),
                   )),
               Padding(
-                  padding: EdgeInsets.only(top: 20, left: 15, right: 15),
+                  padding: const EdgeInsets.only(top: 20, left: 15, right: 15),
                   child: SizedBox(
                     height: 40,
                     child: ToggleSwitch(
@@ -204,7 +202,7 @@ class _SettingsState extends State<Settings> {
                     ),
                   )),
               Padding(
-                  padding: EdgeInsets.only(top: 20, left: 15, right: 15),
+                  padding: const EdgeInsets.only(top: 20, left: 15, right: 15),
                   child: SizedBox(
                     height: 40,
                     child: ToggleSwitch(
@@ -228,7 +226,7 @@ class _SettingsState extends State<Settings> {
                     ),
                   )),
               Padding(
-                  padding: EdgeInsets.only(top: 20, left: 15, right: 15),
+                  padding: const EdgeInsets.only(top: 20, left: 15, right: 15),
                   child: SizedBox(
                     height: 40,
                     child: ToggleSwitch(
@@ -252,7 +250,7 @@ class _SettingsState extends State<Settings> {
                     ),
                   )),
               Padding(
-                padding: EdgeInsets.only(top: 35, left: 15, right: 15),
+                padding: const EdgeInsets.only(top: 35, left: 15, right: 15),
                 child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                   SizedBox(
                     height: 60,
@@ -262,10 +260,11 @@ class _SettingsState extends State<Settings> {
                         variables.tableMySettings[0]['recordid'] = variables.tablecurrentEmployee[0]['recordid'];
                         await db.dbUpdate(variables.tableMySettings, 'Settings', 'recordid');
                         //widget.callback!();
+                        // ignore: use_build_context_synchronously
                         Navigator.pop(context);
                       },
                       style: ElevatedButton.styleFrom(
-                        textStyle: TextStyle(fontSize: 30),
+                        textStyle: const TextStyle(fontSize: 30),
                         foregroundColor: Color(Clrs.black),
                         backgroundColor: Color(Clrs.green),
                         shape: RoundedRectangleBorder(
@@ -273,12 +272,12 @@ class _SettingsState extends State<Settings> {
                           side: BorderSide(color: Color(Clrs.dkblue), width: 2.0),
                         ),
                       ),
-                      child: Text('Update'),
+                      child: const Text('Update'),
                     ),
                   ),
                 ]),
               ),
-              Container(height: 500, width: SizeConfig.screenWidth - 30),
+              SizedBox(height: 500, width: SizeConfig.screenWidth - 30),
             ]),
           ),
         ]),

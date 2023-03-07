@@ -1,16 +1,12 @@
-// ignore_for_file: unrelated_type_equality_checks
+// ignore_for_file: unrelated_type_equality_checks, library_private_types_in_public_api, non_constant_identifier_names, prefer_typing_uninitialized_variables, use_key_in_widget_constructors, unused_local_variable
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'dart:convert';
-import 'dart:developer';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:http/http.dart' as http;
 import 'package:ids_driver/Screens/Fyi/Training.dart';
 import 'package:ids_driver/Screens/MyRoute.dart';
-import 'package:ids_driver/Screens/settings.dart';
 import 'package:ids_driver/Subs/SubRoutines.dart';
 import 'package:ids_driver/variables.dart';
 import 'package:intl/intl.dart';
@@ -19,6 +15,8 @@ import 'Screens/profile.dart';
 import 'Subs/SizeConfig.dart';
 import 'Subs/localColors.dart';
 import 'Subs/dbFirebasek.dart';
+
+int Test = 1;
 
 loadTable() {
   variables.tableMySettings.add({
@@ -34,8 +32,6 @@ loadTable() {
   });
 }
 
-// ignore: non_constant_identifier_names
-int Test = 0;
 TextEditingController logEmail = TextEditingController();
 TextEditingController logPass = TextEditingController();
 
@@ -147,9 +143,9 @@ class _MyHomePageState extends State<MyHomePage> {
       logPass.text = '1234';
       passVerify();
     }
-    getPermission();
-    getToken();
-    messageListener(context);
+    // getPermission();
+    // getToken();
+    // messageListener(context);
   }
 
   Future<void> getPermission() async {
@@ -164,17 +160,13 @@ class _MyHomePageState extends State<MyHomePage> {
       provisional: false,
       sound: true,
     );
-
-    kDebugMode ? print('User granted permission: ${settings.authorizationStatus}') : const SizedBox.shrink();
   }
 
   void getToken() async {
     await FirebaseMessaging.instance.getToken().then((token) {
       setState(() {
         mtoken = token.toString();
-        if (kDebugMode) {
-          print('My token is $mtoken');
-        }
+        if (kDebugMode) {}
       });
     });
   }
@@ -189,7 +181,6 @@ class _MyHomePageState extends State<MyHomePage> {
       'ddu': isDDU().toString() == 'true' ? 'true' : 'false',
       'sent': 'false',
     });
-    print(lst.toString());
     await db.dbUpdate(lst, 'Tokens', 'recordid');
   }
 
@@ -199,21 +190,15 @@ class _MyHomePageState extends State<MyHomePage> {
       if (x['type'] == 'DDU') {
         rtn = true;
       }
-      ;
     }
     return rtn;
   }
 
   void messageListener(BuildContext context) {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      if (kDebugMode) {
-        print('Got a message whilest in the foreground!');
-        print('Message data: ${message.data}');
-      }
+      if (kDebugMode) {}
       if (message.notification != null) {
-        if (kDebugMode) {
-          print('Message also contained a notification: ${message.notification!.body}');
-        }
+        if (kDebugMode) {}
         showDialog(
             context: context,
             builder: ((BuildContext context) {
@@ -516,7 +501,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                       onPressed: () async {
                                         try {
                                           UserCredential userCredential =
-                                              await FirebaseAuth.instance.signInWithEmailAndPassword(email: logEmail.text, password: '93' + logPass.text);
+                                              await FirebaseAuth.instance.signInWithEmailAndPassword(email: logEmail.text, password: '93${logPass.text}');
                                           variables.isLoggedin = true;
                                         } catch (e) {
                                           setState(() {
@@ -524,11 +509,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                             passError = false;
                                             if (e.toString().indexOf('user-not-found') > 0) {
                                               emailError = true;
-                                              print('No user');
                                             }
                                             if (e.toString().indexOf('password is invalid') > 0) {
                                               passError = true;
-                                              print('password is invalid');
                                             }
                                           });
                                           variables.isLoggedin = false;
@@ -583,7 +566,7 @@ class _MyHomePageState extends State<MyHomePage> {
 class DynamicDialog extends StatefulWidget {
   final title;
   final body;
-  DynamicDialog({this.title, this.body});
+  const DynamicDialog({this.title, this.body});
   @override
   _DynamicDialogState createState() => _DynamicDialogState();
 }

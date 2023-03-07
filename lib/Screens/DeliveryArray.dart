@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names, file_names
+
 import 'package:flutter/material.dart';
 import 'package:ids_driver/variables.dart';
 import '../Subs/SizeConfig.dart';
@@ -60,7 +62,7 @@ class DeliveryArrayState extends State<DeliveryArray> {
     return Column(children: [
       const SizedBox(height: 20),
       Container(
-        height: 135,
+        height: 175,
         width: SizeConfig.screenWidth - 40,
         decoration: BoxDecoration(
             color: Color(Clrs.ltgray),
@@ -73,7 +75,7 @@ class DeliveryArrayState extends State<DeliveryArray> {
         child: Stack(children: [
           SizedBox(
             // Company
-            height: 135,
+            height: 175,
             width: SizeConfig.screenWidth - 40,
             child: Padding(
               padding: const EdgeInsets.only(left: 10, top: 5),
@@ -87,221 +89,305 @@ class DeliveryArrayState extends State<DeliveryArray> {
             padding: const EdgeInsets.only(top: 35),
             child: Row(children: [
               Container(
-                  height: 100,
-                  width: (SizeConfig.screenWidth - 40) / 4,
-                  decoration: BoxDecoration(
-                    //color: Color(Clrs.laser),
-                    border: Border.all(color: Color(Clrs.black), width: 1),
-                  ),
-                  child: Stack(children: [
-                    SizedBox(
-                      height: 100,
+                height: 175,
+                width: (SizeConfig.screenWidth - 40) / 4,
+                decoration: BoxDecoration(
+                  //color: Color(Clrs.laser),
+                  border: Border.all(color: Color(Clrs.black), width: 1),
+                ),
+                child: Stack(children: [
+                  SizedBox(
+                      height: 175,
                       width: (SizeConfig.screenWidth - 40) / 4,
-                      child: const Padding(
-                        padding: EdgeInsets.only(top: 3),
-                        child: Text('Pallets', style: TextStyle(fontSize: 15), textAlign: TextAlign.center),
+                      child: Column(mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.center, children: const [
+                        Text('Pallets', style: TextStyle(fontSize: 15), textAlign: TextAlign.center),
+                      ])),
+                  SizedBox(
+                      height: 175,
+                      width: (SizeConfig.screenWidth - 40) / 4,
+                      child: Column(mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.center, children: [
+                        SizedBox(
+                            height: 138,
+                            width: (SizeConfig.screenWidth - 40) / 4,
+                            child: Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
+                              Text(
+                                variables.myStops[widget.idx]['pallets'].toString(),
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Color(Clrs.black),
+                                ),
+                              )
+                            ])),
+                      ])),
+                  SizedBox(
+                    height: 175,
+                    width: (SizeConfig.screenWidth - 40) / 4,
+                    child: Column(mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.center, children: [
+                      InkWell(
+                          onTap: () {
+                            setState(() {
+                              variables.myStops[widget.idx]['pallets']++;
+                              Verified();
+                            });
+                          },
+                          child: SizedBox(
+                            height: 69,
+                            width: SizeConfig.screenWidth - 40,
+                            child: Icon(
+                              Icons.expand_less,
+                              size: 30,
+                              color: Color(Clrs.black),
+                            ),
+                            //color: Color(Clrs.red),
+                          )),
+                      InkWell(
+                        onTap: () {
+                          setState(() {
+                            variables.myStops[widget.idx]['pallets']--;
+                            variables.myStops[widget.idx]['pallets'] < 0 ? variables.myStops[widget.idx]['pallets'] = 0 : const SizedBox.shrink();
+                            Verified();
+                          });
+                        },
+                        child: SizedBox(
+                          height: 69,
+                          width: SizeConfig.screenWidth - 40,
+                          child: Icon(
+                            Icons.expand_more,
+                            size: 30,
+                            color: Color(Clrs.black),
+                          ),
+                          //color: Color(Clrs.green),
+                        ),
                       ),
-                    ),
-                    Padding(
-                        padding: EdgeInsets.only(top: 10, left: ((SizeConfig.screenWidth - 40) / 4) / 4 - 5),
-                        child: IconButton(
-                            onPressed: () {
-                              setState(() {
-                                variables.myStops[widget.idx]['pallets']++;
-                              });
-                              Verified();
-                            },
-                            icon: const Icon(
-                              Icons.expand_less,
-                              size: 34,
-                            ))),
-                    // ),
-                    SizedBox(
-                        height: 70,
-                        width: (SizeConfig.screenWidth - 40) / 4,
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 47),
-                          child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-                            Text(variables.myStops[widget.idx]['pallets'].toString(), style: const TextStyle(fontSize: 20)),
-                          ]),
-                        )),
-                    Padding(
-                        padding: EdgeInsets.only(
-                          top: 60,
-                          left: ((SizeConfig.screenWidth - 40) / 4) / 4 - 5,
-                        ),
-                        child: IconButton(
-                            onPressed: () {
-                              setState(() {
-                                variables.myStops[widget.idx]['pallets']--;
-                                if (variables.myStops[widget.idx]['pallets'] < 0) {
-                                  variables.myStops[widget.idx]['pallets'] = 0;
-                                }
-                              });
-                              Verified();
-                            },
-                            icon: const Icon(Icons.expand_more, size: 34))),
-                    // ),
-                  ])),
-              Container(
-                  height: 100,
-                  width: (SizeConfig.screenWidth - 40) / 4,
-                  decoration: BoxDecoration(
-                    //color: Color(Clrs.laser),
-                    border: Border.all(color: Color(Clrs.black), width: 1),
+                    ]),
                   ),
-                  child: Stack(children: [
-                    SizedBox(
-                      height: 100,
-                      width: (SizeConfig.screenWidth - 40) / 4,
-                      child: const Padding(padding: EdgeInsets.only(top: 3), child: Text('Boxes', style: TextStyle(fontSize: 15), textAlign: TextAlign.center)),
-                    ),
-                    Padding(
-                        padding: EdgeInsets.only(top: 10, left: ((SizeConfig.screenWidth - 40) / 4) / 4 - 5),
-                        child: IconButton(
-                            onPressed: () {
-                              setState(() {
-                                variables.myStops[widget.idx]['boxes']++;
-                              });
-                              Verified();
-                            },
-                            icon: const Icon(
-                              Icons.expand_less,
-                              size: 34,
-                            ))),
-                    SizedBox(
-                        height: 70,
-                        width: (SizeConfig.screenWidth - 40) / 4,
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 47),
-                          child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-                            Text(variables.myStops[widget.idx]['boxes'].toString(), style: const TextStyle(fontSize: 20)),
-                          ]),
-                        )),
-                    Padding(
-                        padding: EdgeInsets.only(
-                          top: 60,
-                          left: ((SizeConfig.screenWidth - 40) / 4) / 4 - 5,
-                        ),
-                        child: IconButton(
-                            onPressed: () {
-                              setState(() {
-                                variables.myStops[widget.idx]['boxes']--;
-                                if (variables.myStops[widget.idx]['boxes'] < 0) {
-                                  variables.myStops[widget.idx]['boxes'] = 0;
-                                }
-                              });
-                              Verified();
-                            },
-                            icon: const Icon(Icons.expand_more, size: 34))),
-                  ])),
+                ]),
+              ),
               Container(
-                  height: 100,
-                  width: (SizeConfig.screenWidth - 40) / 4,
-                  decoration: BoxDecoration(
-                    //color: Color(Clrs.laser),
-                    border: Border.all(color: Color(Clrs.black), width: 1),
-                  ),
-                  child: Stack(children: [
-                    SizedBox(
-                      height: 100,
+                height: 175,
+                width: (SizeConfig.screenWidth - 40) / 4,
+                decoration: BoxDecoration(
+                  //color: Color(Clrs.laser),
+                  border: Border.all(color: Color(Clrs.black), width: 1),
+                ),
+                child: Stack(children: [
+                  SizedBox(
+                      height: 175,
                       width: (SizeConfig.screenWidth - 40) / 4,
-                      child: const Padding(padding: EdgeInsets.only(top: 3), child: Text('Bags', style: TextStyle(fontSize: 15), textAlign: TextAlign.center)),
-                    ),
-                    Padding(
-                        padding: EdgeInsets.only(top: 10, left: ((SizeConfig.screenWidth - 40) / 4) / 4 - 5),
-                        child: IconButton(
-                            onPressed: () {
-                              setState(() {
-                                variables.myStops[widget.idx]['bags']++;
-                              });
+                      child: Column(mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.center, children: const [
+                        Text('Boxes', style: TextStyle(fontSize: 15), textAlign: TextAlign.center),
+                      ])),
+                  SizedBox(
+                      height: 175,
+                      width: (SizeConfig.screenWidth - 40) / 4,
+                      child: Column(mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.center, children: [
+                        SizedBox(
+                            height: 138,
+                            width: (SizeConfig.screenWidth - 40) / 4,
+                            child: Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
+                              Text(
+                                variables.myStops[widget.idx]['boxes'].toString(),
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Color(Clrs.black),
+                                ),
+                              )
+                            ])),
+                      ])),
+                  SizedBox(
+                    height: 175,
+                    width: (SizeConfig.screenWidth - 40) / 4,
+                    child: Column(mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.center, children: [
+                      InkWell(
+                          onTap: () {
+                            setState(() {
+                              variables.myStops[widget.idx]['boxes']++;
                               Verified();
-                            },
-                            icon: const Icon(
+                            });
+                          },
+                          child: SizedBox(
+                            height: 69,
+                            width: SizeConfig.screenWidth - 40,
+                            child: Icon(
                               Icons.expand_less,
-                              size: 34,
-                            ))),
-                    // ),
-                    SizedBox(
-                        height: 70,
-                        width: (SizeConfig.screenWidth - 40) / 4,
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 47),
-                          child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-                            Text(variables.myStops[widget.idx]['bags'].toString(), style: const TextStyle(fontSize: 20)),
-                          ]),
-                        )),
-                    Padding(
-                        padding: EdgeInsets.only(
-                          top: 60,
-                          left: ((SizeConfig.screenWidth - 40) / 4) / 4 - 5,
+                              size: 30,
+                              color: Color(Clrs.black),
+                            ),
+                            //color: Color(Clrs.red),
+                          )),
+                      InkWell(
+                        onTap: () {
+                          setState(() {
+                            variables.myStops[widget.idx]['boxes']--;
+                            variables.myStops[widget.idx]['boxes'] < 0 ? variables.myStops[widget.idx]['pallets'] = 0 : const SizedBox.shrink();
+                            Verified();
+                          });
+                        },
+                        child: SizedBox(
+                          height: 69,
+                          width: SizeConfig.screenWidth - 40,
+                          child: Icon(
+                            Icons.expand_more,
+                            size: 30,
+                            color: Color(Clrs.black),
+                          ),
+                          //color: Color(Clrs.green),
                         ),
-                        child: IconButton(
-                            onPressed: () {
-                              setState(() {
-                                variables.myStops[widget.idx]['bags']--;
-                                if (variables.myStops[widget.idx]['bags'] < 0) {
-                                  variables.myStops[widget.idx]['bags'] = 0;
-                                }
-                              });
-                              Verified();
-                            },
-                            icon: const Icon(Icons.expand_more, size: 34))),
-                    // ),
-                  ])),
+                      ),
+                    ]),
+                  ),
+                ]),
+              ),
               Container(
-                  height: 100,
-                  width: (SizeConfig.screenWidth - 40) / 4,
-                  decoration: BoxDecoration(
-                    //color: Color(Clrs.laser),
-                    border: Border.all(color: Color(Clrs.black), width: 1),
-                  ),
-                  child: Stack(children: [
-                    SizedBox(
-                      height: 100,
+                height: 175,
+                width: (SizeConfig.screenWidth - 40) / 4,
+                decoration: BoxDecoration(
+                  //color: Color(Clrs.laser),
+                  border: Border.all(color: Color(Clrs.black), width: 1),
+                ),
+                child: Stack(children: [
+                  SizedBox(
+                      height: 175,
                       width: (SizeConfig.screenWidth - 40) / 4,
-                      child: const Padding(padding: EdgeInsets.only(top: 3), child: Text('Tubs', style: TextStyle(fontSize: 15), textAlign: TextAlign.center)),
-                    ),
-                    Padding(
-                        padding: EdgeInsets.only(top: 10, left: ((SizeConfig.screenWidth - 40) / 4) / 4 - 5),
-                        child: IconButton(
-                            onPressed: () {
-                              setState(() {
-                                variables.myStops[widget.idx]['tubs']++;
-                              });
+                      child: Column(mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.center, children: const [
+                        Text('Bags', style: TextStyle(fontSize: 15), textAlign: TextAlign.center),
+                      ])),
+                  SizedBox(
+                      height: 175,
+                      width: (SizeConfig.screenWidth - 40) / 4,
+                      child: Column(mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.center, children: [
+                        SizedBox(
+                            height: 138,
+                            width: (SizeConfig.screenWidth - 40) / 4,
+                            child: Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
+                              Text(
+                                variables.myStops[widget.idx]['bags'].toString(),
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Color(Clrs.black),
+                                ),
+                              )
+                            ])),
+                      ])),
+                  SizedBox(
+                    height: 175,
+                    width: (SizeConfig.screenWidth - 40) / 4,
+                    child: Column(mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.center, children: [
+                      InkWell(
+                          onTap: () {
+                            setState(() {
+                              variables.myStops[widget.idx]['bags']++;
                               Verified();
-                            },
-                            icon: const Icon(
+                            });
+                          },
+                          child: SizedBox(
+                            height: 69,
+                            width: SizeConfig.screenWidth - 40,
+                            child: Icon(
                               Icons.expand_less,
-                              size: 34,
-                            ))),
-                    // ),
-                    SizedBox(
-                        height: 70,
-                        width: (SizeConfig.screenWidth - 40) / 4,
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 47),
-                          child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-                            Text(variables.myStops[widget.idx]['tubs'].toString(), style: const TextStyle(fontSize: 20)),
-                          ]),
-                        )),
-                    Padding(
-                        padding: EdgeInsets.only(
-                          top: 60,
-                          left: ((SizeConfig.screenWidth - 40) / 4) / 4 - 5,
+                              size: 30,
+                              color: Color(Clrs.black),
+                            ),
+                            //color: Color(Clrs.red),
+                          )),
+                      InkWell(
+                        onTap: () {
+                          setState(() {
+                            variables.myStops[widget.idx]['bags']--;
+                            variables.myStops[widget.idx]['bags'] < 0 ? variables.myStops[widget.idx]['pallets'] = 0 : const SizedBox.shrink();
+                          });
+                          Verified();
+                        },
+                        child: SizedBox(
+                          height: 69,
+                          width: SizeConfig.screenWidth - 40,
+                          child: Icon(
+                            Icons.expand_more,
+                            size: 30,
+                            color: Color(Clrs.black),
+                          ),
+                          //color: Color(Clrs.green),
                         ),
-                        child: IconButton(
-                            onPressed: () {
-                              setState(() {
-                                variables.myStops[widget.idx]['tubs']--;
-                                if (variables.myStops[widget.idx]['tubs'] < 0) {
-                                  variables.myStops[widget.idx]['tubs'] = 0;
-                                }
-                              });
+                      ),
+                    ]),
+                  ),
+                ]),
+              ),
+              Container(
+                height: 175,
+                width: (SizeConfig.screenWidth - 40) / 4,
+                decoration: BoxDecoration(
+                  //color: Color(Clrs.laser),
+                  border: Border.all(color: Color(Clrs.black), width: 1),
+                ),
+                child: Stack(children: [
+                  SizedBox(
+                      height: 175,
+                      width: (SizeConfig.screenWidth - 40) / 4,
+                      child: Column(mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.center, children: const [
+                        Text('Tubs', style: TextStyle(fontSize: 15), textAlign: TextAlign.center),
+                      ])),
+                  SizedBox(
+                      height: 175,
+                      width: (SizeConfig.screenWidth - 40) / 4,
+                      child: Column(mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.center, children: [
+                        SizedBox(
+                            height: 138,
+                            width: (SizeConfig.screenWidth - 40) / 4,
+                            child: Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
+                              Text(
+                                variables.myStops[widget.idx]['tubs'].toString(),
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Color(Clrs.black),
+                                ),
+                              )
+                            ])),
+                      ])),
+                  SizedBox(
+                    height: 175,
+                    width: (SizeConfig.screenWidth - 40) / 4,
+                    child: Column(mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.center, children: [
+                      InkWell(
+                          onTap: () {
+                            setState(() {
+                              variables.myStops[widget.idx]['tubs']++;
                               Verified();
-                            },
-                            icon: const Icon(Icons.expand_more, size: 34))),
-                  ])),
+                            });
+                          },
+                          child: SizedBox(
+                            height: 69,
+                            width: SizeConfig.screenWidth - 40,
+                            child: Icon(
+                              Icons.expand_less,
+                              size: 30,
+                              color: Color(Clrs.black),
+                            ),
+                            //color: Color(Clrs.red),
+                          )),
+                      InkWell(
+                        onTap: () {
+                          setState(() {
+                            variables.myStops[widget.idx]['tubs']--;
+                            variables.myStops[widget.idx]['tubs'] < 0 ? variables.myStops[widget.idx]['pallets'] = 0 : const SizedBox.shrink();
+                            Verified();
+                          });
+                        },
+                        child: SizedBox(
+                          height: 69,
+                          width: SizeConfig.screenWidth - 40,
+                          child: Icon(
+                            Icons.expand_more,
+                            size: 30,
+                            color: Color(Clrs.black),
+                          ),
+                          //color: Color(Clrs.green),
+                        ),
+                      ),
+                    ]),
+                  ),
+                ]),
+              ),
             ]),
           ),
         ]),
