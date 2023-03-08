@@ -16,7 +16,7 @@ import 'Subs/SizeConfig.dart';
 import 'Subs/localColors.dart';
 import 'Subs/dbFirebasek.dart';
 
-int Test = 1;
+int Test = 2;
 
 loadTable() {
   variables.tableMySettings.add({

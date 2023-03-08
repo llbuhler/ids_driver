@@ -63,7 +63,6 @@ class db {
         .get();
     List<QueryDocumentSnapshot> docs = snapshot.docs;
     for (var doc in docs) {
-      print(idx.toString());
       if (doc.data() != null) {
         var data = doc.data() as Map<String, dynamic>;
         list.add(data);
