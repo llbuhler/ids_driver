@@ -54,12 +54,11 @@ class db {
 
   static Future getstops(List<Map<String, dynamic>> list, String routeid, String driverid, bool all) async {
     list.clear();
-    int idx = 1;
     QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore.instance
         .collection('Stops')
         .orderBy('company')
+        .where((SubRoutine.getday().toString().toLowerCase()), isEqualTo: true)
         .where('driver', isEqualTo: driverid)
-        .where(SubRoutine.getday().toLowerCase(), isEqualTo: true)
         .get();
     List<QueryDocumentSnapshot> docs = snapshot.docs;
     for (var doc in docs) {
@@ -67,7 +66,6 @@ class db {
         var data = doc.data() as Map<String, dynamic>;
         list.add(data);
       }
-      idx++;
     }
     return null;
   }

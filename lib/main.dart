@@ -16,7 +16,7 @@ import 'Subs/SizeConfig.dart';
 import 'Subs/localColors.dart';
 import 'Subs/dbFirebasek.dart';
 
-int Test = 2;
+int Test = 0;
 
 loadTable() {
   variables.tableMySettings.add({
@@ -143,9 +143,9 @@ class _MyHomePageState extends State<MyHomePage> {
       logPass.text = '1234';
       passVerify();
     }
-    // getPermission();
-    // getToken();
-    // messageListener(context);
+    getPermission();
+    getToken();
+    messageListener(context);
   }
 
   Future<void> getPermission() async {
