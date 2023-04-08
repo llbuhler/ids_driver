@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:ids_driver/Subs/SizeConfig.dart';
 import 'package:ids_driver/variables.dart';
@@ -23,11 +25,11 @@ class ProfileState extends State<Profile> {
   @override
   void initState() {
     super.initState();
-    tecstreet.text = variables.tablecurrentEmployee[0]['street'] ?? '';
-    teccity.text = variables.tablecurrentEmployee[0]['city'] ?? '';
-    tecstate.text = variables.tablecurrentEmployee[0]['state'] ?? '';
-    teczipcode.text = variables.tablecurrentEmployee[0]['zipcode'] ?? '';
-    tecphone.text = variables.tablecurrentEmployee[0]['phone'] ?? '';
+    tecstreet.text = variables.tablecurrentEmployee[0]['Street'] ?? '';
+    teccity.text = variables.tablecurrentEmployee[0]['City'] ?? '';
+    tecstate.text = variables.tablecurrentEmployee[0]['State'] ?? '';
+    teczipcode.text = variables.tablecurrentEmployee[0]['Zip'] ?? '';
+    tecphone.text = variables.tablecurrentEmployee[0]['Phone'] ?? '';
     tecemail.text = variables.tablecurrentEmployee[0]['Email'] ?? '';
   }
 
@@ -310,13 +312,25 @@ class ProfileState extends State<Profile> {
                             child: ElevatedButton(
                                 onPressed: () async {
                                   if (update) {
-                                    variables.tablecurrentEmployee[0]['Employee_ID'] = variables.tablecurrentEmployee[0]['Employee_ID'];
+                                    // Update local db
+
                                     variables.tablecurrentEmployee[0]['Street'] = tecstreet.text;
                                     variables.tablecurrentEmployee[0]['City'] = teccity.text;
                                     variables.tablecurrentEmployee[0]['State'] = tecstate.text;
                                     variables.tablecurrentEmployee[0]['Zip'] = teczipcode.text;
                                     variables.tablecurrentEmployee[0]['Phone'] = tecphone.text;
-                                    await db.dbUpdate(variables.tablecurrentEmployee, 'Employees', 'Employee_ID');
+                                    // Update remote db
+                                    List<Map<String, dynamic>> lst = [];
+                                    lst.add({
+                                      'Employee_ID': variables.tablecurrentEmployee[0]['Employee_ID'],
+                                      'Street': tecstreet.text,
+                                      'City': teccity.text,
+                                      'State': tecstate.text,
+                                      'Zip': teczipcode.text,
+                                      'Phone': tecphone.text,
+                                      'Email': tecemail.text,
+                                    });
+                                    await db.dbUpdate(lst, 'Employees', 'Employee_ID');
                                   }
                                   update = false;
                                   setState(() {});

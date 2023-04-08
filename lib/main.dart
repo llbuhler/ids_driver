@@ -82,6 +82,7 @@ class _MyHomePageState extends State<MyHomePage> {
   bool passError = false;
   bool emailError = false;
   bool isVerified = false;
+  bool showPass = true;
   int ticks = 0;
   bool authorized = true;
 
@@ -456,13 +457,44 @@ class _MyHomePageState extends State<MyHomePage> {
                               decoration: InputDecoration(
                                 labelText: 'Email',
                                 enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                    borderSide: BorderSide(width: 2.0, color: Color(emailError ? Clrs.red : Clrs.dkblue))),
-                                errorBorder:
-                                    OutlineInputBorder(borderRadius: BorderRadius.circular(10.0), borderSide: BorderSide(width: 2.0, color: Color(Clrs.red))),
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  borderSide: BorderSide(
+                                    width: 2.0,
+                                    color: Color(emailError
+                                        ? Clrs.red
+                                        : emailError
+                                            ? Clrs.red
+                                            : logEmail.text.length == 0
+                                                ? Clrs.dkblue
+                                                : Clrs.green),
+                                  ),
+                                ),
+                                errorBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  borderSide: BorderSide(
+                                    width: 2.0,
+                                    color: Color(passError
+                                        ? Clrs.red
+                                        : passError
+                                            ? Clrs.red
+                                            : logPass.text.length != 4
+                                                ? Clrs.dkblue
+                                                : Clrs.green),
+                                  ),
+                                ),
                                 focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                    borderSide: BorderSide(width: 2.0, color: Color(emailError ? Clrs.red : Clrs.green))),
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  borderSide: BorderSide(
+                                    width: 2.0,
+                                    color: Color(emailError
+                                        ? Clrs.red
+                                        : emailError
+                                            ? Clrs.red
+                                            : logEmail.text.length == 0
+                                                ? Clrs.dkblue
+                                                : Clrs.green),
+                                  ),
+                                ),
                               ),
                               onChanged: (value) {
                                 setState(() {
@@ -473,17 +505,57 @@ class _MyHomePageState extends State<MyHomePage> {
                             Padding(
                                 padding: const EdgeInsets.only(top: 30),
                                 child: TextFormField(
+                                  obscureText: showPass,
                                   controller: logPass,
                                   decoration: InputDecoration(
+                                    suffix: IconButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          showPass = !showPass;
+                                        });
+                                      },
+                                      icon: const Icon(Icons.visibility, size: 30),
+                                    ),
+                                    iconColor: Color(Clrs.black),
                                     labelText: 'Passcode',
                                     enabledBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(10.0),
-                                        borderSide: BorderSide(width: 2.0, color: Color(passError ? Clrs.red : Clrs.dkblue))),
+                                      borderRadius: BorderRadius.circular(10.0),
+                                      borderSide: BorderSide(
+                                        width: 2.0,
+                                        color: Color(passError
+                                            ? Clrs.red
+                                            : passError
+                                                ? Clrs.red
+                                                : logPass.text.length != 4
+                                                    ? Clrs.dkblue
+                                                    : Clrs.green),
+                                      ),
+                                    ),
                                     errorBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(10.0), borderSide: BorderSide(width: 2.0, color: Color(Clrs.red))),
+                                      borderRadius: BorderRadius.circular(10.0),
+                                      borderSide: BorderSide(
+                                        width: 2.0,
+                                        color: Color(passError
+                                            ? Clrs.red
+                                            : passError
+                                                ? Clrs.red
+                                                : logPass.text.length != 4
+                                                    ? Clrs.dkblue
+                                                    : Clrs.green),
+                                      ),
+                                    ),
                                     focusedBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(10.0),
-                                        borderSide: BorderSide(width: 2.0, color: Color(passError ? Clrs.red : Clrs.green))),
+                                        borderSide: BorderSide(
+                                          width: 2.0,
+                                          color: Color(passError
+                                              ? Clrs.red
+                                              : passError
+                                                  ? Clrs.red
+                                                  : logPass.text.length != 4
+                                                      ? Clrs.dkblue
+                                                      : Clrs.green),
+                                        )),
                                   ),
                                   onChanged: (value) {
                                     setState(() {
@@ -557,7 +629,7 @@ class _MyHomePageState extends State<MyHomePage> {
     await db.getEmps(variables.tableEmps, '');
     await db.getRoutes(variables.tableRoute);
     await db.getDrivers(variables.tableDrivers, '');
-    await db.getstops(variables.tableStops, '', variables.tablecurrentEmployee[0]['Employee_ID'], false);
+    //await db.getstops(variables.tableStops, '', variables.tablecurrentEmployee[0]['Employee_ID'], false);
     await db.getsettings(variables.tableMySettings, '', variables.tablecurrentEmployee[0]['Employee_ID']);
     await db.getMulii(variables.tableMulti);
   }
