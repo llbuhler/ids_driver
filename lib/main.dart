@@ -16,7 +16,7 @@ import 'Subs/SizeConfig.dart';
 import 'Subs/localColors.dart';
 import 'Subs/dbFirebasek.dart';
 
-int Test = 0;
+int Test = 2;
 
 loadTable() {
   variables.tableMySettings.add({
@@ -629,7 +629,7 @@ class _MyHomePageState extends State<MyHomePage> {
     await db.getEmps(variables.tableEmps, '');
     await db.getRoutes(variables.tableRoute);
     await db.getDrivers(variables.tableDrivers, '');
-    //await db.getstops(variables.tableStops, '', variables.tablecurrentEmployee[0]['Employee_ID'], false);
+    await db.getstops(variables.tableStops, '', variables.tablecurrentEmployee[0]['Employee_ID'], false);
     await db.getsettings(variables.tableMySettings, '', variables.tablecurrentEmployee[0]['Employee_ID']);
     await db.getMulii(variables.tableMulti);
   }

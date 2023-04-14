@@ -1,5 +1,6 @@
 // ignore_for_file: file_names, avoid_web_libraries_in_flutter
 
+import 'dart:async';
 import 'dart:html' as fct;
 
 import 'package:flutter/material.dart';
@@ -11,6 +12,7 @@ import '../Subs/localColors.dart';
 import 'DeliveryArray.dart';
 
 bool updateOk = false;
+String dduReadyTime = '1030';
 
 class MyRoute extends StatefulWidget {
   const MyRoute({super.key});
@@ -23,6 +25,35 @@ class MyRouteState extends State<MyRoute> {
   VoidCallback? upDateMe() {
     setState(() {});
     return null;
+  }
+
+  //Timer _timer;
+  int _start = 10;
+  int _ticks = 0;
+
+  void startTimer() {
+    const oneSec = Duration(seconds: 1);
+    Timer _timer = Timer.periodic(
+      oneSec,
+      (Timer timer) {
+        if (_start == 0) {
+          //setState(() {
+          timer.cancel();
+          //});
+        } else {
+          setState(() {
+            print('Tick');
+          });
+        }
+      },
+    );
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    startTimer();
   }
 
   @override
@@ -50,10 +81,12 @@ class MyRouteState extends State<MyRoute> {
                 width: SizeConfig.screenWidth - 100,
                 color: Color(Clrs.blue),
                 child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  Text(
-                    'IDS Drivers App',
-                    style: TextStyle(fontSize: 30, color: Color(Clrs.white)),
-                  )
+                  FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        'IDS Drivers App',
+                        style: TextStyle(fontSize: 30, color: Color(Clrs.white)),
+                      )),
                 ])),
             Container(
                 height: 50,
@@ -228,7 +261,7 @@ class StopItemState extends State<StopItem> {
                     Container(
                       height: expand
                           ? btnpickup == 2
-                              ? 700 + 140 * stopCount.toDouble() //variables.myStops.length.toDouble()
+                              ? 610 + 174 * stopCount.toDouble() //variables.myStops.length.toDouble()
                               : 184
                           : 104,
                       width: SizeConfig.screenWidth - 20,
@@ -245,11 +278,11 @@ class StopItemState extends State<StopItem> {
                         Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
                           SizedBox(
                             height: 100,
-                            width: (SizeConfig.screenWidth - 20) * 0.422,
+                            width: (SizeConfig.screenWidth - 22) * 0.422,
                             child: Column(mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.start, children: [
                               SizedBox(
                                 height: 30,
-                                width: ((SizeConfig.screenWidth - 20) * 0.422) - 15,
+                                width: ((SizeConfig.screenWidth - 22) * 0.422) - 15,
                                 child: FittedBox(
                                   fit: BoxFit.scaleDown,
                                   child: Text(
@@ -263,7 +296,7 @@ class StopItemState extends State<StopItem> {
                               ),
                               SizedBox(
                                 height: 30,
-                                width: ((SizeConfig.screenWidth - 20) * 0.422) - 15,
+                                width: ((SizeConfig.screenWidth - 22) * 0.422) - 15,
                                 child: FittedBox(
                                   fit: BoxFit.scaleDown,
                                   child: Text(
@@ -277,14 +310,14 @@ class StopItemState extends State<StopItem> {
                               ),
                               SizedBox(
                                 height: 30,
-                                width: ((SizeConfig.screenWidth - 20) * 0.422) - 15,
+                                width: ((SizeConfig.screenWidth - 22) * 0.422) - 15,
                                 child: FittedBox(
                                   fit: BoxFit.scaleDown,
                                   child: Text(
                                     '${variables.tableStops[widget.idx]['start']} ${variables.tableStops[widget.idx]['end']}',
                                     style: TextStyle(
                                       fontSize: 20,
-                                      color: getBackColor(widget.idx, false),
+                                      color: Color(statusColor(widget.idx)),
                                     ),
                                   ),
                                 ),
@@ -293,11 +326,11 @@ class StopItemState extends State<StopItem> {
                           ),
                           SizedBox(
                               height: 100,
-                              width: (SizeConfig.screenWidth - 20) * 0.566,
+                              width: (SizeConfig.screenWidth - 22) * 0.566,
                               child: Column(mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.start, children: [
                                 SizedBox(
                                   height: 30,
-                                  width: ((SizeConfig.screenWidth - 20) * 0.422) - 15,
+                                  width: ((SizeConfig.screenWidth - 22) * 0.422) - 15,
                                   child: FittedBox(
                                     fit: BoxFit.scaleDown,
                                     child: Text(
@@ -311,7 +344,7 @@ class StopItemState extends State<StopItem> {
                                 ),
                                 SizedBox(
                                   height: 30,
-                                  width: ((SizeConfig.screenWidth - 20) * 0.422) - 15,
+                                  width: ((SizeConfig.screenWidth - 22) * 0.422) - 15,
                                   child: FittedBox(
                                     fit: BoxFit.scaleDown,
                                     child: Text(
@@ -325,7 +358,7 @@ class StopItemState extends State<StopItem> {
                                 ),
                                 SizedBox(
                                   height: 30, // 'My Route'
-                                  width: ((SizeConfig.screenWidth - 20) * 0.422) - 15,
+                                  width: ((SizeConfig.screenWidth - 22) * 0.422) - 15,
                                   child: FittedBox(
                                     fit: BoxFit.scaleDown,
                                     child: Text(
@@ -345,7 +378,7 @@ class StopItemState extends State<StopItem> {
                             ? Padding(
                                 padding: const EdgeInsets.only(bottom: 20),
                                 child: Container(
-                                  height: 490 + (140.00 * stopCount),
+                                  height: 486 + (174.00 * stopCount),
                                   width: SizeConfig.screenWidth,
                                   decoration: BoxDecoration(
                                     color: Color(Clrs.ltblue),
@@ -417,52 +450,56 @@ class StopItemState extends State<StopItem> {
                                                   height: 60,
                                                   width: ((SizeConfig.screenWidth - 80)) / 2,
                                                   child: ElevatedButton(
-                                                    onPressed: () {
-                                                      setState(() {
-                                                        if (btnclosed == 1) {
-                                                          btnclosed = 2;
-                                                          btnnone = 1;
-                                                          btnupdate = 1;
-                                                        } else if (btnclosed == 2) {
-                                                          btnclosed = 1;
-                                                          btnupdate = 0;
-                                                        }
-                                                      });
-                                                    },
-                                                    style: ElevatedButton.styleFrom(
-                                                        backgroundColor: getBtnColor(btnclosed, true, false),
-                                                        foregroundColor: getBtnColor(btnclosed, false, false),
-                                                        textStyle: const TextStyle(fontSize: 25),
-                                                        shape: RoundedRectangleBorder(
-                                                          borderRadius: BorderRadius.circular(30.0),
-                                                        )),
-                                                    child: const Text('Closed'),
-                                                  )),
+                                                      onPressed: () {
+                                                        setState(() {
+                                                          if (btnclosed == 1) {
+                                                            btnclosed = 2;
+                                                            btnnone = 1;
+                                                            btnupdate = 1;
+                                                          } else if (btnclosed == 2) {
+                                                            btnclosed = 1;
+                                                            btnupdate = 0;
+                                                          }
+                                                        });
+                                                      },
+                                                      style: ElevatedButton.styleFrom(
+                                                          backgroundColor: getBtnColor(btnclosed, true, false),
+                                                          foregroundColor: getBtnColor(btnclosed, false, false),
+                                                          textStyle: const TextStyle(fontSize: 25),
+                                                          shape: RoundedRectangleBorder(
+                                                            borderRadius: BorderRadius.circular(30.0),
+                                                          )),
+                                                      child: const FittedBox(
+                                                        fit: BoxFit.scaleDown,
+                                                        child: Text('Closed'),
+                                                      ))),
                                               SizedBox(
                                                   height: 60,
                                                   width: ((SizeConfig.screenWidth - 50)) / 2,
                                                   child: ElevatedButton(
-                                                    onPressed: () async {
-                                                      setState(() {
-                                                        if (btnnone == 1) {
-                                                          btnclosed = 1;
-                                                          btnnone = 2;
-                                                          btnupdate = 1;
-                                                        } else if (btnnone == 2) {
-                                                          btnnone = 1;
-                                                          btnupdate = 0;
-                                                        }
-                                                      });
-                                                    },
-                                                    style: ElevatedButton.styleFrom(
-                                                        backgroundColor: getBtnColor(btnnone, true, false),
-                                                        foregroundColor: getBtnColor(btnnone, false, false),
-                                                        textStyle: const TextStyle(fontSize: 25),
-                                                        shape: RoundedRectangleBorder(
-                                                          borderRadius: BorderRadius.circular(30.0),
-                                                        )),
-                                                    child: const Text('Nothing'),
-                                                  )),
+                                                      onPressed: () async {
+                                                        setState(() {
+                                                          if (btnnone == 1) {
+                                                            btnclosed = 1;
+                                                            btnnone = 2;
+                                                            btnupdate = 1;
+                                                          } else if (btnnone == 2) {
+                                                            btnnone = 1;
+                                                            btnupdate = 0;
+                                                          }
+                                                        });
+                                                      },
+                                                      style: ElevatedButton.styleFrom(
+                                                          backgroundColor: getBtnColor(btnnone, true, false),
+                                                          foregroundColor: getBtnColor(btnnone, false, false),
+                                                          textStyle: const TextStyle(fontSize: 25),
+                                                          shape: RoundedRectangleBorder(
+                                                            borderRadius: BorderRadius.circular(30.0),
+                                                          )),
+                                                      child: const FittedBox(
+                                                        fit: BoxFit.scaleDown,
+                                                        child: Text('Nothing'),
+                                                      ))),
                                             ]))
                                         : const SizedBox.shrink(),
                                     Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
@@ -471,24 +508,26 @@ class StopItemState extends State<StopItem> {
                                           width: ((SizeConfig.screenWidth - 80)) / 2,
                                           color: Color(Clrs.ltblue),
                                           child: ElevatedButton(
-                                            onPressed: () async {
-                                              setState(() {
-                                                btnpending = 2;
-                                                btnpickup = 1;
-                                                btnupdate = 0;
-                                                btncancel = 1;
-                                                expand = false;
-                                              });
-                                            },
-                                            style: ElevatedButton.styleFrom(
-                                                backgroundColor: getBtnColor(btncancel, true, true),
-                                                foregroundColor: getBtnColor(btncancel, false, true),
-                                                textStyle: const TextStyle(fontSize: 25),
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(30.0),
-                                                )),
-                                            child: const Text('Cancel'),
-                                          )),
+                                              onPressed: () async {
+                                                setState(() {
+                                                  btnpending = 2;
+                                                  btnpickup = 1;
+                                                  btnupdate = 0;
+                                                  btncancel = 1;
+                                                  expand = false;
+                                                });
+                                              },
+                                              style: ElevatedButton.styleFrom(
+                                                  backgroundColor: getBtnColor(btncancel, true, true),
+                                                  foregroundColor: getBtnColor(btncancel, false, true),
+                                                  textStyle: const TextStyle(fontSize: 25),
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius: BorderRadius.circular(30.0),
+                                                  )),
+                                              child: const FittedBox(
+                                                fit: BoxFit.scaleDown,
+                                                child: Text('Cancel'),
+                                              ))),
                                       SizedBox(
                                           height: 60,
                                           width: ((SizeConfig.screenWidth - 50)) / 2,
@@ -609,7 +648,7 @@ class StopItemState extends State<StopItem> {
                           Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
                             Container(
                               height: 100,
-                              width: (SizeConfig.screenWidth - 20) * 0.422,
+                              width: (SizeConfig.screenWidth - 40) * 0.422,
                               color: Color(Clrs.transparent),
                               child: Column(mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.start, children: [
                                 SizedBox(
@@ -628,7 +667,7 @@ class StopItemState extends State<StopItem> {
                                 ),
                                 SizedBox(
                                   height: 30,
-                                  width: ((SizeConfig.screenWidth - 20) * 0.422) - 15,
+                                  width: ((SizeConfig.screenWidth - 22) * 0.422) - 15,
                                   child: FittedBox(
                                     fit: BoxFit.scaleDown,
                                     child: Text(
@@ -642,14 +681,16 @@ class StopItemState extends State<StopItem> {
                                 ),
                                 SizedBox(
                                   height: 30,
-                                  width: ((SizeConfig.screenWidth - 20) * 0.422) - 15,
+                                  width: ((SizeConfig.screenWidth - 22) * 0.422) - 15,
                                   child: FittedBox(
                                     fit: BoxFit.scaleDown,
                                     child: Text(
                                       '${variables.tableStops[widget.idx]['start']} ${variables.tableStops[widget.idx]['end']}',
                                       style: TextStyle(
                                         fontSize: 20,
-                                        color: getBackColor(widget.idx, false),
+                                        color: Color(
+                                          statusColor(widget.idx),
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -706,7 +747,6 @@ class StopItemState extends State<StopItem> {
                                   ),
                                 ])),
                           ]),
-                          //
                           expand
                               ? Padding(
                                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
@@ -759,56 +799,60 @@ class StopItemState extends State<StopItem> {
                                       height: 60,
                                       width: ((SizeConfig.screenWidth - 80)) / 2,
                                       child: ElevatedButton(
-                                        onPressed: () {
-                                          setState(() {
-                                            if (btnclosed == 1) {
-                                              btnclosed = 2;
-                                              btnupdate = 1;
+                                          onPressed: () {
+                                            setState(() {
+                                              if (btnclosed == 1) {
+                                                btnclosed = 2;
+                                                btnupdate = 1;
 
-                                              btndelivered = 1;
-                                            } else {
-                                              btnclosed = 1;
-                                              btnupdate = 0;
-                                            }
-                                          });
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                            backgroundColor: getBtnColor(btnclosed, true, false),
-                                            foregroundColor: getBtnColor(btnclosed, false, false),
-                                            textStyle: const TextStyle(fontSize: 25),
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(30.0),
-                                            )),
-                                        child: const Text('Closed'),
-                                      )),
+                                                btndelivered = 1;
+                                              } else {
+                                                btnclosed = 1;
+                                                btnupdate = 0;
+                                              }
+                                            });
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                              backgroundColor: getBtnColor(btnclosed, true, false),
+                                              foregroundColor: getBtnColor(btnclosed, false, false),
+                                              textStyle: const TextStyle(fontSize: 25),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(30.0),
+                                              )),
+                                          child: const FittedBox(
+                                            fit: BoxFit.scaleDown,
+                                            child: Text('Closed'),
+                                          ))),
                                   const SizedBox(height: 20),
                                   SizedBox(
                                       height: 60,
                                       width: ((SizeConfig.screenWidth - 50)) / 2,
                                       child: ElevatedButton(
-                                        onPressed: () {
-                                          setState(() {
-                                            if (btndelivered == 1) {
-                                              btnpending = 1;
-                                              btndelivered = 2;
-                                              btnclosed = 1;
-                                              btnupdate = 1;
-                                            } else {
-                                              btnpending = 1;
-                                              btndelivered = 1;
-                                              btnupdate = 0;
-                                            }
-                                          });
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                            backgroundColor: getBtnColor(btndelivered, true, false),
-                                            foregroundColor: getBtnColor(btndelivered, false, false),
-                                            textStyle: const TextStyle(fontSize: 25),
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(30.0),
-                                            )),
-                                        child: const Text('Delivered'),
-                                      )),
+                                          onPressed: () {
+                                            setState(() {
+                                              if (btndelivered == 1) {
+                                                btnpending = 1;
+                                                btndelivered = 2;
+                                                btnclosed = 1;
+                                                btnupdate = 1;
+                                              } else {
+                                                btnpending = 1;
+                                                btndelivered = 1;
+                                                btnupdate = 0;
+                                              }
+                                            });
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                              backgroundColor: getBtnColor(btndelivered, true, false),
+                                              foregroundColor: getBtnColor(btndelivered, false, false),
+                                              textStyle: const TextStyle(fontSize: 25),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(30.0),
+                                              )),
+                                          child: const FittedBox(
+                                            fit: BoxFit.scaleDown,
+                                            child: Text('Delivered'),
+                                          ))),
                                 ])
                               : const SizedBox.shrink(),
                           const SizedBox(height: 20),
@@ -818,31 +862,33 @@ class StopItemState extends State<StopItem> {
                                       height: 60,
                                       width: ((SizeConfig.screenWidth - 80)) / 2,
                                       child: ElevatedButton(
-                                        onPressed: () async {
-                                          setState(() {
-                                            btnpending = 2;
-                                            btndelivered = 1;
-                                            btnupdate = 0;
-                                            btncancel = 2;
-                                            expand = false;
-                                          });
-                                          await Future.delayed(
-                                            const Duration(seconds: 2),
-                                          );
-                                          setState(() {
-                                            btncancel = 1;
-                                            expand = false;
-                                          });
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                            backgroundColor: getBtnColor(btncancel, true, true),
-                                            foregroundColor: getBtnColor(btncancel, false, true),
-                                            textStyle: const TextStyle(fontSize: 25),
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(30.0),
-                                            )),
-                                        child: const Text('Cancel'),
-                                      )),
+                                          onPressed: () async {
+                                            setState(() {
+                                              btnpending = 2;
+                                              btndelivered = 1;
+                                              btnupdate = 0;
+                                              btncancel = 2;
+                                              expand = false;
+                                            });
+                                            await Future.delayed(
+                                              const Duration(seconds: 2),
+                                            );
+                                            setState(() {
+                                              btncancel = 1;
+                                              expand = false;
+                                            });
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                              backgroundColor: getBtnColor(btncancel, true, true),
+                                              foregroundColor: getBtnColor(btncancel, false, true),
+                                              textStyle: const TextStyle(fontSize: 25),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(30.0),
+                                              )),
+                                          child: const FittedBox(
+                                            fit: BoxFit.scaleDown,
+                                            child: const Text('Cancel'),
+                                          ))),
                                   SizedBox(
                                       height: 60,
                                       width: ((SizeConfig.screenWidth - 50)) / 2,
@@ -900,6 +946,73 @@ class StopItemState extends State<StopItem> {
     );
   }
 
+  int statusColor(int idx) {
+    int rtn = Clrs.black;
+    bool ddu = variables.tableStops[idx]['start'] == 'DDU' ? true : false;
+    switch (statusTime(variables.tableStops[idx]['start'], variables.tableStops[idx]['end'], variables.tableStops[idx]['type'] == 'DDU')) {
+      case 0:
+        rtn = ddu ? Clrs.black : Clrs.white;
+        break;
+      case 1:
+        rtn = ddu ? Clrs.dkgreen : Clrs.green;
+        break;
+      case 2:
+        rtn = ddu ? Clrs.yellow : Clrs.yellow;
+        break;
+      case 3:
+        rtn = Clrs.red;
+        break;
+    }
+    return rtn;
+  }
+
+  int statusTime(String start, String end, bool DDU) {
+    const int NotOpen = 0;
+    const int Open = 1;
+    const int Warning = 2;
+    const int Closed = 3;
+    int rtn = 0;
+    String dateToday = DateTime.now().toString();
+    dateToday = '${dateToday.substring(0, dateToday.indexOf(' '))}T';
+    DateTime dduTime = timeConvert(dduReadyTime);
+    DateTime startTime = timeConvert(start);
+    DateTime endTime = timeConvert(end);
+    if (DDU) {
+      if (dduTime.compareTo(startTime) == 1) {
+        rtn = Open;
+        if (DateTime.now().compareTo(endTime) == 1) {
+          rtn = Closed;
+        } else if (DateTime.now().add(const Duration(minutes: 30)).compareTo(endTime) == 1) {
+          rtn = Warning;
+        }
+      }
+    } else if (DateTime.now().compareTo(startTime) == 1) {
+      rtn = Open;
+      if (DateTime.now().compareTo(endTime) == 1) {
+        rtn = Closed;
+      } else if (DateTime.now().add(const Duration(minutes: 30)).compareTo(endTime) == 1) {
+        rtn = Warning;
+      }
+    }
+    return rtn;
+  }
+
+  DateTime timeConvert(String time) {
+    String t = '';
+    String dateToday = DateTime.now().toString();
+    if (time.isEmpty) {
+      return DateTime.now();
+    }
+    time = time.replaceAll(':', '');
+    if (time.length == 3 || time.length == 5) {
+      time = '0' + time;
+    }
+    t = time.substring(0, 2) + ':';
+    t += time.substring(2, 4) + ':00';
+
+    return DateTime.parse(dateToday.substring(0, dateToday.indexOf(' ')) + 'T' + t);
+  }
+
   Color getBtnColor(int button, bool backColor, bool cancel) {
     Color rtn = Color(Clrs.transparent);
     if (backColor) {
@@ -911,6 +1024,7 @@ class StopItemState extends State<StopItem> {
           rtn = Color(cancel ? Clrs.ltred : Clrs.ltgreen);
           break;
         case 2:
+        case 3:
           rtn = Color(cancel ? Clrs.red : Clrs.green);
           break;
       }
@@ -929,53 +1043,6 @@ class StopItemState extends State<StopItem> {
     }
     return rtn;
   }
-
-  // updateLocal(int idx, List<Map<String, dynamic>> stp, String table) {
-  //   if (idx == 0) {
-  //     for (var e in variables.tableStops) {
-  //       if (e['recordid'] == stp[0]['recordid']) {
-  //         e['driver'] = stp[0]['driver'];
-  //         e['deliverydate'] = stp[0]['deliverydate'];
-  //         e['statustime'] = stp[0]['statustime'];
-  //         e['status'] = stp[0]['status'];
-  //         e['pallets'] = stp[0]['pallets'];
-  //         e['boxes'] = stp[0]['boxes'];
-  //         e['bags'] = stp[0]['bags'];
-  //         e['tubs'] = stp[0]['tubs'];
-  //         e['request'] = stp[0]['request'];
-  //         e['dirty'] = stp[0]['dirty'];
-  //       }
-  //     }
-  //   } else {
-  //     for (var e in multi) {
-  //       if (e['recordid'] == stp[0]['recordid']) {
-  //         e['driver'] = stp[0]['driver'];
-  //         e['deliverydate'] = stp[0]['deliverydate'];
-  //         e['statustime'] = stp[0]['statustime'];
-  //         e['status'] = stp[0]['status'];
-  //         e['pallets'] = stp[0]['pallets'];
-  //         e['boxes'] = stp[0]['boxes'];
-  //         e['bags'] = stp[0]['bags'];
-  //         e['tubs'] = stp[0]['tubs'];
-  //         e['request'] = stp[0]['request'];
-  //         e['dirty'] = stp[0]['dirty'];
-  //       }
-  //     }
-  //   }
-  //   setState(() {});
-  // }
-
-  // upDateLocalRecord() {
-  //   if (Stops[widget.idx]['type'] != 'DDU') {
-  //     Stops[widget.idx]['pallets'] = del[0]['pallets'];
-  //     Stops[widget.idx]['boxes'] = del[0]['boxes'];
-  //     Stops[widget.idx]['bags'] = del[0]['bags'];
-  //     Stops[widget.idx]['tubs'] = del[0]['tubs'];
-  //   }
-  //   Stops[widget.idx]['deliveryDate'] = del[0]['deliveryDate'];
-  //   Stops[widget.idx]['statustime'] = del[0]['statustime'];
-  //   Stops[widget.idx]['dirty'] = del[0]['dirty'];
-  // }
 
   String configureTime(String t) {
     String rtn = t;
@@ -1032,10 +1099,10 @@ Color getBackColor(int idx, bool complete) {
     if (variables.tableStops[idx]['type'] == 'DDU') {
       switch (variables.tableStops[idx]['status']) {
         case 'Delivered':
-          rtn = Color(Clrs.dkgray);
+          rtn = Color(Clrs.grey);
           break;
         default:
-          rtn = Color(Clrs.ltgray);
+          rtn = Color(Clrs.dkgray);
           break;
       }
     } else {
@@ -1053,19 +1120,19 @@ Color getBackColor(int idx, bool complete) {
       case 'DDU':
         switch (variables.tableStops[idx]['status']) {
           case 'Pending':
-            rtn = Color(Clrs.black);
-            break;
-          case 'Skipped':
-            rtn = Color(Clrs.dkgray);
-            break;
-          case 'Delivered':
             rtn = Color(Clrs.white);
             break;
+          case 'Skipped':
+            rtn = Color(Clrs.white);
+            break;
+          case 'Delivered':
+            rtn = Color(Clrs.black);
+            break;
           case 'Picked Up':
-            rtn = Color(Clrs.dkgray);
+            rtn = Color(Clrs.black);
             break;
           case 'Cancelled':
-            rtn = Color(Clrs.dkgray);
+            rtn = Color(Clrs.black);
             break;
         }
         break;
@@ -1084,7 +1151,7 @@ Color getForeColor(int idx) {
     case 'DDU':
       switch (variables.tableStops[idx]['status']) {
         case 'Pending':
-          rtn = Color(Clrs.black);
+          rtn = Color(Clrs.white);
           break;
         case 'Skipped':
           rtn = Color(Clrs.white);
@@ -1106,8 +1173,11 @@ Color getForeColor(int idx) {
 }
 
 Color getstatusColor(int idx) {
-  Color rtn = Color(variables.tableStops[idx]['type'] == 'DDU' ? Clrs.black : Clrs.white);
+  Color rtn = Color(variables.tableStops[idx]['type'] == 'DDU' ? Clrs.white : Clrs.black);
   switch (variables.tableStops[idx]['status']) {
+    case 'Pending':
+      rtn = Color(Clrs.white);
+      break;
     case 'Picked Up':
     case 'Delivered':
     case 'On Schedule':

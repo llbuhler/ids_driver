@@ -17,5 +17,7 @@ class Clrs {
   static int ltred = 0xffE6C6C9;
   static int grey = 0xFF9E9E9E;
   static int green = 0xFF00FF00;
+  static int dkgreen = 0xFF439771;
+  static int yellow = 0xFFFCFB00;
   static int ltyellow = 0xFFFFECB3;
 }

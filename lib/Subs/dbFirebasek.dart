@@ -64,7 +64,11 @@ class db {
     for (var doc in docs) {
       if (doc.data() != null) {
         var data = doc.data() as Map<String, dynamic>;
-        list.add(data);
+        if (data['active'] && !all) {
+          list.add(data);
+        } else if (all) {
+          list.add(data);
+        }
       }
     }
     return null;
