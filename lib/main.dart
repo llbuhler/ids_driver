@@ -17,6 +17,7 @@ import 'Subs/localColors.dart';
 import 'Subs/dbFirebasek.dart';
 
 int Test = 2;
+String dduReadyTime = '2100';
 
 loadTable() {
   variables.tableMySettings.add({
@@ -464,7 +465,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                         ? Clrs.red
                                         : emailError
                                             ? Clrs.red
-                                            : logEmail.text.length == 0
+                                            : logEmail.text.isEmpty
                                                 ? Clrs.dkblue
                                                 : Clrs.green),
                                   ),
@@ -490,7 +491,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                         ? Clrs.red
                                         : emailError
                                             ? Clrs.red
-                                            : logEmail.text.length == 0
+                                            : logEmail.text.isEmpty
                                                 ? Clrs.dkblue
                                                 : Clrs.green),
                                   ),

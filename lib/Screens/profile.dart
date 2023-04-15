@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:ids_driver/Subs/SizeConfig.dart';
 import 'package:ids_driver/variables.dart';

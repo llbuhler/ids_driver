@@ -1,9 +1,10 @@
-// ignore_for_file: file_names, avoid_web_libraries_in_flutter
+// ignore_for_file: file_names, avoid_web_libraries_in_flutter, no_leading_underscores_for_local_identifiers, unused_local_variable, non_constant_identifier_names, prefer_interpolation_to_compose_strings
 
 import 'dart:async';
 import 'dart:html' as fct;
 
 import 'package:flutter/material.dart';
+import 'package:ids_driver/main.dart';
 import 'package:ids_driver/variables.dart';
 import 'package:ids_driver/Subs/SizeConfig.dart';
 import 'package:ids_driver/Subs/SubRoutines.dart';
@@ -12,7 +13,6 @@ import '../Subs/localColors.dart';
 import 'DeliveryArray.dart';
 
 bool updateOk = false;
-String dduReadyTime = '1030';
 
 class MyRoute extends StatefulWidget {
   const MyRoute({super.key});
@@ -29,7 +29,7 @@ class MyRouteState extends State<MyRoute> {
 
   //Timer _timer;
   int _start = 10;
-  int _ticks = 0;
+  // int _ticks = 0;
 
   void startTimer() {
     const oneSec = Duration(seconds: 1);
@@ -42,7 +42,7 @@ class MyRouteState extends State<MyRoute> {
           //});
         } else {
           setState(() {
-            print('Tick');
+            timeUpdate();
           });
         }
       },
@@ -51,9 +51,18 @@ class MyRouteState extends State<MyRoute> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     startTimer();
+  }
+
+  void despose() {
+    super.dispose();
+    _start = 0;
+    startTimer();
+  }
+
+  void timeUpdate() {
+    setState(() {});
   }
 
   @override
@@ -685,7 +694,7 @@ class StopItemState extends State<StopItem> {
                                   child: FittedBox(
                                     fit: BoxFit.scaleDown,
                                     child: Text(
-                                      '${variables.tableStops[widget.idx]['start']} ${variables.tableStops[widget.idx]['end']}',
+                                      getTimes(widget.idx),
                                       style: TextStyle(
                                         fontSize: 20,
                                         color: Color(
@@ -887,7 +896,7 @@ class StopItemState extends State<StopItem> {
                                               )),
                                           child: const FittedBox(
                                             fit: BoxFit.scaleDown,
-                                            child: const Text('Cancel'),
+                                            child: Text('Cancel'),
                                           ))),
                                   SizedBox(
                                       height: 60,
@@ -946,10 +955,27 @@ class StopItemState extends State<StopItem> {
     );
   }
 
+  String getTimes(int idx) {
+    String rtn = '';
+    switch (SubRoutine.getday()) {
+      case 'Sat':
+        rtn = variables.tableStops[widget.idx]['satstart'] + ' ' + variables.tableStops[widget.idx]['satend'];
+        break;
+      case 'Sun':
+        rtn = variables.tableStops[widget.idx]['sunstart'] + ' ' + variables.tableStops[widget.idx]['sunend'];
+        break;
+      default:
+        rtn = variables.tableStops[widget.idx]['start'] + ' ' + variables.tableStops[widget.idx]['end'];
+        break;
+    }
+    return rtn;
+  }
+
   int statusColor(int idx) {
     int rtn = Clrs.black;
     bool ddu = variables.tableStops[idx]['start'] == 'DDU' ? true : false;
-    switch (statusTime(variables.tableStops[idx]['start'], variables.tableStops[idx]['end'], variables.tableStops[idx]['type'] == 'DDU')) {
+    String d = getTimes(idx);
+    switch (statusTime(d.substring(0, 4), d.substring(5), variables.tableStops[idx]['type'] == 'DDU')) {
       case 0:
         rtn = ddu ? Clrs.black : Clrs.white;
         break;
@@ -967,10 +993,10 @@ class StopItemState extends State<StopItem> {
   }
 
   int statusTime(String start, String end, bool DDU) {
-    const int NotOpen = 0;
-    const int Open = 1;
-    const int Warning = 2;
-    const int Closed = 3;
+    const int notOpen = 0;
+    const int open = 1;
+    const int warning = 2;
+    const int closed = 3;
     int rtn = 0;
     String dateToday = DateTime.now().toString();
     dateToday = '${dateToday.substring(0, dateToday.indexOf(' '))}T';
@@ -979,19 +1005,19 @@ class StopItemState extends State<StopItem> {
     DateTime endTime = timeConvert(end);
     if (DDU) {
       if (dduTime.compareTo(startTime) == 1) {
-        rtn = Open;
+        rtn = open;
         if (DateTime.now().compareTo(endTime) == 1) {
-          rtn = Closed;
+          rtn = closed;
         } else if (DateTime.now().add(const Duration(minutes: 30)).compareTo(endTime) == 1) {
-          rtn = Warning;
+          rtn = warning;
         }
       }
     } else if (DateTime.now().compareTo(startTime) == 1) {
-      rtn = Open;
+      rtn = open;
       if (DateTime.now().compareTo(endTime) == 1) {
-        rtn = Closed;
+        rtn = closed;
       } else if (DateTime.now().add(const Duration(minutes: 30)).compareTo(endTime) == 1) {
-        rtn = Warning;
+        rtn = warning;
       }
     }
     return rtn;
