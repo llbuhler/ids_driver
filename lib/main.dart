@@ -10,13 +10,12 @@ import 'package:ids_driver/Screens/MyRoute.dart';
 import 'package:ids_driver/Subs/SubRoutines.dart';
 import 'package:ids_driver/variables.dart';
 import 'package:intl/intl.dart';
-
 import 'Screens/profile.dart';
 import 'Subs/SizeConfig.dart';
 import 'Subs/localColors.dart';
 import 'Subs/dbFirebasek.dart';
 
-int Test = 2;
+int Test = 0;
 bool useTimer = false;
 String dduReadyTime = '2100';
 
@@ -246,19 +245,19 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(children: [
           Row(children: [
             Container(
-              height: 50,
-              width: 50,
-              color: Color(Clrs.blue),
-              child: myroute
-                  ? IconButton(
-                      onPressed: () async {
-                        await db.getstops(variables.tableStops, '', variables.tablecurrentEmployee[0]['Employee_ID'], false);
-                        setState(() {});
-                      },
-                      icon: Icon(Icons.update, color: Color(Clrs.white), size: 35),
-                    )
-                  : SizedBox.shrink(),
-            ),
+                height: 50,
+                width: 50,
+                color: Color(Clrs.blue),
+                child: myroute
+                    ? IconButton(
+                        onPressed: () async {
+                          await db.getstops(variables.tableStops, '', variables.tablecurrentEmployee[0]['Employee_ID'], false);
+                          setState(() {});
+                        },
+                        icon: Icon(Icons.update, color: Color(Clrs.white), size: 35),
+                      )
+                    : SizedBox.shrink()),
+            //Image.asset(fit: BoxFit.fitHeight, 'assets/icons/IDS Logo sq.png')),
             Container(
                 height: 50,
                 width: SizeConfig.screenWidth - 100,
