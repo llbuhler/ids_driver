@@ -1,4 +1,4 @@
-// ignore_for_file: file_names, avoid_web_libraries_in_flutter, no_leading_underscores_for_local_identifiers, unused_local_variable, non_constant_identifier_names, prefer_interpolation_to_compose_strings
+// ignore_for_file: file_names, avoid_web_libraries_in_flutter, no_leading_underscores_for_local_identifiers, unused_local_variable, non_constant_identifier_names, prefer_interpolation_to_compose_strings, unused_field, prefer_final_fields
 
 import 'dart:async';
 import 'dart:html' as fct;
@@ -22,6 +22,12 @@ class MyRoute extends StatefulWidget {
 }
 
 class MyRouteState extends State<MyRoute> {
+  @override
+  void initState() {
+    super.initState();
+    startTimer();
+  }
+
   VoidCallback? upDateMe() {
     setState(() {});
     return null;
@@ -32,27 +38,21 @@ class MyRouteState extends State<MyRoute> {
   // int _ticks = 0;
 
   void startTimer() {
-    const oneSec = Duration(seconds: 1);
+    const oneSec = Duration(seconds: 3);
     Timer _timer = Timer.periodic(
       oneSec,
       (Timer timer) {
         if (_start == 0) {
-          //setState(() {
           timer.cancel();
-          //});
         } else {
           setState(() {
-            timeUpdate();
+            upDateMe();
+            //timeUpdate();
+            print('tick');
           });
         }
       },
     );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    startTimer();
   }
 
   void despose() {
@@ -62,7 +62,8 @@ class MyRouteState extends State<MyRoute> {
   }
 
   void timeUpdate() {
-    setState(() {});
+    print('tick');
+    //setState(() {});
   }
 
   @override
@@ -103,6 +104,8 @@ class MyRouteState extends State<MyRoute> {
                 color: Color(Clrs.blue),
                 child: IconButton(
                     onPressed: () {
+                      _start = 0;
+                      startTimer();
                       Navigator.pop(context);
                     },
                     icon: Icon(
@@ -412,18 +415,20 @@ class StopItemState extends State<StopItem> {
                                               child: SizedBox(
                                                 height: 100,
                                                 width: SizeConfig.screenWidth - 60,
-                                                child: TextField(
+                                                child: TextFormField(
                                                   controller: trequest,
                                                   maxLines: 5,
                                                   decoration: const InputDecoration(
+                                                      filled: true,
+                                                      fillColor: Colors.white,
                                                       labelText: 'Request',
-                                                      enabledBorder: OutlineInputBorder(
-                                                        borderRadius: BorderRadius.all(Radius.circular(30.0)),
-                                                        borderSide: BorderSide(width: 2.0, color: Colors.black),
-                                                      ),
+                                                      // enabledBorder: OutlineInputBorder(
+                                                      //   borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                                                      //   borderSide: BorderSide(width: 2.0, color: Colors.white),
+                                                      // ),
                                                       focusedBorder: OutlineInputBorder(
                                                         borderRadius: BorderRadius.all(Radius.circular(30.0)),
-                                                        borderSide: BorderSide(width: 2.0, color: Colors.black),
+                                                        borderSide: BorderSide(width: 2.0, color: Colors.white),
                                                       )),
                                                   onTap: () {},
                                                 ),
@@ -762,10 +767,14 @@ class StopItemState extends State<StopItem> {
                                   child: SizedBox(
                                     height: 100,
                                     width: SizeConfig.screenWidth - 60,
-                                    child: TextField(
+                                    child: TextFormField(
                                       controller: trequest,
                                       maxLines: 5,
+                                      cursorColor: Color(Clrs.white),
                                       decoration: const InputDecoration(
+                                          labelStyle: TextStyle(fontSize: 20, color: Colors.white),
+                                          filled: true,
+                                          fillColor: Colors.grey,
                                           labelText: 'Request',
                                           enabledBorder: OutlineInputBorder(
                                             borderRadius: BorderRadius.all(Radius.circular(30.0)),
@@ -788,8 +797,13 @@ class StopItemState extends State<StopItem> {
                                     child: TextField(
                                       controller: tnote,
                                       maxLines: 5,
+                                      cursorColor: Color(Clrs.white),
+                                      style: TextStyle(fontSize: 24, color: Color(Clrs.white)),
                                       decoration: const InputDecoration(
                                           labelText: 'Note',
+                                          labelStyle: TextStyle(fontSize: 20, color: Colors.white),
+                                          filled: true,
+                                          fillColor: Colors.grey,
                                           enabledBorder: OutlineInputBorder(
                                             borderRadius: BorderRadius.all(Radius.circular(30.0)),
                                             borderSide: BorderSide(width: 2.0, color: Colors.black),
@@ -1004,7 +1018,7 @@ class StopItemState extends State<StopItem> {
     DateTime startTime = timeConvert(start);
     DateTime endTime = timeConvert(end);
     if (DDU) {
-      if (dduTime.compareTo(startTime) == 1) {
+      if (DateTime.now().compareTo(startTime) == 1) {
         rtn = open;
         if (DateTime.now().compareTo(endTime) == 1) {
           rtn = closed;
@@ -1219,122 +1233,3 @@ Color getstatusColor(int idx) {
   }
   return rtn;
 }
-
-// class TakePictureScreen extends StatefulWidget {
-//   TakePictureScreen({
-//     super.key,
-//     required this.camera,
-//   });
-
-//   final CameraDescription camera;
-
-//   @override
-//   TakePictureScreenState createState() => TakePictureScreenState();
-// }
-
-// class TakePictureScreenState extends State<TakePictureScreen> {
-//   late CameraController _controller;
-//   late Future<void> _initializeControllerFuture;
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     // To display the current output from the Camera,
-//     // create a CameraController.
-//     _controller = CameraController(
-//       // Get a specific camera from the list of available cameras.
-//       widget.camera,
-//       // Define the resolution to use.
-//       ResolutionPreset.medium,
-//     );
-
-//     // Next, initialize the controller. This returns a Future.
-//     _initializeControllerFuture = _controller.initialize();
-//   }
-
-//   @override
-//   void dispose() {
-//     // Dispose of the controller when the widget is disposed.
-//     _controller.dispose();
-//     super.dispose();
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//         appBar: AppBar(title: const Text('Take a picture')),
-//         // You must wait until the controller is initialized before displaying the
-//         // camera preview. Use a FutureBuilder to display a loading spinner until the
-//         // controller has finished initializing.
-//         body: FutureBuilder<void>(
-//           future: _initializeControllerFuture,
-//           builder: (context, snapshot) {
-//             if (snapshot.connectionState == ConnectionState.done) {
-//               // If the Future is complete, display the preview.
-//               return CameraPreview(_controller);
-//             } else {
-//               // Otherwise, display a loading indicator.
-//               return const Center(child: CircularProgressIndicator());
-//             }
-//           },
-//         ),
-//         floatingActionButton: FloatingActionButton(
-//           // Provide an onPressed callback.
-//           onPressed: () async {
-//             // Take the Picture in a try / catch block. If anything goes wrong,
-//             // catch the error.
-//             try {
-//               // Ensure that the camera is initialized.
-//               await _initializeControllerFuture;
-
-//               // Attempt to take a picture and get the file `image`
-//               // where it was saved.
-//               final image = await _controller.takePicture();
-
-//               if (!mounted) return;
-//               image1 = image.path;
-//               //print(image1.toString());
-//               //images.add(image.path);
-//               // If the picture was taken, display it on a new screen.
-//               await Navigator.of(context).push(
-//                 MaterialPageRoute(
-//                   builder: (context) => DisplayPictureScreen(
-//                     // Pass the automatically generated path to
-//                     // the DisplayPictureScreen widget.
-//                     imagePath: image.path,
-//                   ),
-//                 ),
-//               );
-//             } catch (e) {
-//               //   // If an error occurs, log the error to the console.
-//             }
-//             //},
-
-//             const Icon(Icons.camera_alt);
-//             //Navigator.pop(context);
-//           },
-//         ));
-//   }
-// }
-
-// // A widget that displays the picture taken by the user.
-// class DisplayPictureScreen extends StatelessWidget {
-//   final String imagePath;
-
-//   const DisplayPictureScreen({super.key, required this.imagePath});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(title: const Text('Display the Picture')),
-//       // The image is stored as a file on the device. Use the `Image.file`
-//       // constructor with the given path to display the image.
-//       body: Image.file(File(imagePath)),
-//     );
-//   }
-// }
-//           ),
-//         ]),
-//       ),
-//     );
-//  }

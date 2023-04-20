@@ -1,4 +1,4 @@
-// ignore_for_file: unrelated_type_equality_checks, library_private_types_in_public_api, non_constant_identifier_names, prefer_typing_uninitialized_variables, use_key_in_widget_constructors, unused_local_variable
+// ignore_for_file: unrelated_type_equality_checks, library_private_types_in_public_api, non_constant_identifier_names, prefer_typing_uninitialized_variables, use_key_in_widget_constructors, unused_local_variable, prefer_final_fields, no_leading_underscores_for_local_identifiers
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -17,6 +17,7 @@ import 'Subs/localColors.dart';
 import 'Subs/dbFirebasek.dart';
 
 int Test = 2;
+bool useTimer = false;
 String dduReadyTime = '2100';
 
 loadTable() {
@@ -86,10 +87,30 @@ class _MyHomePageState extends State<MyHomePage> {
   bool showPass = true;
   int ticks = 0;
   bool authorized = true;
+  bool myroute = false;
 
   String mtoken = '';
   String title = '';
   String body = '';
+
+  int _start = 1;
+
+  void startTimer() {
+    const oneSec = Duration(seconds: 3);
+    Timer _timer = Timer.periodic(
+      oneSec,
+      (Timer timer) {
+        if (_start == 0) {
+          timer.cancel();
+        } else {
+          setState(() {
+            //timeUpdate();
+            print('tick');
+          });
+        }
+      },
+    );
+  }
 
   void emailVerify() {
     if (logEmail.text.isEmpty) {
@@ -148,6 +169,7 @@ class _MyHomePageState extends State<MyHomePage> {
     getPermission();
     getToken();
     messageListener(context);
+    startTimer();
   }
 
   Future<void> getPermission() async {
@@ -168,7 +190,9 @@ class _MyHomePageState extends State<MyHomePage> {
     await FirebaseMessaging.instance.getToken().then((token) {
       setState(() {
         mtoken = token.toString();
-        if (kDebugMode) {}
+        if (kDebugMode) {
+          //print(mtoken);
+        }
       });
     });
   }
@@ -216,413 +240,474 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     SizeConfig.init(context);
     return Material(
-        child: SizedBox(
-      height: SizeConfig.screenHeight,
-      width: SizeConfig.screenWidth,
-      child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-        Container(
-            height: 50,
-            width: SizeConfig.screenWidth,
-            color: Color(Clrs.blue),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'IDS Drivers App',
-                  style: TextStyle(fontSize: 30, color: Color(Clrs.white)),
-                ),
-              ],
-            )),
-        variables.isLoggedin
-            ? Expanded(
-                child: ListView(children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 30, left: 15, right: 15),
-                  child: SizedBox(
-                    height: 50,
-                    width: SizeConfig.screenWidth - 30,
-                    child: ElevatedButton(
+      child: SizedBox(
+        height: SizeConfig.screenHeight,
+        width: SizeConfig.screenWidth,
+        child: Column(children: [
+          Row(children: [
+            Container(
+              height: 50,
+              width: 50,
+              color: Color(Clrs.blue),
+              child: myroute
+                  ? IconButton(
                       onPressed: () async {
-                        //await db.getMulii(variables.tableMulti);
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const MyRoute(),
-                            ));
+                        await db.getstops(variables.tableStops, '', variables.tablecurrentEmployee[0]['Employee_ID'], false);
+                        setState(() {});
                       },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(Clrs.blue),
-                        foregroundColor: Color(Clrs.white),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20.0),
-                          side: BorderSide(color: Color(Clrs.dkblue), width: 2.0),
-                        ),
-                      ),
-                      child: const Text(
-                        'My Route',
-                        style: TextStyle(fontSize: 30),
-                      ),
-                    ),
+                      icon: Icon(Icons.update, color: Color(Clrs.white), size: 35),
+                    )
+                  : SizedBox.shrink(),
+            ),
+            Container(
+                height: 50,
+                width: SizeConfig.screenWidth - 100,
+                color: Color(Clrs.blue),
+                child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  Text(
+                    'IDS Drivers App',
+                    style: TextStyle(fontSize: 30, color: Color(Clrs.white)),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 30, left: 15, right: 15),
-                  child: SizedBox(
-                    height: 50,
-                    width: SizeConfig.screenWidth - 30,
-                    child: ElevatedButton(
+                ])),
+            Container(
+              height: 50,
+              width: 50,
+              color: Color(Clrs.blue),
+              child: myroute
+                  ? IconButton(
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const Profile(),
-                          ),
-                        );
+                        if (myroute) {
+                          myroute = false;
+                        }
                       },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(Clrs.blue),
-                        foregroundColor: Color(Clrs.white),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20.0),
-                          side: BorderSide(color: Color(Clrs.dkblue), width: 2.0),
-                        ),
-                      ),
-                      child: const Text(
-                        'Profile',
-                        style: TextStyle(fontSize: 30),
-                      ),
-                    ),
-                  ),
-                ),
-                // variables.tableMySettings[0]['messages']
-                //     ? Padding(
-                //         padding: const EdgeInsets.only(top: 30, left: 15, right: 15),
-                //         child: SizedBox(
-                //           height: 50,
-                //           width: SizeConfig.screenWidth - 30,
-                //           child: ElevatedButton(
-                //             onPressed: () {},
-                //             style: ElevatedButton.styleFrom(
-                //               backgroundColor: Color(Clrs.blue),
-                //               foregroundColor: Color(Clrs.white),
-                //               shape: RoundedRectangleBorder(
-                //                 borderRadius: BorderRadius.circular(20.0),
-                //                 side: BorderSide(color: Color(Clrs.dkblue), width: 2.0),
-                //               ),
-                //             ),
-                //             child: const Text(
-                //               'Messages',
-                //               style: TextStyle(fontSize: 30),
-                //             ),
-                //           ),
-                //         ),
-                //       )
-                //     : const SizedBox.shrink(),
-                Padding(
-                  padding: const EdgeInsets.only(top: 30, left: 15, right: 15),
-                  child: SizedBox(
-                    height: 50,
-                    width: SizeConfig.screenWidth - 30,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const training(),
-                            ));
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(Clrs.blue),
-                        foregroundColor: Color(Clrs.white),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20.0),
-                          side: BorderSide(color: Color(Clrs.dkblue), width: 2.0),
-                        ),
-                      ),
-                      child: const Text(
-                        'FYI / Training',
-                        style: TextStyle(fontSize: 30),
-                      ),
-                    ),
-                  ),
-                ),
-                // variables.tableMySettings[0]['loadboard']
-                //     ? Padding(
-                //         padding: const EdgeInsets.only(top: 30, left: 15, right: 15),
-                //         child: SizedBox(
-                //           height: 50,
-                //           width: SizeConfig.screenWidth - 30,
-                //           child: ElevatedButton(
-                //             onPressed: () {},
-                //             style: ElevatedButton.styleFrom(
-                //               backgroundColor: Color(Clrs.blue),
-                //               foregroundColor: Color(Clrs.taco),
-                //               shape: RoundedRectangleBorder(
-                //                 borderRadius: BorderRadius.circular(20.0),
-                //                 side: BorderSide(color: Color(Clrs.dkblue), width: 2.0),
-                //               ),
-                //             ),
-                //             child: const Text(
-                //               'Load Board',
-                //               style: TextStyle(fontSize: 30),
-                //             ),
-                //           ),
-                //         ),
-                //       )
-                //     : const SizedBox.shrink(),
-                Padding(
-                  padding: const EdgeInsets.only(top: 70, left: 15, right: 15),
-                  child: SizedBox(
-                    height: 50,
-                    width: SizeConfig.screenWidth - 30,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          variables.isLoggedin = false;
-                        });
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(Clrs.blue),
-                        foregroundColor: Color(Clrs.taco),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20.0),
-                          side: BorderSide(color: Color(Clrs.dkblue), width: 2.0),
-                        ),
-                      ),
-                      child: const Text(
-                        'Log Out',
-                        style: TextStyle(fontSize: 30),
-                      ),
-                    ),
-                  ),
-                ),
-                // variables.tablecurrentEmployee[0]['Clearance'] == 'Admin'
-                //     ? Padding(
-                //         padding: const EdgeInsets.only(top: 30, left: 15, right: 15),
-                //         child: SizedBox(
-                //           height: 50,
-                //           width: SizeConfig.screenWidth - 30,
-                //           child: ElevatedButton(
-                //             onPressed: () {
-                //               Navigator.push(
-                //                   context,
-                //                   MaterialPageRoute(
-                //                     builder: (context) => const Settings(),
-                //                   ));
-                //             },
-                //             style: ElevatedButton.styleFrom(
-                //               backgroundColor: Color(Clrs.blue),
-                //               foregroundColor: Color(Clrs.taco),
-                //               shape: RoundedRectangleBorder(
-                //                 borderRadius: BorderRadius.circular(20.0),
-                //                 side: BorderSide(color: Color(Clrs.dkblue), width: 2.0),
-                //               ),
-                //             ),
-                //             child: const Text(
-                //               'Settings',
-                //               style: TextStyle(fontSize: 30),
-                //             ),
-                //           ),
-                //         ),
-                //       )
-                //     : const SizedBox.shrink(),
-                SizedBox(height: 400, width: SizeConfig.screenWidth),
-              ]))
-            : Column(children: [
-                Container(
-                  height: 30,
-                  width: SizeConfig.screenWidth,
-                  decoration: BoxDecoration(border: Border.all(color: Color(Clrs.blue), width: 2.0)),
-                  child: Column(mainAxisAlignment: MainAxisAlignment.center, children: const [
-                    Text(
-                      'Log In',
-                      style: TextStyle(fontSize: 18),
-                    ),
-                  ]),
-                ),
-                Padding(
-                    padding: const EdgeInsets.only(top: 50),
-                    child: Container(
-                      height: 300,
-                      width: SizeConfig.screenWidth - 30,
-                      decoration: BoxDecoration(
-                        color: Color(Clrs.ltblue),
-                        borderRadius: BorderRadius.circular(15.0),
-                        border: Border.all(color: Color(Clrs.dkblue), width: 2.0),
-                      ),
-                      child: Padding(
-                          padding: const EdgeInsets.only(top: 10, left: 15, right: 15),
-                          child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-                            TextFormField(
-                              controller: logEmail,
-                              decoration: InputDecoration(
-                                labelText: 'Email',
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                  borderSide: BorderSide(
-                                    width: 2.0,
-                                    color: Color(emailError
-                                        ? Clrs.red
-                                        : emailError
-                                            ? Clrs.red
-                                            : logEmail.text.isEmpty
-                                                ? Clrs.dkblue
-                                                : Clrs.green),
-                                  ),
-                                ),
-                                errorBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                  borderSide: BorderSide(
-                                    width: 2.0,
-                                    color: Color(passError
-                                        ? Clrs.red
-                                        : passError
-                                            ? Clrs.red
-                                            : logPass.text.length != 4
-                                                ? Clrs.dkblue
-                                                : Clrs.green),
-                                  ),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                  borderSide: BorderSide(
-                                    width: 2.0,
-                                    color: Color(emailError
-                                        ? Clrs.red
-                                        : emailError
-                                            ? Clrs.red
-                                            : logEmail.text.isEmpty
-                                                ? Clrs.dkblue
-                                                : Clrs.green),
-                                  ),
-                                ),
+                      icon: Icon(Icons.menu, color: Color(Clrs.white), size: 35),
+                    )
+                  : SizedBox.shrink(),
+            ),
+          ]),
+          !myroute
+              ? variables.isLoggedin
+                  ? Expanded(
+                      child: ListView(children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 30, left: 15, right: 15),
+                        child: SizedBox(
+                          height: 50,
+                          width: SizeConfig.screenWidth - 30,
+                          child: ElevatedButton(
+                            onPressed: () async {
+                              setState(() {
+                                myroute = true;
+                              });
+
+                              //await db.getMulii(variables.tableMulti);
+
+                              // Navigator.push(
+                              //     context,
+                              //     MaterialPageRoute(
+                              //       builder: (context) => const MyRoute(),
+                              //     ));
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Color(Clrs.blue),
+                              foregroundColor: Color(Clrs.white),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20.0),
+                                side: BorderSide(color: Color(Clrs.dkblue), width: 2.0),
                               ),
-                              onChanged: (value) {
-                                setState(() {
-                                  emailVerify();
-                                });
-                              },
                             ),
-                            Padding(
-                                padding: const EdgeInsets.only(top: 30),
-                                child: TextFormField(
-                                  obscureText: showPass,
-                                  controller: logPass,
-                                  decoration: InputDecoration(
-                                    suffix: IconButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          showPass = !showPass;
-                                        });
-                                      },
-                                      icon: const Icon(Icons.visibility, size: 30),
-                                    ),
-                                    iconColor: Color(Clrs.black),
-                                    labelText: 'Passcode',
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                      borderSide: BorderSide(
-                                        width: 2.0,
-                                        color: Color(passError
-                                            ? Clrs.red
-                                            : passError
-                                                ? Clrs.red
-                                                : logPass.text.length != 4
-                                                    ? Clrs.dkblue
-                                                    : Clrs.green),
-                                      ),
-                                    ),
-                                    errorBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                      borderSide: BorderSide(
-                                        width: 2.0,
-                                        color: Color(passError
-                                            ? Clrs.red
-                                            : passError
-                                                ? Clrs.red
-                                                : logPass.text.length != 4
-                                                    ? Clrs.dkblue
-                                                    : Clrs.green),
-                                      ),
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(10.0),
-                                        borderSide: BorderSide(
-                                          width: 2.0,
-                                          color: Color(passError
-                                              ? Clrs.red
-                                              : passError
-                                                  ? Clrs.red
-                                                  : logPass.text.length != 4
-                                                      ? Clrs.dkblue
-                                                      : Clrs.green),
-                                        )),
-                                  ),
-                                  onChanged: (value) {
-                                    setState(() {
-                                      passVerify();
-                                    });
-                                  },
-                                )),
-                            Padding(
+                            child: const Text(
+                              'My Route',
+                              style: TextStyle(fontSize: 30),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 30, left: 15, right: 15),
+                        child: SizedBox(
+                          height: 50,
+                          width: SizeConfig.screenWidth - 30,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const Profile(),
+                                ),
+                              );
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Color(Clrs.blue),
+                              foregroundColor: Color(Clrs.white),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20.0),
+                                side: BorderSide(color: Color(Clrs.dkblue), width: 2.0),
+                              ),
+                            ),
+                            child: const Text(
+                              'Profile',
+                              style: TextStyle(fontSize: 30),
+                            ),
+                          ),
+                        ),
+                      ),
+                      // variables.tableMySettings[0]['messages']
+                      //     ? Padding(
+                      //         padding: const EdgeInsets.only(top: 30, left: 15, right: 15),
+                      //         child: SizedBox(
+                      //           height: 50,
+                      //           width: SizeConfig.screenWidth - 30,
+                      //           child: ElevatedButton(
+                      //             onPressed: () {},
+                      //             style: ElevatedButton.styleFrom(
+                      //               backgroundColor: Color(Clrs.blue),
+                      //               foregroundColor: Color(Clrs.white),
+                      //               shape: RoundedRectangleBorder(
+                      //                 borderRadius: BorderRadius.circular(20.0),
+                      //                 side: BorderSide(color: Color(Clrs.dkblue), width: 2.0),
+                      //               ),
+                      //             ),
+                      //             child: const Text(
+                      //               'Messages',
+                      //               style: TextStyle(fontSize: 30),
+                      //             ),
+                      //           ),
+                      //         ),
+                      //       )
+                      //     : const SizedBox.shrink(),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 30, left: 15, right: 15),
+                        child: SizedBox(
+                          height: 50,
+                          width: SizeConfig.screenWidth - 30,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const training(),
+                                  ));
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Color(Clrs.blue),
+                              foregroundColor: Color(Clrs.white),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20.0),
+                                side: BorderSide(color: Color(Clrs.dkblue), width: 2.0),
+                              ),
+                            ),
+                            child: const Text(
+                              'FYI / Training',
+                              style: TextStyle(fontSize: 30),
+                            ),
+                          ),
+                        ),
+                      ),
+                      // variables.tableMySettings[0]['loadboard']
+                      //     ? Padding(
+                      //         padding: const EdgeInsets.only(top: 30, left: 15, right: 15),
+                      //         child: SizedBox(
+                      //           height: 50,
+                      //           width: SizeConfig.screenWidth - 30,
+                      //           child: ElevatedButton(
+                      //             onPressed: () {},
+                      //             style: ElevatedButton.styleFrom(
+                      //               backgroundColor: Color(Clrs.blue),
+                      //               foregroundColor: Color(Clrs.taco),
+                      //               shape: RoundedRectangleBorder(
+                      //                 borderRadius: BorderRadius.circular(20.0),
+                      //                 side: BorderSide(color: Color(Clrs.dkblue), width: 2.0),
+                      //               ),
+                      //             ),
+                      //             child: const Text(
+                      //               'Load Board',
+                      //               style: TextStyle(fontSize: 30),
+                      //             ),
+                      //           ),
+                      //         ),
+                      //       )
+                      //     : const SizedBox.shrink(),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 70, left: 15, right: 15),
+                        child: SizedBox(
+                          height: 50,
+                          width: SizeConfig.screenWidth - 30,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              setState(() {
+                                variables.isLoggedin = false;
+                              });
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Color(Clrs.blue),
+                              foregroundColor: Color(Clrs.taco),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20.0),
+                                side: BorderSide(color: Color(Clrs.dkblue), width: 2.0),
+                              ),
+                            ),
+                            child: const Text(
+                              'Log Out',
+                              style: TextStyle(fontSize: 30),
+                            ),
+                          ),
+                        ),
+                      ),
+                      // variables.tablecurrentEmployee[0]['Clearance'] == 'Admin'
+                      //     ? Padding(
+                      //         padding: const EdgeInsets.only(top: 30, left: 15, right: 15),
+                      //         child: SizedBox(
+                      //           height: 50,
+                      //           width: SizeConfig.screenWidth - 30,
+                      //           child: ElevatedButton(
+                      //             onPressed: () {
+                      //               Navigator.push(
+                      //                   context,
+                      //                   MaterialPageRoute(
+                      //                     builder: (context) => const Settings(),
+                      //                   ));
+                      //             },
+                      //             style: ElevatedButton.styleFrom(
+                      //               backgroundColor: Color(Clrs.blue),
+                      //               foregroundColor: Color(Clrs.taco),
+                      //               shape: RoundedRectangleBorder(
+                      //                 borderRadius: BorderRadius.circular(20.0),
+                      //                 side: BorderSide(color: Color(Clrs.dkblue), width: 2.0),
+                      //               ),
+                      //             ),
+                      //             child: const Text(
+                      //               'Settings',
+                      //               style: TextStyle(fontSize: 30),
+                      //             ),
+                      //           ),
+                      //         ),
+                      //       )
+                      //     : const SizedBox.shrink(),
+                      SizedBox(height: 400, width: SizeConfig.screenWidth),
+                    ]))
+                  : SizedBox(
+                      height: SizeConfig.screenHeight - 50,
+                      width: SizeConfig.screenWidth,
+                      child: Column(children: [
+                        Expanded(
+                            child: ListView(children: [
+                          Container(
+                            height: 30,
+                            width: SizeConfig.screenWidth,
+                            decoration: BoxDecoration(border: Border.all(color: Color(Clrs.blue), width: 2.0)),
+                            child: Column(mainAxisAlignment: MainAxisAlignment.center, children: const [
+                              Text(
+                                'Log In',
+                                style: TextStyle(fontSize: 18),
+                              ),
+                            ]),
+                          ),
+                          Padding(
                               padding: const EdgeInsets.only(top: 50),
-                              child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                                SizedBox(
-                                    height: 60,
-                                    width: 150,
-                                    child: ElevatedButton(
-                                      onPressed: () async {
-                                        try {
-                                          UserCredential userCredential =
-                                              await FirebaseAuth.instance.signInWithEmailAndPassword(email: logEmail.text, password: '93${logPass.text}');
-                                          variables.isLoggedin = true;
-                                        } catch (e) {
-                                          setState(() {
-                                            emailError = false;
-                                            passError = false;
-                                            if (e.toString().indexOf('user-not-found') > 0) {
-                                              emailError = true;
-                                            }
-                                            if (e.toString().indexOf('password is invalid') > 0) {
-                                              passError = true;
-                                            }
-                                          });
-                                          variables.isLoggedin = false;
-                                        }
-                                        variables.isLoggedin ? await getAllTables() : const SizedBox.shrink();
-                                        //UpdateTokens();
-                                        // variables.tablecurrentEmployee.clear();
-                                        // int i = 0;
-                                        // for (i = 0; i < variables.tableEmps.length; i++) {
-                                        //   if (variables.tableEmps[i]['Email]'].toString() == logEmail.text.toString()) {
-                                        //     variables.tablecurrentEmployee.add(variables.tableEmps[i]);
-                                        //   }
-                                        // }
-                                        setState(() {});
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                        foregroundColor: Color(Clrs.black),
-                                        backgroundColor: Color(isVerified ? Clrs.green : Clrs.grey),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(20.0),
-                                          side: BorderSide(color: Color(Clrs.dkblue), width: 2.0),
+                              child: Container(
+                                height: 500,
+                                width: SizeConfig.screenWidth - 30,
+                                decoration: BoxDecoration(
+                                  color: Color(Clrs.ltblue),
+                                  borderRadius: BorderRadius.circular(15.0),
+                                  border: Border.all(color: Color(Clrs.dkblue), width: 2.0),
+                                ),
+                                child: Column(children: [
+                                  Container(
+                                    height: 200,
+                                    width: SizeConfig.screenWidth - 30,
+                                    child: Image.asset(fit: BoxFit.fitHeight, 'assets/icons/IDS Driver Logo sq-8.png'),
+                                  ),
+                                  Padding(
+                                      padding: const EdgeInsets.only(top: 10, left: 15, right: 15),
+                                      child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+                                        TextFormField(
+                                          controller: logEmail,
+                                          decoration: InputDecoration(
+                                            labelText: 'Email',
+                                            enabledBorder: OutlineInputBorder(
+                                              borderRadius: BorderRadius.circular(10.0),
+                                              borderSide: BorderSide(
+                                                width: 2.0,
+                                                color: Color(emailError
+                                                    ? Clrs.red
+                                                    : emailError
+                                                        ? Clrs.red
+                                                        : logEmail.text.isEmpty
+                                                            ? Clrs.dkblue
+                                                            : Clrs.green),
+                                              ),
+                                            ),
+                                            errorBorder: OutlineInputBorder(
+                                              borderRadius: BorderRadius.circular(10.0),
+                                              borderSide: BorderSide(
+                                                width: 2.0,
+                                                color: Color(passError
+                                                    ? Clrs.red
+                                                    : passError
+                                                        ? Clrs.red
+                                                        : logPass.text.length != 4
+                                                            ? Clrs.dkblue
+                                                            : Clrs.green),
+                                              ),
+                                            ),
+                                            focusedBorder: OutlineInputBorder(
+                                              borderRadius: BorderRadius.circular(10.0),
+                                              borderSide: BorderSide(
+                                                width: 2.0,
+                                                color: Color(emailError
+                                                    ? Clrs.red
+                                                    : emailError
+                                                        ? Clrs.red
+                                                        : logEmail.text.isEmpty
+                                                            ? Clrs.dkblue
+                                                            : Clrs.green),
+                                              ),
+                                            ),
+                                          ),
+                                          onChanged: (value) {
+                                            setState(() {
+                                              emailVerify();
+                                            });
+                                          },
                                         ),
-                                      ),
-                                      child: Text(
-                                        'Login',
-                                        style: TextStyle(
-                                          fontSize: 30,
-                                          color: Color(Clrs.black),
+                                        Padding(
+                                            padding: const EdgeInsets.only(top: 30),
+                                            child: TextFormField(
+                                              obscureText: showPass,
+                                              controller: logPass,
+                                              decoration: InputDecoration(
+                                                suffix: IconButton(
+                                                  onPressed: () {
+                                                    setState(() {
+                                                      showPass = !showPass;
+                                                    });
+                                                  },
+                                                  icon: const Icon(Icons.visibility, size: 30),
+                                                ),
+                                                iconColor: Color(Clrs.black),
+                                                labelText: 'Passcode',
+                                                enabledBorder: OutlineInputBorder(
+                                                  borderRadius: BorderRadius.circular(10.0),
+                                                  borderSide: BorderSide(
+                                                    width: 2.0,
+                                                    color: Color(passError
+                                                        ? Clrs.red
+                                                        : passError
+                                                            ? Clrs.red
+                                                            : logPass.text.length != 4
+                                                                ? Clrs.dkblue
+                                                                : Clrs.green),
+                                                  ),
+                                                ),
+                                                errorBorder: OutlineInputBorder(
+                                                  borderRadius: BorderRadius.circular(10.0),
+                                                  borderSide: BorderSide(
+                                                    width: 2.0,
+                                                    color: Color(passError
+                                                        ? Clrs.red
+                                                        : passError
+                                                            ? Clrs.red
+                                                            : logPass.text.length != 4
+                                                                ? Clrs.dkblue
+                                                                : Clrs.green),
+                                                  ),
+                                                ),
+                                                focusedBorder: OutlineInputBorder(
+                                                    borderRadius: BorderRadius.circular(10.0),
+                                                    borderSide: BorderSide(
+                                                      width: 2.0,
+                                                      color: Color(passError
+                                                          ? Clrs.red
+                                                          : passError
+                                                              ? Clrs.red
+                                                              : logPass.text.length != 4
+                                                                  ? Clrs.dkblue
+                                                                  : Clrs.green),
+                                                    )),
+                                              ),
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  passVerify();
+                                                });
+                                              },
+                                            )),
+                                        Padding(
+                                          padding: const EdgeInsets.only(top: 50),
+                                          child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                                            SizedBox(
+                                                height: 60,
+                                                width: 150,
+                                                child: ElevatedButton(
+                                                  onPressed: () async {
+                                                    try {
+                                                      UserCredential userCredential = await FirebaseAuth.instance
+                                                          .signInWithEmailAndPassword(email: logEmail.text, password: '93${logPass.text}');
+                                                      variables.isLoggedin = true;
+                                                    } catch (e) {
+                                                      setState(() {
+                                                        emailError = false;
+                                                        passError = false;
+                                                        if (e.toString().indexOf('user-not-found') > 0) {
+                                                          emailError = true;
+                                                        }
+                                                        if (e.toString().indexOf('password is invalid') > 0) {
+                                                          passError = true;
+                                                        }
+                                                      });
+                                                      variables.isLoggedin = false;
+                                                    }
+                                                    variables.isLoggedin ? await getAllTables() : const SizedBox.shrink();
+                                                    UpdateTokens();
+                                                    // variables.tablecurrentEmployee.clear();
+                                                    // int i = 0;
+                                                    // for (i = 0; i < variables.tableEmps.length; i++) {
+                                                    //   if (variables.tableEmps[i]['Email]'].toString() == logEmail.text.toString()) {
+                                                    //     variables.tablecurrentEmployee.add(variables.tableEmps[i]);
+                                                    //   }
+                                                    // }
+                                                    setState(() {});
+                                                  },
+                                                  style: ElevatedButton.styleFrom(
+                                                    foregroundColor: Color(Clrs.black),
+                                                    backgroundColor: Color(isVerified ? Clrs.green : Clrs.grey),
+                                                    shape: RoundedRectangleBorder(
+                                                      borderRadius: BorderRadius.circular(20.0),
+                                                      side: BorderSide(color: Color(Clrs.dkblue), width: 2.0),
+                                                    ),
+                                                  ),
+                                                  child: Text(
+                                                    'Login',
+                                                    style: TextStyle(
+                                                      fontSize: 30,
+                                                      color: Color(Clrs.black),
+                                                    ),
+                                                  ),
+                                                )),
+                                          ]),
                                         ),
-                                      ),
-                                    )),
-                              ]),
-                            ),
-                          ])),
+                                      ])),
+                                ]),
+                              )),
+                        ])),
+                      ]))
+              : Container(
+                  height: SizeConfig.screenHeight - 80,
+                  width: SizeConfig.screenWidth,
+                  color: Color(Clrs.ltblue),
+                  child: Column(children: [
+                    Expanded(
+                        child: ListView.builder(
+                      itemCount: variables.tableStops.length,
+                      itemBuilder: (context, index) {
+                        return StopItem(index);
+                      },
                     )),
-              ]),
-      ]),
-    ));
+                  ])),
+        ]),
+      ),
+    );
   }
 
   Future getAllTables() async {
