@@ -2,7 +2,7 @@
 
 import 'dart:async';
 import 'dart:html' as fct;
-
+//import 'package:uuid/uuid.dart';
 import 'package:flutter/material.dart';
 import 'package:ids_driver/main.dart';
 import 'package:ids_driver/variables.dart';
@@ -48,7 +48,7 @@ class MyRouteState extends State<MyRoute> {
           setState(() {
             upDateMe();
             //timeUpdate();
-            print('tick');
+            // print('tick');
           });
         }
       },
@@ -62,7 +62,7 @@ class MyRouteState extends State<MyRoute> {
   }
 
   void timeUpdate() {
-    print('tick');
+    // print('tick');
     //setState(() {});
   }
 
@@ -80,7 +80,9 @@ class MyRouteState extends State<MyRoute> {
               color: Color(Clrs.blue),
               child: IconButton(
                 onPressed: () async {
-                  await db.getstops(variables.tableStops, '', variables.tablecurrentEmployee[0]['Employee_ID'], false);
+                  //  Navigator.push<void>(context, MaterialPageRoute<void>(builder: (BuildContext context) => ItemsWidget()));
+                  //ItemsWidget();
+                  // await db.getstops(variables.tableStops, '', variables.tablecurrentEmployee[0]['Employee_ID'], false);
                   setState(() {});
                 },
                 icon: Icon(Icons.update, color: Color(Clrs.white), size: 30),

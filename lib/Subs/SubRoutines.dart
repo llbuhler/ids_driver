@@ -49,7 +49,7 @@ class SubRoutine {
         rtn = 'Sun';
         break;
     }
-    return test ? 'Fri' : rtn;
+    return test ? 'Sat' : rtn;
   }
 
   static String convertSeconds({required int q, required bool seconds}) {

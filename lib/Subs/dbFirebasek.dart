@@ -5,6 +5,19 @@ import '../Subs/SubRoutines.dart';
 //import 'package:firebase_core/firebase_core.dart';
 
 class db {
+  static Future preLogLookup(List<Map<String, dynamic>> list, String sn) async {
+    list.clear();
+    QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore.instance.collection('Employees').where('UserSN', isEqualTo: sn).get();
+    List<QueryDocumentSnapshot> docs = snapshot.docs;
+    for (var doc in docs) {
+      if (doc.data() != null) {
+        var data = doc.data() as Map<String, dynamic>;
+        list.add(data);
+      }
+    }
+    return null;
+  }
+
   static Future getMulii(List<Map<String, dynamic>> list) async {
     list.clear();
     QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore.instance.collection('Multi').get();
@@ -55,14 +68,29 @@ class db {
   static Future getstops(List<Map<String, dynamic>> list, String routeid, String driverid, bool all) async {
     String day = SubRoutine.getday().toString().toLowerCase();
     list.clear();
-    QuerySnapshot<Map<String, dynamic>> snapshot =
-        await FirebaseFirestore.instance.collection('Stops').orderBy('company').where(day, isEqualTo: true).where('driver', isEqualTo: driverid).get();
+    QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore.instance.collection('Stops').where(day, isEqualTo: true).orderBy('routeidx').get();
     List<QueryDocumentSnapshot> docs = snapshot.docs;
     for (var doc in docs) {
       if (doc.data() != null) {
         var data = doc.data() as Map<String, dynamic>;
         if (data['active'] && !all) {
-          list.add(data);
+          switch (day) {
+            case 'sat':
+              if (data['satdriver'] == driverid) {
+                list.add(data);
+              }
+              break;
+            case 'sun':
+              if (data['sundriver'] == driverid) {
+                list.add(data);
+              }
+              break;
+            default:
+              if (data['driver'] == driverid) {
+                list.add(data);
+              }
+              break;
+          }
         } else if (all) {
           list.add(data);
         }

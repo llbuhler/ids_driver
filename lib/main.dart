@@ -1,21 +1,30 @@
-// ignore_for_file: unrelated_type_equality_checks, library_private_types_in_public_api, non_constant_identifier_names, prefer_typing_uninitialized_variables, use_key_in_widget_constructors, unused_local_variable, prefer_final_fields, no_leading_underscores_for_local_identifiers
+// ignore_for_file: unrelated_type_equality_checks, library_private_types_in_public_api, non_constant_identifier_names, prefer_typing_uninitialized_variables, use_key_in_widget_constructors, unused_local_variable, prefer_final_fields, no_leading_underscores_for_local_identifiers, empty_catches
+
+// import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
+// import 'package:unique_identifier/unique_identifier.dart';
+// import 'package:platform_device_id/platform_device_id.dart'
+import 'package:uuid/uuid.dart';
+// import 'dart:io' show Platform;
+// import 'package:device_information/device_information.dart';
+// import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:ids_driver/Screens/Fyi/Training.dart';
 import 'package:ids_driver/Screens/MyRoute.dart';
 import 'package:ids_driver/Subs/SubRoutines.dart';
 import 'package:ids_driver/variables.dart';
 import 'package:intl/intl.dart';
+import 'Screens/Storage.dart';
 import 'Screens/profile.dart';
 import 'Subs/SizeConfig.dart';
 import 'Subs/localColors.dart';
 import 'Subs/dbFirebasek.dart';
 
-int Test = 0;
+int Test = 2;
 bool useTimer = false;
 String dduReadyTime = '2100';
 
@@ -37,6 +46,7 @@ TextEditingController logEmail = TextEditingController();
 TextEditingController logPass = TextEditingController();
 
 bool kDebugMode = true;
+String UserSN = const Uuid().v1();
 
 main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -63,6 +73,7 @@ class MyApp extends StatelessWidget {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'IDS Web interface',
+      //home: ItemsWidget(),
       home: MyHomePage(),
     );
   }
@@ -75,6 +86,9 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  // ignore: unused_field
+  String _identifier = 'Unknown';
+
   FirebaseAuth auth = FirebaseAuth.instance;
   DateFormat dateformat = DateFormat('EEEE MM/dd      hh:mm');
   //final _newStopState ss = _newStopState();
@@ -104,7 +118,7 @@ class _MyHomePageState extends State<MyHomePage> {
         } else {
           setState(() {
             //timeUpdate();
-            print('tick');
+            //  print('tick');
           });
         }
       },
@@ -152,9 +166,66 @@ class _MyHomePageState extends State<MyHomePage> {
     return null;
   }
 
+// TODO get saved userID
+  String userID = 'bb4c2670-fd7e-11ed-b7f7-eb4c5e28cea4';
+  //Seth 'bb4c2670-fd7e-11ed-b7f7-eb4c5e28cea4';
+  //Larry  'cbbbbca0-fbee-11ed-9628-a5f5e38806ba'; //const Uuid().v1();
+  bool preLogged = false;
+
+  preLogin() async {
+    try {
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithEmailAndPassword(email: 'idsprelogin@idealdeliverservice.com', password: 'ab784254zzz1');
+      await db.preLogLookup(variables.tablecurrentEmployee, userID);
+      if (variables.tablecurrentEmployee.isNotEmpty) {
+        await FirebaseAuth.instance.signOut();
+        try {
+          await FirebaseAuth.instance
+              .signInWithEmailAndPassword(email: variables.tablecurrentEmployee[0]['Email'], password: '93' + variables.tablecurrentEmployee[0]['Code']);
+          setState(() {
+            variables.isLoggedin = true;
+          });
+        } catch (e) {
+          // error
+        }
+      }
+    } catch (e) {}
+  }
+
+  // getInfo1() async {
+  //   await getId();
+  // }
+
+  // Future getId() async {}
+
+  // Future<void> initPlatformState() async {
+  //   late String platformVersion, imeiNo = '', modelName = '', manufacturer = '', deviceName = '', productName = '', cpuType = '', hardware = '';
+  //   var apiLevel;
+  //   // Platform messages may fail,
+  //   // so we use a try/catch PlatformException.
+  //   try {
+  //     // platformVersion = await DeviceInformation.platformVersion;
+  //     imeiNo = await DeviceInformation.deviceIMEINumber;
+  //     // modelName = await DeviceInformation.deviceModel;
+  //     // manufacturer = await DeviceInformation.deviceManufacturer;
+  //     // apiLevel = await DeviceInformation.apiLevel;
+  //     // deviceName = await DeviceInformation.deviceName;
+  //     // productName = await DeviceInformation.productName;
+  //     // cpuType = await DeviceInformation.cpuName;
+  //     // hardware = await DeviceInformation.hardware;
+  //   } on PlatformException catch (e) {
+  //     platformVersion = '${e.message}';
+  //   }
+  //   print('imeiNo: ' + imeiNo);
+  // }
+
+  getUserIdState getid = getUserIdState();
+
   @override
   void initState() {
     super.initState();
+    userID = getid.GetUserID();
+    preLogin();
     loadTable();
     if (Test == 1) {
       logEmail.text = 'larry.buhler9290@gmail.com';
@@ -169,6 +240,8 @@ class _MyHomePageState extends State<MyHomePage> {
     getToken();
     messageListener(context);
     startTimer();
+    getid.setUserID('bb4c2670-fd7e-11ed-b7f7-eb4c5e28cea4');
+    // getInfo1();
   }
 
   Future<void> getPermission() async {
@@ -295,6 +368,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           width: SizeConfig.screenWidth - 30,
                           child: ElevatedButton(
                             onPressed: () async {
+                              await db.getstops(variables.tableStops, '', variables.tablecurrentEmployee[0]['Employee_ID'], false);
                               setState(() {
                                 myroute = true;
                               });
@@ -657,15 +731,25 @@ class _MyHomePageState extends State<MyHomePage> {
                                                       });
                                                       variables.isLoggedin = false;
                                                     }
+
                                                     variables.isLoggedin ? await getAllTables() : const SizedBox.shrink();
                                                     UpdateTokens();
-                                                    // variables.tablecurrentEmployee.clear();
-                                                    // int i = 0;
-                                                    // for (i = 0; i < variables.tableEmps.length; i++) {
-                                                    //   if (variables.tableEmps[i]['Email]'].toString() == logEmail.text.toString()) {
-                                                    //     variables.tablecurrentEmployee.add(variables.tableEmps[i]);
-                                                    //   }
-                                                    // }
+                                                    variables.tablecurrentEmployee.clear();
+                                                    int i = 0;
+                                                    for (i = 0; i < variables.tableEmps.length; i++) {
+                                                      if (variables.tableEmps[i]['Email'].toString() == logEmail.text.toString()) {
+                                                        variables.tablecurrentEmployee.add(variables.tableEmps[i]);
+                                                      }
+                                                    }
+                                                    if (variables.tablecurrentEmployee[0]['UserSN'] == 'None') {
+                                                      List<Map<String, dynamic>> lst = [];
+                                                      lst.add({
+                                                        'Employee_ID': variables.tablecurrentEmployee[0]['Employee_ID'],
+                                                        'UserSN': UserSN,
+                                                      });
+                                                      await db.dbUpdate(lst, 'Employees', 'Employee_ID');
+                                                      // TODO save id value
+                                                    }
                                                     setState(() {});
                                                   },
                                                   style: ElevatedButton.styleFrom(
