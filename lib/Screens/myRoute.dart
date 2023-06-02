@@ -191,13 +191,13 @@ class StopItemState extends State<StopItem> {
   int btnnone = 1;
 
   List<Map<String, dynamic>> multi = [];
+  int count = 0;
 
   int stopCount = 1;
 
   @override
   Widget build(BuildContext context) {
     Future getMainCompany(int idx) async {
-      //await db.getMulii(multi);
       String time = SubRoutine.getTime(DateTime.now(), false, true);
       String date = SubRoutine.getDate(DateTime.now());
       variables.myStops.clear();
@@ -262,7 +262,17 @@ class StopItemState extends State<StopItem> {
               child: InkWell(
                   onTap: () async {
                     if (variables.tableStops[widget.idx]['status'] != 'Picked Up') {
+                      // print(variables.tableStops[widget.idx]['status']);
                       await getMainCompany(widget.idx);
+                      await db.getMulii(variables.tableMulti);
+                      // print(variables.tableStops[widget.idx]['company']);
+                      // (variables.tableMulti.toString());
+                      for (var e in variables.tableMulti) {
+                        if (e['parent'] == variables.tableStops[widget.idx]['recordid']) {
+                          count++;
+                          print(count.toString() + '  ' + e['company']);
+                        }
+                      }
                       setState(() {
                         btnpending = 1;
                         btnpickup = 2;
@@ -392,7 +402,7 @@ class StopItemState extends State<StopItem> {
                             ? Padding(
                                 padding: const EdgeInsets.only(bottom: 20),
                                 child: Container(
-                                  height: 486 + (174.00 * stopCount),
+                                  height: 486 + (174.00 * count),
                                   width: SizeConfig.screenWidth,
                                   decoration: BoxDecoration(
                                     color: Color(Clrs.ltblue),
@@ -401,41 +411,40 @@ class StopItemState extends State<StopItem> {
                                   child: Column(children: [
                                     Padding(
                                         padding: const EdgeInsets.symmetric(vertical: 10),
-                                        // child:
-                                        // SizedBox(
-                                        //     height: 180 * count.toDouble(),
-                                        //     width: SizeConfig.screenWidth,
-                                        child: Column(children: [
-                                          DeliveryArray(0, stopCount, isValid),
-                                          stopCount > 1 ? DeliveryArray(1, stopCount, isValid) : const SizedBox.shrink(),
-                                          stopCount > 2 ? DeliveryArray(2, stopCount, isValid) : const SizedBox.shrink(),
-                                          stopCount > 3 ? DeliveryArray(3, stopCount, isValid) : const SizedBox.shrink(),
-                                          stopCount > 4 ? DeliveryArray(4, stopCount, isValid) : const SizedBox.shrink(),
-                                          stopCount > 5 ? DeliveryArray(5, stopCount, isValid) : const SizedBox.shrink(),
-                                          Padding(
-                                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                                              child: SizedBox(
-                                                height: 100,
-                                                width: SizeConfig.screenWidth - 60,
-                                                child: TextFormField(
-                                                  controller: trequest,
-                                                  maxLines: 5,
-                                                  decoration: const InputDecoration(
-                                                      filled: true,
-                                                      fillColor: Colors.white,
-                                                      labelText: 'Request',
-                                                      // enabledBorder: OutlineInputBorder(
-                                                      //   borderRadius: BorderRadius.all(Radius.circular(30.0)),
-                                                      //   borderSide: BorderSide(width: 2.0, color: Colors.white),
-                                                      // ),
-                                                      focusedBorder: OutlineInputBorder(
-                                                        borderRadius: BorderRadius.all(Radius.circular(30.0)),
-                                                        borderSide: BorderSide(width: 2.0, color: Colors.white),
-                                                      )),
-                                                  onTap: () {},
-                                                ),
-                                              )),
-                                        ])),
+                                        child: SizedBox(
+                                            height: 320.0, // + (count * 135).toDouble(),
+                                            width: SizeConfig.screenWidth,
+                                            child: Column(children: [
+                                              DeliveryArray(0, stopCount, isValid),
+                                              // count > 1 ? DeliveryArray(1, count, isValid) : const SizedBox.shrink(),
+                                              // count > 2 ? DeliveryArray(2, count, isValid) : const SizedBox.shrink(),
+                                              // count > 3 ? DeliveryArray(3, count, isValid) : const SizedBox.shrink(),
+                                              // count > 4 ? DeliveryArray(4, count, isValid) : const SizedBox.shrink(),
+                                              // count > 5 ? DeliveryArray(5, count, isValid) : const SizedBox.shrink(),
+                                              Padding(
+                                                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                                                  child: SizedBox(
+                                                    height: 100,
+                                                    width: SizeConfig.screenWidth - 60,
+                                                    child: TextFormField(
+                                                      controller: trequest,
+                                                      maxLines: 5,
+                                                      decoration: const InputDecoration(
+                                                          // filled: true,
+                                                          // fillColor: Colors.white,
+                                                          labelText: 'Request',
+                                                          enabledBorder: OutlineInputBorder(
+                                                            borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                                                            borderSide: BorderSide(width: 2.0, color: Colors.black),
+                                                          ),
+                                                          focusedBorder: OutlineInputBorder(
+                                                            borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                                                            borderSide: BorderSide(width: 2.0, color: Colors.white),
+                                                          )),
+                                                      onTap: () {},
+                                                    ),
+                                                  )),
+                                            ]))),
                                     Padding(
                                         padding: const EdgeInsets.symmetric(horizontal: 10),
                                         child: SizedBox(
@@ -484,6 +493,7 @@ class StopItemState extends State<StopItem> {
                                                           textStyle: const TextStyle(fontSize: 25),
                                                           shape: RoundedRectangleBorder(
                                                             borderRadius: BorderRadius.circular(30.0),
+                                                            side: BorderSide(color: Color(Clrs.green), width: 2.0),
                                                           )),
                                                       child: const FittedBox(
                                                         fit: BoxFit.scaleDown,
@@ -511,6 +521,7 @@ class StopItemState extends State<StopItem> {
                                                           textStyle: const TextStyle(fontSize: 25),
                                                           shape: RoundedRectangleBorder(
                                                             borderRadius: BorderRadius.circular(30.0),
+                                                            side: BorderSide(color: Color(Clrs.green), width: 2.0),
                                                           )),
                                                       child: const FittedBox(
                                                         fit: BoxFit.scaleDown,
@@ -539,6 +550,7 @@ class StopItemState extends State<StopItem> {
                                                   textStyle: const TextStyle(fontSize: 25),
                                                   shape: RoundedRectangleBorder(
                                                     borderRadius: BorderRadius.circular(30.0),
+                                                    side: BorderSide(color: Color(Clrs.red), width: 2.0),
                                                   )),
                                               child: const FittedBox(
                                                 fit: BoxFit.scaleDown,
@@ -613,6 +625,7 @@ class StopItemState extends State<StopItem> {
                                                 textStyle: const TextStyle(fontSize: 25),
                                                 shape: RoundedRectangleBorder(
                                                   borderRadius: BorderRadius.circular(30.0),
+                                                  side: BorderSide(color: Color(btnupdate == 1 ? Clrs.green : Clrs.black), width: 2.0),
                                                 )),
                                             child: const Text('Save'),
                                           )),
@@ -843,6 +856,7 @@ class StopItemState extends State<StopItem> {
                                               textStyle: const TextStyle(fontSize: 25),
                                               shape: RoundedRectangleBorder(
                                                 borderRadius: BorderRadius.circular(30.0),
+                                                side: BorderSide(color: Color(Clrs.green), width: 2),
                                               )),
                                           child: const FittedBox(
                                             fit: BoxFit.scaleDown,
@@ -873,6 +887,7 @@ class StopItemState extends State<StopItem> {
                                               textStyle: const TextStyle(fontSize: 25),
                                               shape: RoundedRectangleBorder(
                                                 borderRadius: BorderRadius.circular(30.0),
+                                                side: BorderSide(color: Color(Clrs.green), width: 2),
                                               )),
                                           child: const FittedBox(
                                             fit: BoxFit.scaleDown,
@@ -909,6 +924,7 @@ class StopItemState extends State<StopItem> {
                                               textStyle: const TextStyle(fontSize: 25),
                                               shape: RoundedRectangleBorder(
                                                 borderRadius: BorderRadius.circular(30.0),
+                                                side: BorderSide(color: Color(Clrs.red), width: 2),
                                               )),
                                           child: const FittedBox(
                                             fit: BoxFit.scaleDown,
@@ -951,6 +967,7 @@ class StopItemState extends State<StopItem> {
                                             textStyle: const TextStyle(fontSize: 25),
                                             shape: RoundedRectangleBorder(
                                               borderRadius: BorderRadius.circular(30.0),
+                                              side: BorderSide(color: Color(btnupdate == 1 ? Clrs.green : Clrs.grey), width: 2),
                                             )),
                                         child: const Text('Save'),
                                       )),

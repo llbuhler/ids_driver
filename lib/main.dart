@@ -1,4 +1,4 @@
-// ignore_for_file: unrelated_type_equality_checks, library_private_types_in_public_api, non_constant_identifier_names, prefer_typing_uninitialized_variables, use_key_in_widget_constructors, unused_local_variable, prefer_final_fields, no_leading_underscores_for_local_identifiers, empty_catches
+// ignore_for_file: unrelated_type_equality_checks, library_private_types_in_public_api, non_constant_identifier_names, prefer_typing_uninitialized_variables, use_key_in_widget_constructors, unused_local_variable, prefer_final_fields, no_leading_underscores_for_local_identifiers, empty_catches, sized_box_for_whitespace
 
 // import 'dart:io';
 
@@ -181,6 +181,7 @@ class _MyHomePageState extends State<MyHomePage> {
         await FirebaseAuth.instance.signOut();
         try {
           await FirebaseAuth.instance
+              // ignore: prefer_interpolation_to_compose_strings
               .signInWithEmailAndPassword(email: variables.tablecurrentEmployee[0]['Email'], password: '93' + variables.tablecurrentEmployee[0]['Code']);
           setState(() {
             variables.isLoggedin = true;
@@ -329,7 +330,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         },
                         icon: Icon(Icons.update, color: Color(Clrs.white), size: 35),
                       )
-                    : SizedBox.shrink()),
+                    : const SizedBox.shrink()),
             //Image.asset(fit: BoxFit.fitHeight, 'assets/icons/IDS Logo sq.png')),
             Container(
                 height: 50,
@@ -354,7 +355,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       },
                       icon: Icon(Icons.menu, color: Color(Clrs.white), size: 35),
                     )
-                  : SizedBox.shrink(),
+                  : const SizedBox.shrink(),
             ),
           ]),
           !myroute

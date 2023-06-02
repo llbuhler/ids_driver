@@ -80,7 +80,7 @@ class DeliveryArrayState extends State<DeliveryArray> {
             child: Padding(
               padding: const EdgeInsets.only(left: 10, top: 5),
               child: Text(
-                variables.myStops[widget.idx]['company'],
+                widget.idx > 0 ? variables.tableMulti[widget.idx - 1]['company'] : variables.myStops[widget.idx]['company'],
                 style: const TextStyle(fontSize: 20),
               ),
             ),
