@@ -265,11 +265,12 @@ class StopItemState extends State<StopItem> {
                       // print(variables.tableStops[widget.idx]['status']);
                       await getMainCompany(widget.idx);
                       await db.getMulii(variables.tableMulti);
-                      // print(variables.tableStops[widget.idx]['company']);
-                      // (variables.tableMulti.toString());
+                      myStop.clear();
+                      myStop.add(variables.tableStops[widget.idx]);
                       for (var e in variables.tableMulti) {
                         if (e['parent'] == variables.tableStops[widget.idx]['recordid']) {
                           count++;
+                          myStop.add(e);
                           print(count.toString() + '  ' + e['company']);
                         }
                       }
@@ -285,7 +286,7 @@ class StopItemState extends State<StopItem> {
                     Container(
                       height: expand
                           ? btnpickup == 2
-                              ? 610 + 174 * stopCount.toDouble() //variables.myStops.length.toDouble()
+                              ? 490 + 200 * count.toDouble() //variables.myStops.length.toDouble()
                               : 184
                           : 104,
                       width: SizeConfig.screenWidth - 20,
@@ -398,242 +399,323 @@ class StopItemState extends State<StopItem> {
                                 ),
                               ])),
                         ]),
+
+                        expand
+                            ? Container(
+                                height: 200,
+                                width: SizeConfig.screenWidth - 20,
+                                color: Color(Clrs.dkblue),
+                                child: DeliveryArray(0, stopCount, isValid),
+                              )
+                            : const SizedBox.shrink(),
+                        expand && myStop.length > 1
+                            ? Container(
+                                height: 200,
+                                width: SizeConfig.screenWidth - 20,
+                                color: Color(Clrs.dkblue),
+                                child: DeliveryArray(1, stopCount, isValid),
+                              )
+                            : const SizedBox.shrink(),
+                        expand && myStop.length > 2
+                            ? Container(
+                                height: 200,
+                                width: SizeConfig.screenWidth - 20,
+                                color: Color(Clrs.dkblue),
+                                child: DeliveryArray(2, stopCount, isValid),
+                              )
+                            : const SizedBox.shrink(),
+                        expand && myStop.length > 3
+                            ? Container(
+                                height: 200,
+                                width: SizeConfig.screenWidth - 20,
+                                color: Color(Clrs.dkblue),
+                                child: DeliveryArray(3, stopCount, isValid),
+                              )
+                            : const SizedBox.shrink(),
+                        // expand && count > 5
+                        //     ? Container(
+                        //         height: 200,
+                        //         width: SizeConfig.screenWidth - 20,
+                        //         color: Color(Clrs.dkblue),
+                        //         child: DeliveryArray(0, stopCount, isValid),
+                        //       )
+                        //     : const SizedBox.shrink(),
+                        // expand && count > 4
+                        //     ? Container(
+                        //         height: 200,
+                        //         width: SizeConfig.screenWidth - 20,
+                        //         color: Color(Clrs.dkblue),
+                        //         child: DeliveryArray(0, stopCount, isValid),
+                        //       )
+                        //     : const SizedBox.shrink(),
+                        // expand && count > 3
+                        //     ? Container(
+                        //         height: 200,
+                        //         width: SizeConfig.screenWidth - 20,
+                        //         color: Color(Clrs.dkblue),
+                        //         child: DeliveryArray(0, count, isValid),
+                        //       )
+                        //     : const SizedBox.shrink(),
+                        // expand && count > 2
+                        //     ? Container(
+                        //         height: 200,
+                        //         width: SizeConfig.screenWidth - 20,
+                        //         color: Color(Clrs.dkblue),
+                        //         child: DeliveryArray(3, count, isValid),
+                        //       )
+                        //     : const SizedBox.shrink(),
+                        // expand && count > 1
+                        //     ? Container(
+                        //         height: 200,
+                        //         width: SizeConfig.screenWidth - 20,
+                        //         color: Color(Clrs.dkblue),
+                        //         child: DeliveryArray(0, count, isValid),
+                        //       )
+                        //     : const SizedBox.shrink(),
+                        // expand && count > 0
+                        //     ? Container(
+                        //         height: 200,
+                        //         width: SizeConfig.screenWidth - 20,
+                        //         color: Color(Clrs.dkblue),
+                        //         child: DeliveryArray(0, count, isValid),
+                        //       )
+                        //     : const SizedBox.shrink(),
+                        // expand
+                        //     ? Container(
+                        //         height: 200,
+                        //         width: SizeConfig.screenWidth - 20,
+                        //         color: Color(Clrs.dkblue),
+                        //         child: DeliveryArray(0, count, isValid),
+                        //       )
+                        //     : const SizedBox.shrink(),
+
+                        // expand
+                        //     ? Padding(
+                        //         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                        //         child: SizedBox(
+                        //           height: 100,
+                        //           width: SizeConfig.screenWidth - 60,
+                        //           child: TextFormField(
+                        //             controller: trequest,
+                        //             style: const TextStyle(color: Colors.white),
+                        //             maxLines: 5,
+                        //             decoration: const InputDecoration(
+                        //                 // filled: true,
+                        //                 // fillColor: Colors.white,
+
+                        //                 labelText: 'Request',
+                        //                 labelStyle: TextStyle(color: Colors.white),
+                        //                 enabledBorder: OutlineInputBorder(
+                        //                   borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                        //                   borderSide: BorderSide(width: 2.0, color: Colors.white),
+                        //                 ),
+                        //                 focusedBorder: OutlineInputBorder(
+                        //                   borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                        //                   borderSide: BorderSide(width: 2.0, color: Colors.white),
+                        //                 )),
+                        //             onTap: () {},
+                        //           ),
+                        //         ),
+                        //       )
+                        //     : const SizedBox.shrink(),
+                        // expand
+                        //     ? Padding(
+                        //         padding: const EdgeInsets.symmetric(horizontal: 10),
+                        //         child: SizedBox(
+                        //           height: 100,
+                        //           width: SizeConfig.screenWidth - 60,
+                        //           child: TextField(
+                        //             controller: tnote,
+                        //             style: const TextStyle(color: Colors.white),
+                        //             maxLines: 5,
+                        //             decoration: const InputDecoration(
+                        //                 labelText: 'Note',
+                        //                 labelStyle: TextStyle(color: Colors.white),
+                        //                 enabledBorder: OutlineInputBorder(
+                        //                   borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                        //                   borderSide: BorderSide(width: 2.0, color: Colors.white),
+                        //                 ),
+                        //                 focusedBorder: OutlineInputBorder(
+                        //                   borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                        //                   borderSide: BorderSide(width: 2.0, color: Colors.black),
+                        //                 )),
+                        //             onTap: () {},
+                        //           ),
+                        //         ))
+                        //     : const SizedBox.shrink(),
+
+                        expand ? const SizedBox(height: 20) : const SizedBox.shrink(),
                         expand
                             ? Padding(
                                 padding: const EdgeInsets.only(bottom: 20),
-                                child: Container(
-                                  height: 486 + (174.00 * count),
-                                  width: SizeConfig.screenWidth,
-                                  decoration: BoxDecoration(
-                                    color: Color(Clrs.ltblue),
-                                    borderRadius: const BorderRadius.only(bottomRight: Radius.circular(20)),
-                                  ),
-                                  child: Column(children: [
-                                    Padding(
-                                        padding: const EdgeInsets.symmetric(vertical: 10),
-                                        child: SizedBox(
-                                            height: 320.0, // + (count * 135).toDouble(),
-                                            width: SizeConfig.screenWidth,
-                                            child: Column(children: [
-                                              DeliveryArray(0, stopCount, isValid),
-                                              // count > 1 ? DeliveryArray(1, count, isValid) : const SizedBox.shrink(),
-                                              // count > 2 ? DeliveryArray(2, count, isValid) : const SizedBox.shrink(),
-                                              // count > 3 ? DeliveryArray(3, count, isValid) : const SizedBox.shrink(),
-                                              // count > 4 ? DeliveryArray(4, count, isValid) : const SizedBox.shrink(),
-                                              // count > 5 ? DeliveryArray(5, count, isValid) : const SizedBox.shrink(),
-                                              Padding(
-                                                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                                                  child: SizedBox(
-                                                    height: 100,
-                                                    width: SizeConfig.screenWidth - 60,
-                                                    child: TextFormField(
-                                                      controller: trequest,
-                                                      maxLines: 5,
-                                                      decoration: const InputDecoration(
-                                                          // filled: true,
-                                                          // fillColor: Colors.white,
-                                                          labelText: 'Request',
-                                                          enabledBorder: OutlineInputBorder(
-                                                            borderRadius: BorderRadius.all(Radius.circular(30.0)),
-                                                            borderSide: BorderSide(width: 2.0, color: Colors.black),
-                                                          ),
-                                                          focusedBorder: OutlineInputBorder(
-                                                            borderRadius: BorderRadius.all(Radius.circular(30.0)),
-                                                            borderSide: BorderSide(width: 2.0, color: Colors.white),
-                                                          )),
-                                                      onTap: () {},
-                                                    ),
-                                                  )),
-                                            ]))),
-                                    Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                                        child: SizedBox(
-                                          height: 100,
-                                          width: SizeConfig.screenWidth - 60,
-                                          child: TextField(
-                                            controller: tnote,
-                                            maxLines: 5,
-                                            decoration: const InputDecoration(
-                                                labelText: 'Note',
-                                                enabledBorder: OutlineInputBorder(
-                                                  borderRadius: BorderRadius.all(Radius.circular(30.0)),
-                                                  borderSide: BorderSide(width: 2.0, color: Colors.black),
-                                                ),
-                                                focusedBorder: OutlineInputBorder(
-                                                  borderRadius: BorderRadius.all(Radius.circular(30.0)),
-                                                  borderSide: BorderSide(width: 2.0, color: Colors.black),
-                                                )),
-                                            onTap: () {},
-                                          ),
-                                        )),
-                                    const SizedBox(height: 20),
-                                    expand
-                                        ? Padding(
-                                            padding: const EdgeInsets.only(bottom: 20),
-                                            child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-                                              SizedBox(
-                                                  height: 60,
-                                                  width: ((SizeConfig.screenWidth - 80)) / 2,
-                                                  child: ElevatedButton(
-                                                      onPressed: () {
-                                                        setState(() {
-                                                          if (btnclosed == 1) {
-                                                            btnclosed = 2;
-                                                            btnnone = 1;
-                                                            btnupdate = 1;
-                                                          } else if (btnclosed == 2) {
-                                                            btnclosed = 1;
-                                                            btnupdate = 0;
-                                                          }
-                                                        });
-                                                      },
-                                                      style: ElevatedButton.styleFrom(
-                                                          backgroundColor: getBtnColor(btnclosed, true, false),
-                                                          foregroundColor: getBtnColor(btnclosed, false, false),
-                                                          textStyle: const TextStyle(fontSize: 25),
-                                                          shape: RoundedRectangleBorder(
-                                                            borderRadius: BorderRadius.circular(30.0),
-                                                            side: BorderSide(color: Color(Clrs.green), width: 2.0),
-                                                          )),
-                                                      child: const FittedBox(
-                                                        fit: BoxFit.scaleDown,
-                                                        child: Text('Closed'),
-                                                      ))),
-                                              SizedBox(
-                                                  height: 60,
-                                                  width: ((SizeConfig.screenWidth - 50)) / 2,
-                                                  child: ElevatedButton(
-                                                      onPressed: () async {
-                                                        setState(() {
-                                                          if (btnnone == 1) {
-                                                            btnclosed = 1;
-                                                            btnnone = 2;
-                                                            btnupdate = 1;
-                                                          } else if (btnnone == 2) {
-                                                            btnnone = 1;
-                                                            btnupdate = 0;
-                                                          }
-                                                        });
-                                                      },
-                                                      style: ElevatedButton.styleFrom(
-                                                          backgroundColor: getBtnColor(btnnone, true, false),
-                                                          foregroundColor: getBtnColor(btnnone, false, false),
-                                                          textStyle: const TextStyle(fontSize: 25),
-                                                          shape: RoundedRectangleBorder(
-                                                            borderRadius: BorderRadius.circular(30.0),
-                                                            side: BorderSide(color: Color(Clrs.green), width: 2.0),
-                                                          )),
-                                                      child: const FittedBox(
-                                                        fit: BoxFit.scaleDown,
-                                                        child: Text('Nothing'),
-                                                      ))),
-                                            ]))
-                                        : const SizedBox.shrink(),
-                                    Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-                                      Container(
-                                          height: 60,
-                                          width: ((SizeConfig.screenWidth - 80)) / 2,
-                                          color: Color(Clrs.ltblue),
-                                          child: ElevatedButton(
-                                              onPressed: () async {
-                                                setState(() {
-                                                  btnpending = 2;
-                                                  btnpickup = 1;
-                                                  btnupdate = 0;
-                                                  btncancel = 1;
-                                                  expand = false;
-                                                });
-                                              },
-                                              style: ElevatedButton.styleFrom(
-                                                  backgroundColor: getBtnColor(btncancel, true, true),
-                                                  foregroundColor: getBtnColor(btncancel, false, true),
-                                                  textStyle: const TextStyle(fontSize: 25),
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius: BorderRadius.circular(30.0),
-                                                    side: BorderSide(color: Color(Clrs.red), width: 2.0),
-                                                  )),
-                                              child: const FittedBox(
-                                                fit: BoxFit.scaleDown,
-                                                child: Text('Cancel'),
-                                              ))),
-                                      SizedBox(
-                                          height: 60,
-                                          width: ((SizeConfig.screenWidth - 50)) / 2,
-                                          child: ElevatedButton(
-                                            onPressed: () async {
-                                              if (btnupdate == 1) {
-                                                setState(() {
-                                                  btnupdate = 2;
-                                                });
-                                                // Update Local db
-                                                variables.tableStops[widget.idx]['pallets'] = variables.myStops[0]['pallets'];
-                                                variables.tableStops[widget.idx]['boxes'] = variables.myStops[0]['boxes'];
-                                                variables.tableStops[widget.idx]['bags'] = variables.myStops[0]['bags'];
-                                                variables.tableStops[widget.idx]['tubs'] = variables.myStops[0]['tubs'];
-                                                variables.tableStops[widget.idx]['request'] = variables.myStops[0]['request'];
-                                                variables.tableStops[widget.idx]['note'] = variables.myStops[0]['note'];
-                                                variables.tableStops[widget.idx]['status'] = btnclosed == 2
-                                                    ? 'Late'
-                                                    : btnnone == 2
-                                                        ? 'Picked Up'
-                                                        : 'Picked Up';
-                                                // Update multi if needed
-                                                if (variables.myStops.length > 1) {
-                                                  for (int x = 1; x < variables.myStops.length; x++) {
-                                                    List<Map<String, dynamic>> lst = [];
-                                                    lst.add({
-                                                      'recordid': variables.myStops[x]['recordid'],
-                                                      'status': 'Picked Up',
-                                                      'time': SubRoutine.getTime(DateTime.now(), false, true),
-                                                      'deliverydate': SubRoutine.getDate(DateTime.now()),
-                                                      'pallets': variables.myStops[x]['pallets'],
-                                                      'boxes': variables.myStops[x]['boxes'],
-                                                      'bags': variables.myStops[x]['bags'],
-                                                      'tubs': variables.myStops[x]['tubs'],
-                                                    });
-                                                    await db.dbUpdate(lst, 'Multi', 'recordid');
-                                                  }
-                                                }
-                                                // update remote db
-                                                List<Map<String, dynamic>> lst = [];
-                                                lst.add({
-                                                  'recordid': variables.myStops[0]['recordid'],
-                                                  'status': btnclosed == 2
-                                                      ? 'Late'
-                                                      : btnnone == 2
-                                                          ? 'Picked Up'
-                                                          : 'Picked Up',
-                                                  'statustime': SubRoutine.getTime(DateTime.now(), false, true),
-                                                  'deliverydate': SubRoutine.getDate(DateTime.now()),
-                                                  'pallets': variables.myStops[0]['pallets'].toString(),
-                                                  'boxes': variables.myStops[0]['boxes'].toString(),
-                                                  'bags': variables.myStops[0]['bags'].toString(),
-                                                  'tubs': variables.myStops[0]['tubs'].toString(),
-                                                });
-                                                await db.dbUpdate(lst, 'Stops', 'recordid');
-                                                if (variables.myStops.length > 1) {}
-                                                setState(() {
-                                                  btnupdate = 1;
-
-                                                  expand = false;
-                                                });
+                                child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+                                  SizedBox(
+                                      height: 60,
+                                      width: ((SizeConfig.screenWidth - 80)) / 2,
+                                      child: ElevatedButton(
+                                          onPressed: () {
+                                            setState(() {
+                                              if (btnclosed == 1) {
+                                                btnclosed = 2;
+                                                btnnone = 1;
+                                                btnupdate = 1;
+                                              } else if (btnclosed == 2) {
+                                                btnclosed = 1;
+                                                btnupdate = 0;
                                               }
-                                            },
-                                            style: ElevatedButton.styleFrom(
-                                                backgroundColor: getBtnColor(btnupdate, true, false),
-                                                foregroundColor: getBtnColor(btnupdate, false, false),
-                                                textStyle: const TextStyle(fontSize: 25),
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(30.0),
-                                                  side: BorderSide(color: Color(btnupdate == 1 ? Clrs.green : Clrs.black), width: 2.0),
-                                                )),
-                                            child: const Text('Save'),
-                                          )),
-                                    ])
-                                  ]),
-                                ),
-                              )
+                                            });
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                              backgroundColor: getBtnColor(btnclosed, true, false),
+                                              foregroundColor: getBtnColor(btnclosed, false, false),
+                                              textStyle: const TextStyle(fontSize: 25),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(30.0),
+                                                side: BorderSide(color: Color(Clrs.green), width: 2.0),
+                                              )),
+                                          child: const FittedBox(
+                                            fit: BoxFit.scaleDown,
+                                            child: Text('Closed'),
+                                          ))),
+                                  SizedBox(
+                                      height: 60,
+                                      width: ((SizeConfig.screenWidth - 50)) / 2,
+                                      child: ElevatedButton(
+                                          onPressed: () async {
+                                            setState(() {
+                                              if (btnnone == 1) {
+                                                btnclosed = 1;
+                                                btnnone = 2;
+                                                btnupdate = 1;
+                                              } else if (btnnone == 2) {
+                                                btnnone = 1;
+                                                btnupdate = 0;
+                                              }
+                                            });
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                              backgroundColor: getBtnColor(btnnone, true, false),
+                                              foregroundColor: getBtnColor(btnnone, false, false),
+                                              textStyle: const TextStyle(fontSize: 25),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(30.0),
+                                                side: BorderSide(color: Color(Clrs.green), width: 2.0),
+                                              )),
+                                          child: const FittedBox(
+                                            fit: BoxFit.scaleDown,
+                                            child: Text('Nothing'),
+                                          ))),
+                                ]))
                             : const SizedBox.shrink(),
+                        expand
+                            ? Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+                                Container(
+                                    height: 60,
+                                    width: ((SizeConfig.screenWidth - 80)) / 2,
+                                    color: Color(Clrs.transparent),
+                                    child: ElevatedButton(
+                                        onPressed: () async {
+                                          setState(() {
+                                            btnpending = 2;
+                                            btnpickup = 1;
+                                            btnupdate = 0;
+                                            btncancel = 1;
+                                            expand = false;
+                                          });
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                            backgroundColor: getBtnColor(btncancel, true, true),
+                                            foregroundColor: getBtnColor(btncancel, false, true),
+                                            textStyle: const TextStyle(fontSize: 25),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(30.0),
+                                              side: BorderSide(color: Color(Clrs.red), width: 2.0),
+                                            )),
+                                        child: const FittedBox(
+                                          fit: BoxFit.scaleDown,
+                                          child: Text('Cancel'),
+                                        ))),
+                                SizedBox(
+                                    height: 60,
+                                    width: ((SizeConfig.screenWidth - 50)) / 2,
+                                    child: ElevatedButton(
+                                      onPressed: () async {
+                                        if (btnupdate == 1) {
+                                          setState(() {
+                                            btnupdate = 2;
+                                          });
+                                          // Update Local db
+                                          variables.tableStops[widget.idx]['pallets'] = myStop[0]['pallets'];
+                                          variables.tableStops[widget.idx]['boxes'] = myStop[0]['boxes'];
+                                          variables.tableStops[widget.idx]['bags'] = myStop[0]['bags'];
+                                          variables.tableStops[widget.idx]['tubs'] = myStop[0]['tubs'];
+                                          variables.tableStops[widget.idx]['request'] = myStop[0]['request'];
+                                          variables.tableStops[widget.idx]['note'] = myStop[0]['note'];
+                                          variables.tableStops[widget.idx]['status'] = btnclosed == 2
+                                              ? 'Late'
+                                              : btnnone == 2
+                                                  ? 'Picked Up'
+                                                  : 'Picked Up';
+                                          // Update multi if needed
+                                          if (variables.myStops.length > 1) {
+                                            for (int x = 1; x < variables.myStops.length; x++) {
+                                              List<Map<String, dynamic>> lst = [];
+                                              lst.add({
+                                                'recordid': myStop[x]['recordid'],
+                                                'status': 'Picked Up',
+                                                'time': SubRoutine.getTime(DateTime.now(), false, true),
+                                                'deliverydate': SubRoutine.getDate(DateTime.now()),
+                                                'pallets': myStop[x]['pallets'],
+                                                'boxes': myStop[x]['boxes'],
+                                                'bags': myStop[x]['bags'],
+                                                'tubs': myStop[x]['tubs'],
+                                              });
+                                              await db.dbUpdate(lst, 'Multi', 'recordid');
+                                            }
+                                            await db.getMulii(variables.tableMulti);
+                                          }
+                                          // update remote db
+                                          List<Map<String, dynamic>> lst = [];
+                                          lst.add({
+                                            'recordid': variables.myStops[0]['recordid'],
+                                            'status': btnclosed == 2
+                                                ? 'Late'
+                                                : btnnone == 2
+                                                    ? 'Picked Up'
+                                                    : 'Picked Up',
+                                            'statustime': SubRoutine.getTime(DateTime.now(), false, true),
+                                            'deliverydate': SubRoutine.getDate(DateTime.now()),
+                                            'pallets': myStop[0]['pallets'].toString(),
+                                            'boxes': myStop[0]['boxes'].toString(),
+                                            'bags': myStop[0]['bags'].toString(),
+                                            'tubs': myStop[0]['tubs'].toString(),
+                                          });
+                                          await db.dbUpdate(lst, 'Stops', 'recordid');
+                                          if (variables.myStops.length > 1) {}
+                                          setState(() {
+                                            btnupdate = 1;
+
+                                            expand = false;
+                                          });
+                                        }
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                          backgroundColor: getBtnColor(btnupdate, true, false),
+                                          foregroundColor: getBtnColor(btnupdate, false, false),
+                                          textStyle: const TextStyle(fontSize: 25),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(30.0),
+                                            side: BorderSide(color: Color(btnupdate == 1 ? Clrs.green : Clrs.black), width: 2.0),
+                                          )),
+                                      child: const Text('Save'),
+                                    )),
+                              ])
+                            : const SizedBox.shrink(),
+                        //           SizedBox(height: 40),
+                        //         ]),
+                        //       ),
+                        //     )
+                        //   : const SizedBox.shrink(),
                       ]),
                     ),
                     widget.idx == variables.tableStops.length - 1
@@ -1167,10 +1249,10 @@ Color getBackColor(int idx, bool complete) {
     } else {
       switch (variables.tableStops[idx]['status']) {
         case 'Picked Up':
-          rtn = Color(Clrs.dkblue);
+          rtn = Color(Clrs.blue);
           break;
         default:
-          rtn = Color(Clrs.blue);
+          rtn = Color(Clrs.dkblue);
           break;
       }
     }

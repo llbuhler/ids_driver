@@ -27,6 +27,7 @@ import 'Subs/dbFirebasek.dart';
 int Test = 2;
 bool useTimer = false;
 String dduReadyTime = '2100';
+List<Map<String, dynamic>> myStop = [];
 
 loadTable() {
   variables.tableMySettings.add({

@@ -1,6 +1,7 @@
 // ignore_for_file: non_constant_identifier_names, file_names
 
 import 'package:flutter/material.dart';
+import 'package:ids_driver/main.dart';
 import 'package:ids_driver/variables.dart';
 import '../Subs/SizeConfig.dart';
 import '../Subs/localColors.dart';
@@ -65,7 +66,7 @@ class DeliveryArrayState extends State<DeliveryArray> {
         height: 175,
         width: SizeConfig.screenWidth - 40,
         decoration: BoxDecoration(
-            color: Color(Clrs.ltgray),
+            color: Color(Clrs.dkblue),
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(widget.idx == 0 ? 15 : 0),
               topRight: Radius.circular(widget.idx == 0 ? 15 : 0),
@@ -80,8 +81,8 @@ class DeliveryArrayState extends State<DeliveryArray> {
             child: Padding(
               padding: const EdgeInsets.only(left: 10, top: 5),
               child: Text(
-                widget.idx > 0 ? variables.tableMulti[widget.idx - 1]['company'] : variables.myStops[widget.idx]['company'],
-                style: const TextStyle(fontSize: 20),
+                myStop[widget.idx]['company'],
+                style: const TextStyle(fontSize: 20, color: Colors.white),
               ),
             ),
           ),
@@ -93,14 +94,14 @@ class DeliveryArrayState extends State<DeliveryArray> {
                 width: (SizeConfig.screenWidth - 40) / 4,
                 decoration: BoxDecoration(
                   //color: Color(Clrs.laser),
-                  border: Border.all(color: Color(Clrs.black), width: 1),
+                  border: Border.all(color: Color(Clrs.white), width: 1),
                 ),
                 child: Stack(children: [
                   SizedBox(
                       height: 175,
                       width: (SizeConfig.screenWidth - 40) / 4,
                       child: Column(mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.center, children: const [
-                        Text('Pallets', style: TextStyle(fontSize: 15), textAlign: TextAlign.center),
+                        Text('Pallets', style: TextStyle(fontSize: 15, color: Colors.white), textAlign: TextAlign.center),
                       ])),
                   SizedBox(
                       height: 175,
@@ -111,10 +112,10 @@ class DeliveryArrayState extends State<DeliveryArray> {
                             width: (SizeConfig.screenWidth - 40) / 4,
                             child: Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
                               Text(
-                                variables.myStops[widget.idx]['pallets'].toString(),
+                                myStop[widget.idx]['pallets'].toString(),
                                 style: TextStyle(
                                   fontSize: 20,
-                                  color: Color(Clrs.black),
+                                  color: Color(Clrs.white),
                                 ),
                               )
                             ])),
@@ -136,7 +137,7 @@ class DeliveryArrayState extends State<DeliveryArray> {
                             child: Icon(
                               Icons.expand_less,
                               size: 30,
-                              color: Color(Clrs.black),
+                              color: Color(Clrs.white),
                             ),
                             //color: Color(Clrs.red),
                           )),
@@ -154,7 +155,7 @@ class DeliveryArrayState extends State<DeliveryArray> {
                           child: Icon(
                             Icons.expand_more,
                             size: 30,
-                            color: Color(Clrs.black),
+                            color: Color(Clrs.white),
                           ),
                           //color: Color(Clrs.green),
                         ),
@@ -168,14 +169,14 @@ class DeliveryArrayState extends State<DeliveryArray> {
                 width: (SizeConfig.screenWidth - 40) / 4,
                 decoration: BoxDecoration(
                   //color: Color(Clrs.laser),
-                  border: Border.all(color: Color(Clrs.black), width: 1),
+                  border: Border.all(color: Color(Clrs.white), width: 1),
                 ),
                 child: Stack(children: [
                   SizedBox(
                       height: 175,
                       width: (SizeConfig.screenWidth - 40) / 4,
                       child: Column(mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.center, children: const [
-                        Text('Boxes', style: TextStyle(fontSize: 15), textAlign: TextAlign.center),
+                        Text('Boxes', style: TextStyle(fontSize: 15, color: Colors.white), textAlign: TextAlign.center),
                       ])),
                   SizedBox(
                       height: 175,
@@ -186,10 +187,10 @@ class DeliveryArrayState extends State<DeliveryArray> {
                             width: (SizeConfig.screenWidth - 40) / 4,
                             child: Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
                               Text(
-                                variables.myStops[widget.idx]['boxes'].toString(),
+                                myStop[widget.idx]['boxes'].toString(),
                                 style: TextStyle(
                                   fontSize: 20,
-                                  color: Color(Clrs.black),
+                                  color: Color(Clrs.white),
                                 ),
                               )
                             ])),
@@ -211,7 +212,7 @@ class DeliveryArrayState extends State<DeliveryArray> {
                             child: Icon(
                               Icons.expand_less,
                               size: 30,
-                              color: Color(Clrs.black),
+                              color: Color(Clrs.white),
                             ),
                             //color: Color(Clrs.red),
                           )),
@@ -229,7 +230,7 @@ class DeliveryArrayState extends State<DeliveryArray> {
                           child: Icon(
                             Icons.expand_more,
                             size: 30,
-                            color: Color(Clrs.black),
+                            color: Color(Clrs.white),
                           ),
                           //color: Color(Clrs.green),
                         ),
@@ -243,14 +244,14 @@ class DeliveryArrayState extends State<DeliveryArray> {
                 width: (SizeConfig.screenWidth - 40) / 4,
                 decoration: BoxDecoration(
                   //color: Color(Clrs.laser),
-                  border: Border.all(color: Color(Clrs.black), width: 1),
+                  border: Border.all(color: Color(Clrs.white), width: 1),
                 ),
                 child: Stack(children: [
                   SizedBox(
                       height: 175,
                       width: (SizeConfig.screenWidth - 40) / 4,
                       child: Column(mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.center, children: const [
-                        Text('Bags', style: TextStyle(fontSize: 15), textAlign: TextAlign.center),
+                        Text('Bags', style: TextStyle(fontSize: 15, color: Colors.white), textAlign: TextAlign.center),
                       ])),
                   SizedBox(
                       height: 175,
@@ -261,10 +262,10 @@ class DeliveryArrayState extends State<DeliveryArray> {
                             width: (SizeConfig.screenWidth - 40) / 4,
                             child: Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
                               Text(
-                                variables.myStops[widget.idx]['bags'].toString(),
+                                myStop[widget.idx]['bags'].toString(),
                                 style: TextStyle(
                                   fontSize: 20,
-                                  color: Color(Clrs.black),
+                                  color: Color(Clrs.white),
                                 ),
                               )
                             ])),
@@ -286,7 +287,7 @@ class DeliveryArrayState extends State<DeliveryArray> {
                             child: Icon(
                               Icons.expand_less,
                               size: 30,
-                              color: Color(Clrs.black),
+                              color: Color(Clrs.white),
                             ),
                             //color: Color(Clrs.red),
                           )),
@@ -304,7 +305,7 @@ class DeliveryArrayState extends State<DeliveryArray> {
                           child: Icon(
                             Icons.expand_more,
                             size: 30,
-                            color: Color(Clrs.black),
+                            color: Color(Clrs.white),
                           ),
                           //color: Color(Clrs.green),
                         ),
@@ -318,14 +319,14 @@ class DeliveryArrayState extends State<DeliveryArray> {
                 width: (SizeConfig.screenWidth - 40) / 4,
                 decoration: BoxDecoration(
                   //color: Color(Clrs.laser),
-                  border: Border.all(color: Color(Clrs.black), width: 1),
+                  border: Border.all(color: Color(Clrs.white), width: 1),
                 ),
                 child: Stack(children: [
                   SizedBox(
                       height: 175,
                       width: (SizeConfig.screenWidth - 40) / 4,
                       child: Column(mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.center, children: const [
-                        Text('Tubs', style: TextStyle(fontSize: 15), textAlign: TextAlign.center),
+                        Text('Tubs', style: TextStyle(fontSize: 15, color: Colors.white), textAlign: TextAlign.center),
                       ])),
                   SizedBox(
                       height: 175,
@@ -336,10 +337,10 @@ class DeliveryArrayState extends State<DeliveryArray> {
                             width: (SizeConfig.screenWidth - 40) / 4,
                             child: Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
                               Text(
-                                variables.myStops[widget.idx]['tubs'].toString(),
+                                myStop[widget.idx]['tubs'].toString(),
                                 style: TextStyle(
                                   fontSize: 20,
-                                  color: Color(Clrs.black),
+                                  color: Color(Clrs.white),
                                 ),
                               )
                             ])),
@@ -361,7 +362,7 @@ class DeliveryArrayState extends State<DeliveryArray> {
                             child: Icon(
                               Icons.expand_less,
                               size: 30,
-                              color: Color(Clrs.black),
+                              color: Color(Clrs.white),
                             ),
                             //color: Color(Clrs.red),
                           )),
@@ -379,7 +380,7 @@ class DeliveryArrayState extends State<DeliveryArray> {
                           child: Icon(
                             Icons.expand_more,
                             size: 30,
-                            color: Color(Clrs.black),
+                            color: Color(Clrs.white),
                           ),
                           //color: Color(Clrs.green),
                         ),
