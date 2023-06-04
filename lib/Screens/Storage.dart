@@ -44,7 +44,7 @@ class getUserIdState extends State<getUserId> {
   String GetUserID() {
     // initList();
 
-    return 'bb4c2670-fd7e-11ed-b7f7-eb4c5e28cea4';
+    return ''; //'bb4c2670-fd7e-11ed-b7f7-eb4c5e28cea4';
   }
 
   Future saveId() async {

@@ -24,7 +24,7 @@ import 'Subs/SizeConfig.dart';
 import 'Subs/localColors.dart';
 import 'Subs/dbFirebasek.dart';
 
-int Test = 2;
+int Test = 0;
 bool useTimer = false;
 String dduReadyTime = '2100';
 List<Map<String, dynamic>> myStop = [];
@@ -168,7 +168,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
 // TODO get saved userID
-  String userID = 'bb4c2670-fd7e-11ed-b7f7-eb4c5e28cea4';
+  String userID = '';
   //Seth 'bb4c2670-fd7e-11ed-b7f7-eb4c5e28cea4';
   //Larry  'cbbbbca0-fbee-11ed-9628-a5f5e38806ba'; //const Uuid().v1();
   bool preLogged = false;
