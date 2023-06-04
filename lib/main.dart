@@ -24,7 +24,7 @@ import 'Subs/SizeConfig.dart';
 import 'Subs/localColors.dart';
 import 'Subs/dbFirebasek.dart';
 
-int Test = 0;
+int Test = 1;
 bool useTimer = false;
 String dduReadyTime = '2100';
 List<Map<String, dynamic>> myStop = [];
@@ -172,11 +172,12 @@ class _MyHomePageState extends State<MyHomePage> {
   //Seth 'bb4c2670-fd7e-11ed-b7f7-eb4c5e28cea4';
   //Larry  'cbbbbca0-fbee-11ed-9628-a5f5e38806ba'; //const Uuid().v1();
   bool preLogged = false;
-
   preLogin() async {
     try {
       UserCredential userCredential =
-          await FirebaseAuth.instance.signInWithEmailAndPassword(email: 'idsprelogin@idealdeliverservice.com', password: 'ab784254zzz1');
+          await FirebaseAuth.instance.signInWithEmailAndPassword(email: 'idsprelogin@idsdeliverservice.com', password: 'ab784254zzz1');
+      storage stor = storage();
+      userID = stor.getId().toString();
       await db.preLogLookup(variables.tablecurrentEmployee, userID);
       if (variables.tablecurrentEmployee.isNotEmpty) {
         await FirebaseAuth.instance.signOut();
@@ -191,7 +192,9 @@ class _MyHomePageState extends State<MyHomePage> {
           // error
         }
       }
-    } catch (e) {}
+    } catch (e) {
+      print(e);
+    }
   }
 
   // getInfo1() async {
@@ -221,12 +224,10 @@ class _MyHomePageState extends State<MyHomePage> {
   //   print('imeiNo: ' + imeiNo);
   // }
 
-  getUserIdState getid = getUserIdState();
-
   @override
   void initState() {
     super.initState();
-    userID = getid.GetUserID();
+
     preLogin();
     loadTable();
     if (Test == 1) {
@@ -242,7 +243,7 @@ class _MyHomePageState extends State<MyHomePage> {
     getToken();
     messageListener(context);
     startTimer();
-    getid.setUserID('bb4c2670-fd7e-11ed-b7f7-eb4c5e28cea4');
+
     // getInfo1();
   }
 
@@ -751,6 +752,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                                       });
                                                       await db.dbUpdate(lst, 'Employees', 'Employee_ID');
                                                       // TODO save id value
+                                                      storage stor = storage();
+                                                      stor.saveId(UserSN);
                                                     }
                                                     setState(() {});
                                                   },
