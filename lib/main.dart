@@ -176,8 +176,8 @@ class _MyHomePageState extends State<MyHomePage> {
     try {
       UserCredential userCredential =
           await FirebaseAuth.instance.signInWithEmailAndPassword(email: 'idsprelogin@idsdeliverservice.com', password: 'ab784254zzz1');
-      storage stor = storage();
-      userID = stor.getId().toString();
+      LocalStorageHelper stor = LocalStorageHelper();
+      userID = LocalStorageHelper.getValue('userId').toString();
       await db.preLogLookup(variables.tablecurrentEmployee, userID);
       if (variables.tablecurrentEmployee.isNotEmpty) {
         await FirebaseAuth.instance.signOut();
@@ -650,65 +650,72 @@ class _MyHomePageState extends State<MyHomePage> {
                                         ),
                                         Padding(
                                             padding: const EdgeInsets.only(top: 30),
-                                            child: TextFormField(
-                                              obscureText: showPass,
-                                              controller: logPass,
-                                              decoration: InputDecoration(
-                                                suffix: IconButton(
+                                            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                                              SizedBox(
+                                                  height: 80,
+                                                  width: SizeConfig.screenWidth - 80,
+                                                  child: TextFormField(
+                                                    obscureText: showPass,
+                                                    controller: logPass,
+                                                    decoration: InputDecoration(
+                                                      iconColor: Color(Clrs.black),
+                                                      labelText: 'Passcode',
+                                                      enabledBorder: OutlineInputBorder(
+                                                        borderRadius: BorderRadius.circular(10.0),
+                                                        borderSide: BorderSide(
+                                                          width: 2.0,
+                                                          color: Color(passError
+                                                              ? Clrs.red
+                                                              : passError
+                                                                  ? Clrs.red
+                                                                  : logPass.text.length != 4
+                                                                      ? Clrs.dkblue
+                                                                      : Clrs.green),
+                                                        ),
+                                                      ),
+                                                      errorBorder: OutlineInputBorder(
+                                                        borderRadius: BorderRadius.circular(10.0),
+                                                        borderSide: BorderSide(
+                                                          width: 2.0,
+                                                          color: Color(passError
+                                                              ? Clrs.red
+                                                              : passError
+                                                                  ? Clrs.red
+                                                                  : logPass.text.length != 4
+                                                                      ? Clrs.dkblue
+                                                                      : Clrs.green),
+                                                        ),
+                                                      ),
+                                                      focusedBorder: OutlineInputBorder(
+                                                          borderRadius: BorderRadius.circular(10.0),
+                                                          borderSide: BorderSide(
+                                                            width: 2.0,
+                                                            color: Color(passError
+                                                                ? Clrs.red
+                                                                : passError
+                                                                    ? Clrs.red
+                                                                    : logPass.text.length != 4
+                                                                        ? Clrs.dkblue
+                                                                        : Clrs.green),
+                                                          )),
+                                                    ),
+                                                    onChanged: (value) {
+                                                      setState(() {
+                                                        passVerify();
+                                                      });
+                                                    },
+                                                  )),
+                                              Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+                                                IconButton(
                                                   onPressed: () {
                                                     setState(() {
                                                       showPass = !showPass;
                                                     });
                                                   },
-                                                  icon: const Icon(Icons.visibility, size: 30),
-                                                ),
-                                                iconColor: Color(Clrs.black),
-                                                labelText: 'Passcode',
-                                                enabledBorder: OutlineInputBorder(
-                                                  borderRadius: BorderRadius.circular(10.0),
-                                                  borderSide: BorderSide(
-                                                    width: 2.0,
-                                                    color: Color(passError
-                                                        ? Clrs.red
-                                                        : passError
-                                                            ? Clrs.red
-                                                            : logPass.text.length != 4
-                                                                ? Clrs.dkblue
-                                                                : Clrs.green),
-                                                  ),
-                                                ),
-                                                errorBorder: OutlineInputBorder(
-                                                  borderRadius: BorderRadius.circular(10.0),
-                                                  borderSide: BorderSide(
-                                                    width: 2.0,
-                                                    color: Color(passError
-                                                        ? Clrs.red
-                                                        : passError
-                                                            ? Clrs.red
-                                                            : logPass.text.length != 4
-                                                                ? Clrs.dkblue
-                                                                : Clrs.green),
-                                                  ),
-                                                ),
-                                                focusedBorder: OutlineInputBorder(
-                                                    borderRadius: BorderRadius.circular(10.0),
-                                                    borderSide: BorderSide(
-                                                      width: 2.0,
-                                                      color: Color(passError
-                                                          ? Clrs.red
-                                                          : passError
-                                                              ? Clrs.red
-                                                              : logPass.text.length != 4
-                                                                  ? Clrs.dkblue
-                                                                  : Clrs.green),
-                                                    )),
-                                              ),
-                                              onChanged: (value) {
-                                                setState(() {
-                                                  passVerify();
-                                                });
-                                              },
-                                            )),
+                                                  icon: const Icon(Icons.visibility, size: 40),
+                                                )
+                                              ]),
+                                            ])),
                                         Padding(
                                           padding: const EdgeInsets.only(top: 50),
                                           child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -744,17 +751,17 @@ class _MyHomePageState extends State<MyHomePage> {
                                                         variables.tablecurrentEmployee.add(variables.tableEmps[i]);
                                                       }
                                                     }
-                                                    if (variables.tablecurrentEmployee[0]['UserSN'] == 'None') {
-                                                      List<Map<String, dynamic>> lst = [];
-                                                      lst.add({
-                                                        'Employee_ID': variables.tablecurrentEmployee[0]['Employee_ID'],
-                                                        'UserSN': UserSN,
-                                                      });
-                                                      await db.dbUpdate(lst, 'Employees', 'Employee_ID');
-                                                      // TODO save id value
-                                                      storage stor = storage();
-                                                      stor.saveId(UserSN);
-                                                    }
+                                                    // if (variables.tablecurrentEmployee[0]['UserSN'] == 'None') {
+                                                    List<Map<String, dynamic>> lst = [];
+                                                    lst.add({
+                                                      'Employee_ID': variables.tablecurrentEmployee[0]['Employee_ID'],
+                                                      'UserSN': UserSN,
+                                                    });
+                                                    await db.dbUpdate(lst, 'Employees', 'Employee_ID');
+                                                    // TODO save id value
+                                                    //LocalStorageHelper stor = LocalStorageHelper();
+                                                    LocalStorageHelper.saveValue('userId', UserSN);
+                                                    // }
                                                     setState(() {});
                                                   },
                                                   style: ElevatedButton.styleFrom(
