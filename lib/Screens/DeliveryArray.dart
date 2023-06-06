@@ -112,7 +112,7 @@ class DeliveryArrayState extends State<DeliveryArray> {
                             width: (SizeConfig.screenWidth - 40) / 4,
                             child: Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
                               Text(
-                                myStop[widget.idx]['pallets'].toString(),
+                                variables.myStops[widget.idx]['pallets'].toString(),
                                 style: TextStyle(
                                   fontSize: 20,
                                   color: Color(Clrs.white),
@@ -187,7 +187,7 @@ class DeliveryArrayState extends State<DeliveryArray> {
                             width: (SizeConfig.screenWidth - 40) / 4,
                             child: Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
                               Text(
-                                myStop[widget.idx]['boxes'].toString(),
+                                variables.myStops[widget.idx]['boxes'].toString(),
                                 style: TextStyle(
                                   fontSize: 20,
                                   color: Color(Clrs.white),
@@ -262,7 +262,7 @@ class DeliveryArrayState extends State<DeliveryArray> {
                             width: (SizeConfig.screenWidth - 40) / 4,
                             child: Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
                               Text(
-                                myStop[widget.idx]['bags'].toString(),
+                                variables.myStops[widget.idx]['bags'].toString(),
                                 style: TextStyle(
                                   fontSize: 20,
                                   color: Color(Clrs.white),
@@ -337,7 +337,7 @@ class DeliveryArrayState extends State<DeliveryArray> {
                             width: (SizeConfig.screenWidth - 40) / 4,
                             child: Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
                               Text(
-                                myStop[widget.idx]['tubs'].toString(),
+                                variables.myStops[widget.idx]['tubs'].toString(),
                                 style: TextStyle(
                                   fontSize: 20,
                                   color: Color(Clrs.white),
