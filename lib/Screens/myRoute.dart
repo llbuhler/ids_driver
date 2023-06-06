@@ -685,10 +685,10 @@ class StopItemState extends State<StopItem> {
                                                     : 'Picked Up',
                                             'statustime': SubRoutine.getTime(DateTime.now(), false, true),
                                             'deliverydate': SubRoutine.getDate(DateTime.now()),
-                                            'pallets': myStop[0]['pallets'].toString(),
-                                            'boxes': myStop[0]['boxes'].toString(),
-                                            'bags': myStop[0]['bags'].toString(),
-                                            'tubs': myStop[0]['tubs'].toString(),
+                                            'pallets': variables.myStops[0]['pallets'].toString(),
+                                            'boxes': variables.myStops[0]['boxes'].toString(),
+                                            'bags': variables.myStops[0]['bags'].toString(),
+                                            'tubs': variables.myStops[0]['tubs'].toString(),
                                           });
                                           await db.dbUpdate(lst, 'Stops', 'recordid');
                                           if (variables.myStops.length > 1) {}
@@ -1035,6 +1035,10 @@ class StopItemState extends State<StopItem> {
                                             'statustime': variables.tableStops[widget.idx]['statustime'],
                                             'request': variables.tableStops[widget.idx]['request'],
                                             'note': variables.tableStops[widget.idx]['note'],
+                                            // 'pallets': variables.tableStops[widget.idx]['pallets'],
+                                            // 'boxes': variables.tableStops[widget.idx]['boxes'],
+                                            // 'bags': variables.tableStops[widget.idx]['bags'],
+                                            // 'tubs': variables.tableStops[widget.idx]['tubs'],
                                           });
                                           await db.dbUpdate(lst, 'Stops', 'recordid');
 
