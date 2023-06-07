@@ -264,7 +264,10 @@ class StopItemState extends State<StopItem> {
                     if (variables.tableStops[widget.idx]['status'] != 'Picked Up') {
                       // print(variables.tableStops[widget.idx]['status']);
                       await getMainCompany(widget.idx);
-                      await db.getMulii(variables.tableMulti);
+                      variables.tableMulti.clear();
+                      if (variables.tableStops[widget.idx]['multi'] == 'true') {
+                        await db.getMulii(variables.tableMulti);
+                      }
                       myStop.clear();
                       myStop.add(variables.tableStops[widget.idx]);
                       for (var e in variables.tableMulti) {
@@ -286,9 +289,9 @@ class StopItemState extends State<StopItem> {
                     Container(
                       height: expand
                           ? btnpickup == 2
-                              ? 490 + 200 * count.toDouble() //variables.myStops.length.toDouble()
-                              : 184
-                          : 104,
+                              ? 494 + 200 * count.toDouble() //variables.myStops.length.toDouble()
+                              : 188
+                          : 108,
                       width: SizeConfig.screenWidth - 20,
                       decoration: BoxDecoration(
                         color: getBackColor(widget.idx, true),
@@ -297,7 +300,7 @@ class StopItemState extends State<StopItem> {
 
                           bottomRight: Radius.circular(20.0),
                         ),
-                        border: Border.all(color: Color(variables.tableStops[widget.idx]['multi'] == 'true' ? Clrs.laser : Clrs.blue), width: 2.0),
+                        border: Border.all(color: Color(variables.tableStops[widget.idx]['multi'] == 'true' ? Clrs.laser : Clrs.blue), width: 4.0),
                       ),
                       child: Column(children: [
                         Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -665,16 +668,26 @@ class StopItemState extends State<StopItem> {
                                                 'status': 'Picked Up',
                                                 'time': SubRoutine.getTime(DateTime.now(), false, true),
                                                 'deliverydate': SubRoutine.getDate(DateTime.now()),
-                                                'pallets': myStop[x]['pallets'],
-                                                'boxes': myStop[x]['boxes'],
-                                                'bags': myStop[x]['bags'],
-                                                'tubs': myStop[x]['tubs'],
+                                                'pallets': variables.myStops[x]['pallets'],
+                                                'boxes': variables.myStops[x]['boxes'],
+                                                'bags': variables.myStops[x]['bags'],
+                                                'tubs': variables.myStops[x]['tubs'],
                                               });
+
                                               await db.dbUpdate(lst, 'Multi', 'recordid');
                                             }
                                             await db.getMulii(variables.tableMulti);
                                           }
                                           // update remote db
+                                          String rtn = myStop[0]['driver'];
+                                          switch (SubRoutine.getday()) {
+                                            case 'Sat':
+                                              rtn = myStop[0]['satdriver'];
+                                              break;
+                                            case 'Sun':
+                                              rtn = myStop[0]['sundriver'];
+                                              break;
+                                          }
                                           List<Map<String, dynamic>> lst = [];
                                           lst.add({
                                             'recordid': variables.myStops[0]['recordid'],
@@ -685,6 +698,7 @@ class StopItemState extends State<StopItem> {
                                                     : 'Picked Up',
                                             'statustime': SubRoutine.getTime(DateTime.now(), false, true),
                                             'deliverydate': SubRoutine.getDate(DateTime.now()),
+                                            'deliverydriver': rtn,
                                             'pallets': variables.myStops[0]['pallets'].toString(),
                                             'boxes': variables.myStops[0]['boxes'].toString(),
                                             'bags': variables.myStops[0]['bags'].toString(),
@@ -1073,6 +1087,19 @@ class StopItemState extends State<StopItem> {
       // : const SizedBox.shrink(),
     );
   }
+
+  // String getDriver(int idx) {
+  //   String rtn = variables.myStops[idx]['driver'];
+  //   switch (SubRoutine.getday()) {
+  //     case 'Sat':
+  //       rtn = variables.myStops[idx]['satdriver'];
+  //       break;
+  //     case 'Sun':
+  //       rtn = variables.myStops[idx]['sundriver'];
+  //       break;
+  //   }
+  //   return rtn;
+  // }
 
   String getTimes(int idx) {
     String rtn = '';
