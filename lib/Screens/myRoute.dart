@@ -289,7 +289,7 @@ class StopItemState extends State<StopItem> {
                     Container(
                       height: expand
                           ? btnpickup == 2
-                              ? 494 + 200 * count.toDouble() //variables.myStops.length.toDouble()
+                              ? 496 + 200 * count.toDouble() //variables.myStops.length.toDouble()
                               : 188
                           : 108,
                       width: SizeConfig.screenWidth - 20,
