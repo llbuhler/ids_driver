@@ -193,7 +193,7 @@ class _MyHomePageState extends State<MyHomePage> {
         }
       }
     } catch (e) {
-      print(e);
+      //  print(e);
     }
   }
 
@@ -295,16 +295,25 @@ class _MyHomePageState extends State<MyHomePage> {
     return rtn;
   }
 
+  void remoteUpdate() async {
+    await db.getstops(variables.tableStops, '', variables.tablecurrentEmployee[0]['Employee_ID'], false);
+  }
+
   void messageListener(BuildContext context) {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      if (kDebugMode) {}
-      if (message.notification != null) {
-        if (kDebugMode) {}
-        showDialog(
-            context: context,
-            builder: ((BuildContext context) {
-              return DynamicDialog(title: message.notification!.title, body: message.notification!.body);
-            }));
+      switch (message.notification!.title) {
+        case 'Update':
+          setState(() {
+            remoteUpdate();
+          });
+          break;
+        case 'DDU Ready':
+          showDialog(
+              context: context,
+              builder: ((BuildContext context) {
+                return DynamicDialog(title: message.notification!.title, body: message.notification!.body);
+              }));
+          break;
       }
     });
   }
@@ -334,16 +343,18 @@ class _MyHomePageState extends State<MyHomePage> {
                       )
                     : const SizedBox.shrink()),
             //Image.asset(fit: BoxFit.fitHeight, 'assets/icons/IDS Logo sq.png')),
-            Container(
-                height: 50,
-                width: SizeConfig.screenWidth - 100,
-                color: Color(Clrs.blue),
-                child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  Text(
-                    'IDS Drivers App',
-                    style: TextStyle(fontSize: 30, color: Color(Clrs.white)),
-                  ),
-                ])),
+            Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Container(
+                  height: 50,
+                  width: SizeConfig.screenWidth - 100,
+                  color: Color(Clrs.blue),
+                  child: FittedBox(
+                      fit: BoxFit.contain,
+                      child: Text(
+                        'IDS Drivers App',
+                        style: TextStyle(fontSize: 30, color: Color(Clrs.white)),
+                      ))),
+            ]),
             Container(
               height: 50,
               width: 50,

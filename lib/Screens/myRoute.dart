@@ -300,7 +300,7 @@ class StopItemState extends State<StopItem> {
 
                           bottomRight: Radius.circular(20.0),
                         ),
-                        border: Border.all(color: Color(variables.tableStops[widget.idx]['multi'] == 'true' ? Clrs.laser : Clrs.blue), width: 4.0),
+                        border: Border.all(color: Color(variables.tableStops[widget.idx]['multi'] == 'true' ? Clrs.laser : Clrs.blue), width: 2.0),
                       ),
                       child: Column(children: [
                         Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -324,7 +324,7 @@ class StopItemState extends State<StopItem> {
                               ),
                               SizedBox(
                                 height: 30,
-                                width: ((SizeConfig.screenWidth - 22) * 0.422) - 15,
+                                width: ((SizeConfig.screenWidth - 22) * 0.422) - 18,
                                 child: FittedBox(
                                   fit: BoxFit.scaleDown,
                                   child: Text(
@@ -338,7 +338,7 @@ class StopItemState extends State<StopItem> {
                               ),
                               SizedBox(
                                 height: 30,
-                                width: ((SizeConfig.screenWidth - 22) * 0.422) - 15,
+                                width: ((SizeConfig.screenWidth - 22) * 0.422) - 18,
                                 child: FittedBox(
                                   fit: BoxFit.scaleDown,
                                   child: Text(
@@ -358,7 +358,7 @@ class StopItemState extends State<StopItem> {
                               child: Column(mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.start, children: [
                                 SizedBox(
                                   height: 30,
-                                  width: ((SizeConfig.screenWidth - 22) * 0.422) - 15,
+                                  width: ((SizeConfig.screenWidth - 22) * 0.422) - 18,
                                   child: FittedBox(
                                     fit: BoxFit.scaleDown,
                                     child: Text(
@@ -372,7 +372,7 @@ class StopItemState extends State<StopItem> {
                                 ),
                                 SizedBox(
                                   height: 30,
-                                  width: ((SizeConfig.screenWidth - 22) * 0.422) - 15,
+                                  width: ((SizeConfig.screenWidth - 22) * 0.422) - 18,
                                   child: FittedBox(
                                     fit: BoxFit.scaleDown,
                                     child: Text(
@@ -386,7 +386,7 @@ class StopItemState extends State<StopItem> {
                                 ),
                                 SizedBox(
                                   height: 30, // 'My Route'
-                                  width: ((SizeConfig.screenWidth - 22) * 0.422) - 15,
+                                  width: ((SizeConfig.screenWidth - 22) * 0.422) - 18,
                                   child: FittedBox(
                                     fit: BoxFit.scaleDown,
                                     child: Text(
