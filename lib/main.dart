@@ -301,19 +301,16 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void messageListener(BuildContext context) {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      switch (message.notification!.title) {
-        case 'Update':
-          setState(() {
-            remoteUpdate();
-          });
-          break;
-        case 'DDU Ready':
-          showDialog(
-              context: context,
-              builder: ((BuildContext context) {
-                return DynamicDialog(title: message.notification!.title, body: message.notification!.body);
-              }));
-          break;
+      if (message.notification!.title == 'Update') {
+        setState(() {
+          remoteUpdate();
+        });
+      } else {
+        showDialog(
+            context: context,
+            builder: ((BuildContext context) {
+              return DynamicDialog(title: message.notification!.title, body: message.notification!.body);
+            }));
       }
     });
   }
