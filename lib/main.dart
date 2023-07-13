@@ -5,6 +5,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:ids_driver/Screens/updating.dart';
 import 'dart:async';
 // import 'package:unique_identifier/unique_identifier.dart';
 // import 'package:platform_device_id/platform_device_id.dart'
@@ -25,7 +26,7 @@ import 'Subs/localColors.dart';
 import 'Subs/dbFirebasek.dart';
 //import 'package:ids_driver/Screens/updating.dart';
 
-int Test = 0;
+int Test = 1;
 bool useTimer = false;
 String dduReadyTime = '2100';
 List<Map<String, dynamic>> myStop = [];
@@ -302,8 +303,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void messageListener(BuildContext context) {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      if (message.notification!.title == 'Update') {
-        Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => MyRoute()));
+      if (message.notification!.title.toString() == 'Update') {
+        Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => UpdateStops()));
       } else {
         showDialog(
             context: context,
