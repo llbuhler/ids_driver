@@ -23,6 +23,7 @@ import 'Screens/profile.dart';
 import 'Subs/SizeConfig.dart';
 import 'Subs/localColors.dart';
 import 'Subs/dbFirebasek.dart';
+//import 'package:ids_driver/Screens/updating.dart';
 
 int Test = 0;
 bool useTimer = false;
@@ -302,9 +303,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void messageListener(BuildContext context) {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       if (message.notification!.title == 'Update') {
-        setState(() {
-          remoteUpdate();
-        });
+        Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => MyRoute()));
       } else {
         showDialog(
             context: context,
