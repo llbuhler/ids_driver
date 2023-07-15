@@ -26,7 +26,7 @@ import 'Subs/localColors.dart';
 import 'Subs/dbFirebasek.dart';
 //import 'package:ids_driver/Screens/updating.dart';
 
-int Test = 1;
+int Test = 0;
 bool useTimer = false;
 String dduReadyTime = '2100';
 List<Map<String, dynamic>> myStop = [];
