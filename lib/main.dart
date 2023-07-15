@@ -327,35 +327,36 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(children: [
           Row(children: [
             Container(
-                height: 50,
-                width: 50,
-                color: Color(Clrs.blue),
-                child: myroute
-                    ? IconButton(
-                        onPressed: () async {
-                          await db.getstops(variables.tableStops, '', variables.tablecurrentEmployee[0]['Employee_ID'], false);
-                          setState(() {});
-                        },
-                        icon: Icon(Icons.update, color: Color(Clrs.white), size: 35),
-                      )
-                    : const SizedBox.shrink()),
+              height: 50,
+              width: 50,
+              color: Color(Clrs.ltblue),
+              child: myroute
+                  ? IconButton(
+                      onPressed: () async {
+                        await db.getstops(variables.tableStops, '', variables.tablecurrentEmployee[0]['Employee_ID'], false);
+                        setState(() {});
+                      },
+                      icon: Icon(Icons.update, color: Color(Clrs.dkblue), size: 35),
+                    )
+                  : Image.asset('assets/icons/IDS Driver Logo sq-8.png'),
+            ),
             //Image.asset(fit: BoxFit.fitHeight, 'assets/icons/IDS Logo sq.png')),
             Column(mainAxisAlignment: MainAxisAlignment.center, children: [
               Container(
                   height: 50,
                   width: SizeConfig.screenWidth - 100,
-                  color: Color(Clrs.blue),
+                  color: Color(Clrs.ltblue),
                   child: FittedBox(
                       fit: BoxFit.contain,
                       child: Text(
                         'IDS Drivers App',
-                        style: TextStyle(fontSize: 30, color: Color(Clrs.white)),
+                        style: TextStyle(fontSize: 30, color: Color(Clrs.dkblue)),
                       ))),
             ]),
             Container(
               height: 50,
               width: 50,
-              color: Color(Clrs.blue),
+              color: Color(Clrs.ltblue),
               child: myroute
                   ? IconButton(
                       onPressed: () {
@@ -363,7 +364,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           myroute = false;
                         }
                       },
-                      icon: Icon(Icons.menu, color: Color(Clrs.white), size: 35),
+                      icon: Icon(Icons.menu, color: Color(Clrs.dkblue), size: 35),
                     )
                   : const SizedBox.shrink(),
             ),

@@ -43,22 +43,25 @@ class ProfileState extends State<Profile> {
             Container(
               height: 50,
               width: 50,
-              color: Color(Clrs.blue),
+              color: Color(Clrs.ltblue),
+              child: Image.asset('assets/icons/IDS Driver Logo sq-8.png'),
             ),
             Container(
                 height: 50,
                 width: SizeConfig.screenWidth - 100,
-                color: Color(Clrs.blue),
+                color: Color(Clrs.ltblue),
                 child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  Text(
-                    'IDS Drivers App',
-                    style: TextStyle(fontSize: 30, color: Color(Clrs.white)),
-                  )
+                  FittedBox(
+                      fit: BoxFit.fitHeight,
+                      child: Text(
+                        'IDS Drivers App',
+                        style: TextStyle(fontSize: 30, color: Color(Clrs.dkblue)),
+                      ))
                 ])),
             Container(
                 height: 50,
                 width: 50,
-                color: Color(Clrs.blue),
+                color: Color(Clrs.ltblue),
                 child: IconButton(
                     onPressed: () {
                       Navigator.pop(context);
@@ -66,18 +69,20 @@ class ProfileState extends State<Profile> {
                     icon: Icon(
                       Icons.menu,
                       size: 30,
-                      color: Color(Clrs.white),
+                      color: Color(Clrs.dkblue),
                     ))),
           ]),
           Container(
             height: 30,
             width: SizeConfig.screenWidth,
             decoration: BoxDecoration(border: Border.all(color: Color(Clrs.blue), width: 2.0)),
-            child: Column(mainAxisAlignment: MainAxisAlignment.center, children: const [
-              Text(
-                'My Profile',
-                style: TextStyle(fontSize: 18),
-              ),
+            child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+              FittedBox(
+                  fit: BoxFit.fitHeight,
+                  child: Text(
+                    'My Profile',
+                    style: TextStyle(fontSize: 18),
+                  )),
             ]),
           ),
           SizedBox(
