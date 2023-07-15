@@ -304,7 +304,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void messageListener(BuildContext context) {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       if (message.notification!.title.toString() == 'Update') {
-        Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => UpdateStops()));
+        Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => const UpdateStops()));
       } else {
         showDialog(
             context: context,
@@ -581,7 +581,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             height: 30,
                             width: SizeConfig.screenWidth,
                             decoration: BoxDecoration(border: Border.all(color: Color(Clrs.blue), width: 2.0)),
-                            child: Column(mainAxisAlignment: MainAxisAlignment.center, children: const [
+                            child: const Column(mainAxisAlignment: MainAxisAlignment.center, children: [
                               Text(
                                 'Log In',
                                 style: TextStyle(fontSize: 18),
@@ -714,7 +714,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                       });
                                                     }),
                                               ),
-                                              SizedBox(width: 40),
+                                              const SizedBox(width: 40),
                                               Container(
                                                   height: 80,
                                                   width: 86,
