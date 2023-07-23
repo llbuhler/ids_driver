@@ -119,8 +119,8 @@ class MyRouteState extends State<MyRoute> {
           Container(
             height: 30,
             width: SizeConfig.screenWidth,
-            decoration: BoxDecoration(border: Border.all(color: Color(Clrs.blue), width: 2.0)),
-            child: Column(mainAxisAlignment: MainAxisAlignment.center, children: const [
+            decoration: BoxDecoration(border: Border.all(color: Color(Clrs.dkblue), width: 2.0)),
+            child: const Column(mainAxisAlignment: MainAxisAlignment.center, children: [
               Text(
                 'My Route',
                 style: TextStyle(fontSize: 18),
