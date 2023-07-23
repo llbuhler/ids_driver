@@ -72,75 +72,75 @@ class MyRouteState extends State<MyRoute> {
       child: SizedBox(
         height: SizeConfig.screenHeight,
         width: SizeConfig.screenWidth,
-        child: Column(children: [
-          Row(children: [
-            Container(
-              height: 50,
-              width: 50,
-              color: Color(Clrs.blue),
-              child: IconButton(
-                onPressed: () async {
-                  //  Navigator.push<void>(context, MaterialPageRoute<void>(builder: (BuildContext context) => ItemsWidget()));
-                  //ItemsWidget();
-                  // await db.getstops(variables.tableStops, '', variables.tablecurrentEmployee[0]['Employee_ID'], false);
-                  setState(() {});
-                },
-                icon: Icon(Icons.update, color: Color(Clrs.white), size: 30),
-              ),
-            ),
-            Container(
-                height: 50,
-                width: SizeConfig.screenWidth - 100,
-                color: Color(Clrs.blue),
-                child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  FittedBox(
-                      fit: BoxFit.scaleDown,
-                      child: Text(
-                        'IDS Drivers App',
-                        style: TextStyle(fontSize: 30, color: Color(Clrs.white)),
-                      )),
-                ])),
-            Container(
-                height: 50,
-                width: 50,
-                color: Color(Clrs.blue),
-                child: IconButton(
-                    onPressed: () {
-                      _start = 0;
-                      startTimer();
-                      Navigator.pop(context);
-                    },
-                    icon: Icon(
-                      Icons.menu,
-                      size: 30,
-                      color: Color(Clrs.white),
-                    ))),
-          ]),
-          Container(
-            height: 30,
-            width: SizeConfig.screenWidth,
-            decoration: BoxDecoration(border: Border.all(color: Color(Clrs.dkblue), width: 2.0)),
-            child: const Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Text(
-                'My Route',
-                style: TextStyle(fontSize: 18),
-              ),
-            ]),
-          ),
-          Container(
-              height: SizeConfig.screenHeight - 80,
-              width: SizeConfig.screenWidth,
-              color: Color(Clrs.ltblue),
-              child: Column(children: [
-                Expanded(
-                    child: ListView.builder(
-                  itemCount: variables.tableStops.length,
-                  itemBuilder: (context, index) {
-                    return StopItem(index);
-                  },
-                )),
-              ])),
-        ]),
+        // child: Column(children: [
+        // Row(children: [
+        //   Container(
+        //     height: 50,
+        //     width: 50,
+        //     color: Color(Clrs.blue),
+        //     child: IconButton(
+        //       onPressed: () async {
+        //         //  Navigator.push<void>(context, MaterialPageRoute<void>(builder: (BuildContext context) => ItemsWidget()));
+        //         //ItemsWidget();
+        //         // await db.getstops(variables.tableStops, '', variables.tablecurrentEmployee[0]['Employee_ID'], false);
+        //         setState(() {});
+        //       },
+        //       icon: Icon(Icons.update, color: Color(Clrs.white), size: 30),
+        //     ),
+        //   ),
+        //   Container(
+        //       height: 50,
+        //       width: SizeConfig.screenWidth - 100,
+        //       color: Color(Clrs.blue),
+        //       child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+        //         FittedBox(
+        //             fit: BoxFit.scaleDown,
+        //             child: Text(
+        //               'IDS Drivers App',
+        //               style: TextStyle(fontSize: 30, color: Color(Clrs.white)),
+        //             )),
+        //       ])),
+        //   Container(
+        //       height: 50,
+        //       width: 50,
+        //       color: Color(Clrs.blue),
+        //       child: IconButton(
+        //           onPressed: () {
+        //             _start = 0;
+        //             startTimer();
+        //             Navigator.pop(context);
+        //           },
+        //           icon: Icon(
+        //             Icons.menu,
+        //             size: 30,
+        //             color: Color(Clrs.white),
+        //           ))),
+        // ]),
+        // Container(
+        //   height: 30,
+        //   width: SizeConfig.screenWidth,
+        //   decoration: BoxDecoration(border: Border.all(color: Color(Clrs.green), width: 2.0)),
+        //   child: const Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+        //     Text(
+        //       'My Route',
+        //       style: TextStyle(fontSize: 18),
+        //     ),
+        //   ]),
+        // ),
+        // Container(
+        //     height: SizeConfig.screenHeight - 80,
+        //     width: SizeConfig.screenWidth,
+        //     color: Color(Clrs.ltblue),
+        //     child: Column(children: [
+        //       Expanded(
+        //           child: ListView.builder(
+        //         itemCount: variables.tableStops.length,
+        //         itemBuilder: (context, index) {
+        //           return StopItem(index);
+        //         },
+        //       )),
+        //     ])),
+        // ]),
       ),
     );
   }
@@ -289,7 +289,7 @@ class StopItemState extends State<StopItem> {
                     Container(
                       height: expand
                           ? btnpickup == 2
-                              ? 496 + 200 * count.toDouble() //variables.myStops.length.toDouble()
+                              ? 694 + 200 * count.toDouble() //variables.myStops.length.toDouble()
                               : 188
                           : 108,
                       width: SizeConfig.screenWidth - 20,
@@ -435,117 +435,60 @@ class StopItemState extends State<StopItem> {
                                 child: DeliveryArray(3, stopCount, isValid),
                               )
                             : const SizedBox.shrink(),
-                        // expand && count > 5
-                        //     ? Container(
-                        //         height: 200,
-                        //         width: SizeConfig.screenWidth - 20,
-                        //         color: Color(Clrs.dkblue),
-                        //         child: DeliveryArray(0, stopCount, isValid),
-                        //       )
-                        //     : const SizedBox.shrink(),
-                        // expand && count > 4
-                        //     ? Container(
-                        //         height: 200,
-                        //         width: SizeConfig.screenWidth - 20,
-                        //         color: Color(Clrs.dkblue),
-                        //         child: DeliveryArray(0, stopCount, isValid),
-                        //       )
-                        //     : const SizedBox.shrink(),
-                        // expand && count > 3
-                        //     ? Container(
-                        //         height: 200,
-                        //         width: SizeConfig.screenWidth - 20,
-                        //         color: Color(Clrs.dkblue),
-                        //         child: DeliveryArray(0, count, isValid),
-                        //       )
-                        //     : const SizedBox.shrink(),
-                        // expand && count > 2
-                        //     ? Container(
-                        //         height: 200,
-                        //         width: SizeConfig.screenWidth - 20,
-                        //         color: Color(Clrs.dkblue),
-                        //         child: DeliveryArray(3, count, isValid),
-                        //       )
-                        //     : const SizedBox.shrink(),
-                        // expand && count > 1
-                        //     ? Container(
-                        //         height: 200,
-                        //         width: SizeConfig.screenWidth - 20,
-                        //         color: Color(Clrs.dkblue),
-                        //         child: DeliveryArray(0, count, isValid),
-                        //       )
-                        //     : const SizedBox.shrink(),
-                        // expand && count > 0
-                        //     ? Container(
-                        //         height: 200,
-                        //         width: SizeConfig.screenWidth - 20,
-                        //         color: Color(Clrs.dkblue),
-                        //         child: DeliveryArray(0, count, isValid),
-                        //       )
-                        //     : const SizedBox.shrink(),
-                        // expand
-                        //     ? Container(
-                        //         height: 200,
-                        //         width: SizeConfig.screenWidth - 20,
-                        //         color: Color(Clrs.dkblue),
-                        //         child: DeliveryArray(0, count, isValid),
-                        //       )
-                        //     : const SizedBox.shrink(),
+                        expand
+                            ? Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                                child: SizedBox(
+                                  height: 100,
+                                  width: SizeConfig.screenWidth - 60,
+                                  child: TextFormField(
+                                    controller: trequest,
+                                    style: const TextStyle(color: Colors.white),
+                                    maxLines: 5,
+                                    decoration: const InputDecoration(
+                                        // filled: true,
+                                        // fillColor: Colors.white,
 
-                        // expand
-                        //     ? Padding(
-                        //         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                        //         child: SizedBox(
-                        //           height: 100,
-                        //           width: SizeConfig.screenWidth - 60,
-                        //           child: TextFormField(
-                        //             controller: trequest,
-                        //             style: const TextStyle(color: Colors.white),
-                        //             maxLines: 5,
-                        //             decoration: const InputDecoration(
-                        //                 // filled: true,
-                        //                 // fillColor: Colors.white,
-
-                        //                 labelText: 'Request',
-                        //                 labelStyle: TextStyle(color: Colors.white),
-                        //                 enabledBorder: OutlineInputBorder(
-                        //                   borderRadius: BorderRadius.all(Radius.circular(30.0)),
-                        //                   borderSide: BorderSide(width: 2.0, color: Colors.white),
-                        //                 ),
-                        //                 focusedBorder: OutlineInputBorder(
-                        //                   borderRadius: BorderRadius.all(Radius.circular(30.0)),
-                        //                   borderSide: BorderSide(width: 2.0, color: Colors.white),
-                        //                 )),
-                        //             onTap: () {},
-                        //           ),
-                        //         ),
-                        //       )
-                        //     : const SizedBox.shrink(),
-                        // expand
-                        //     ? Padding(
-                        //         padding: const EdgeInsets.symmetric(horizontal: 10),
-                        //         child: SizedBox(
-                        //           height: 100,
-                        //           width: SizeConfig.screenWidth - 60,
-                        //           child: TextField(
-                        //             controller: tnote,
-                        //             style: const TextStyle(color: Colors.white),
-                        //             maxLines: 5,
-                        //             decoration: const InputDecoration(
-                        //                 labelText: 'Note',
-                        //                 labelStyle: TextStyle(color: Colors.white),
-                        //                 enabledBorder: OutlineInputBorder(
-                        //                   borderRadius: BorderRadius.all(Radius.circular(30.0)),
-                        //                   borderSide: BorderSide(width: 2.0, color: Colors.white),
-                        //                 ),
-                        //                 focusedBorder: OutlineInputBorder(
-                        //                   borderRadius: BorderRadius.all(Radius.circular(30.0)),
-                        //                   borderSide: BorderSide(width: 2.0, color: Colors.black),
-                        //                 )),
-                        //             onTap: () {},
-                        //           ),
-                        //         ))
-                        //     : const SizedBox.shrink(),
+                                        labelText: 'Request',
+                                        labelStyle: TextStyle(color: Colors.white),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                                          borderSide: BorderSide(width: 2.0, color: Colors.white),
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                                          borderSide: BorderSide(width: 2.0, color: Colors.white),
+                                        )),
+                                    onTap: () {},
+                                  ),
+                                ),
+                              )
+                            : const SizedBox.shrink(),
+                        expand
+                            ? Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 10),
+                                child: SizedBox(
+                                  height: 100,
+                                  width: SizeConfig.screenWidth - 60,
+                                  child: TextField(
+                                    controller: tnote,
+                                    style: const TextStyle(color: Colors.white),
+                                    maxLines: 5,
+                                    decoration: const InputDecoration(
+                                        labelText: 'Note',
+                                        labelStyle: TextStyle(color: Colors.white),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                                          borderSide: BorderSide(width: 2.0, color: Colors.white),
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                                          borderSide: BorderSide(width: 2.0, color: Colors.black),
+                                        )),
+                                    onTap: () {},
+                                  ),
+                                ))
+                            : const SizedBox.shrink(),
 
                         expand ? const SizedBox(height: 20) : const SizedBox.shrink(),
                         expand
@@ -699,6 +642,8 @@ class StopItemState extends State<StopItem> {
                                             'statustime': SubRoutine.getTime(DateTime.now(), false, true),
                                             'deliverydate': SubRoutine.getDate(DateTime.now()),
                                             'deliverydriver': rtn,
+                                            'note': tnote.text,
+                                            'request': trequest.text,
                                             'pallets': variables.myStops[0]['pallets'].toString(),
                                             'boxes': variables.myStops[0]['boxes'].toString(),
                                             'bags': variables.myStops[0]['bags'].toString(),

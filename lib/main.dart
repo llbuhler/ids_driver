@@ -26,7 +26,7 @@ import 'Subs/localColors.dart';
 import 'Subs/dbFirebasek.dart';
 //import 'package:ids_driver/Screens/updating.dart';
 
-int Test = 0;
+int Test = 2;
 bool useTimer = false;
 String dduReadyTime = '2100';
 List<Map<String, dynamic>> myStop = [];
@@ -104,6 +104,7 @@ class _MyHomePageState extends State<MyHomePage> {
   int ticks = 0;
   bool authorized = true;
   bool myroute = false;
+  bool update = false;
 
   String mtoken = '';
   String title = '';
@@ -331,13 +332,21 @@ class _MyHomePageState extends State<MyHomePage> {
               width: 50,
               color: Color(Clrs.ltblue),
               child: myroute
-                  ? IconButton(
-                      onPressed: () async {
-                        await db.getstops(variables.tableStops, '', variables.tablecurrentEmployee[0]['Employee_ID'], false);
-                        setState(() {});
-                      },
-                      icon: Icon(Icons.update, color: Color(Clrs.dkblue), size: 35),
-                    )
+                  ? update
+                      ? const SizedBox(height: 40, width: 40, child: CircularProgressIndicator())
+                      : IconButton(
+                          onPressed: () async {
+                            setState(() {
+                              update = true;
+                            });
+                            //await Future.delayed(const Duration(seconds: 5));
+                            await db.getstops(variables.tableStops, '', variables.tablecurrentEmployee[0]['Employee_ID'], false);
+                            setState(() {
+                              update = false;
+                            });
+                          },
+                          icon: Icon(Icons.update, color: Color(Clrs.dkblue), size: 35),
+                        )
                   : Image.asset('assets/icons/IDS Driver Logo sq-8.png'),
             ),
             //Image.asset(fit: BoxFit.fitHeight, 'assets/icons/IDS Logo sq.png')),
@@ -369,6 +378,26 @@ class _MyHomePageState extends State<MyHomePage> {
                   : const SizedBox.shrink(),
             ),
           ]),
+          Container(
+            height: 30,
+            width: SizeConfig.screenWidth,
+            decoration: BoxDecoration(
+              border: Border(
+                top: BorderSide(color: Color(Clrs.dkblue), width: 2.0),
+                bottom: BorderSide(color: Color(Clrs.dkblue), width: 2),
+              ),
+            ),
+            child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Text(
+                !variables.isLoggedin
+                    ? 'Log In'
+                    : myroute
+                        ? 'My Route'
+                        : 'Menu',
+                style: const TextStyle(fontSize: 18),
+              ),
+            ]),
+          ),
           !myroute
               ? variables.isLoggedin
                   ? Expanded(
@@ -489,30 +518,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           ),
                         ),
                       ),
-                      // variables.tableMySettings[0]['loadboard']
-                      //     ? Padding(
-                      //         padding: const EdgeInsets.only(top: 30, left: 15, right: 15),
-                      //         child: SizedBox(
-                      //           height: 50,
-                      //           width: SizeConfig.screenWidth - 30,
-                      //           child: ElevatedButton(
-                      //             onPressed: () {},
-                      //             style: ElevatedButton.styleFrom(
-                      //               backgroundColor: Color(Clrs.blue),
-                      //               foregroundColor: Color(Clrs.taco),
-                      //               shape: RoundedRectangleBorder(
-                      //                 borderRadius: BorderRadius.circular(20.0),
-                      //                 side: BorderSide(color: Color(Clrs.dkblue), width: 2.0),
-                      //               ),
-                      //             ),
-                      //             child: const Text(
-                      //               'Load Board',
-                      //               style: TextStyle(fontSize: 30),
-                      //             ),
-                      //           ),
-                      //         ),
-                      //       )
-                      //     : const SizedBox.shrink(),
+
                       Padding(
                         padding: const EdgeInsets.only(top: 70, left: 15, right: 15),
                         child: SizedBox(
@@ -539,59 +545,19 @@ class _MyHomePageState extends State<MyHomePage> {
                           ),
                         ),
                       ),
-                      // variables.tablecurrentEmployee[0]['Clearance'] == 'Admin'
-                      //     ? Padding(
-                      //         padding: const EdgeInsets.only(top: 30, left: 15, right: 15),
-                      //         child: SizedBox(
-                      //           height: 50,
-                      //           width: SizeConfig.screenWidth - 30,
-                      //           child: ElevatedButton(
-                      //             onPressed: () {
-                      //               Navigator.push(
-                      //                   context,
-                      //                   MaterialPageRoute(
-                      //                     builder: (context) => const Settings(),
-                      //                   ));
-                      //             },
-                      //             style: ElevatedButton.styleFrom(
-                      //               backgroundColor: Color(Clrs.blue),
-                      //               foregroundColor: Color(Clrs.taco),
-                      //               shape: RoundedRectangleBorder(
-                      //                 borderRadius: BorderRadius.circular(20.0),
-                      //                 side: BorderSide(color: Color(Clrs.dkblue), width: 2.0),
-                      //               ),
-                      //             ),
-                      //             child: const Text(
-                      //               'Settings',
-                      //               style: TextStyle(fontSize: 30),
-                      //             ),
-                      //           ),
-                      //         ),
-                      //       )
-                      //     : const SizedBox.shrink(),
+
                       SizedBox(height: 400, width: SizeConfig.screenWidth),
                     ]))
                   : SizedBox(
-                      height: SizeConfig.screenHeight - 50,
+                      height: SizeConfig.screenHeight - 80,
                       width: SizeConfig.screenWidth,
                       child: Column(children: [
                         Expanded(
                             child: ListView(children: [
-                          Container(
-                            height: 30,
-                            width: SizeConfig.screenWidth,
-                            decoration: BoxDecoration(border: Border.all(color: Color(Clrs.blue), width: 2.0)),
-                            child: const Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-                              Text(
-                                'Log In',
-                                style: TextStyle(fontSize: 18),
-                              ),
-                            ]),
-                          ),
                           Padding(
-                              padding: const EdgeInsets.only(top: 50),
+                              padding: const EdgeInsets.only(top: 20),
                               child: Container(
-                                height: 500,
+                                height: 450,
                                 width: SizeConfig.screenWidth - 30,
                                 decoration: BoxDecoration(
                                   color: Color(Clrs.ltblue),
@@ -621,7 +587,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                         ? Clrs.red
                                                         : logEmail.text.isEmpty
                                                             ? Clrs.dkblue
-                                                            : Clrs.green),
+                                                            : Clrs.dkblue),
                                               ),
                                             ),
                                             errorBorder: OutlineInputBorder(
@@ -634,7 +600,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                         ? Clrs.red
                                                         : logPass.text.length != 4
                                                             ? Clrs.dkblue
-                                                            : Clrs.green),
+                                                            : Clrs.dkblue),
                                               ),
                                             ),
                                             focusedBorder: OutlineInputBorder(
@@ -647,7 +613,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                         ? Clrs.red
                                                         : logEmail.text.isEmpty
                                                             ? Clrs.dkblue
-                                                            : Clrs.green),
+                                                            : Clrs.dkblue),
                                               ),
                                             ),
                                           ),
@@ -679,7 +645,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                   ? Clrs.red
                                                                   : logPass.text.length != 4
                                                                       ? Clrs.dkblue
-                                                                      : Clrs.green),
+                                                                      : Clrs.dkblue),
                                                         ),
                                                       ),
                                                       errorBorder: OutlineInputBorder(
@@ -692,7 +658,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                   ? Clrs.red
                                                                   : logPass.text.length != 4
                                                                       ? Clrs.dkblue
-                                                                      : Clrs.green),
+                                                                      : Clrs.dkblue),
                                                         ),
                                                       ),
                                                       focusedBorder: OutlineInputBorder(
@@ -705,7 +671,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                     ? Clrs.red
                                                                     : logPass.text.length != 4
                                                                         ? Clrs.dkblue
-                                                                        : Clrs.green),
+                                                                        : Clrs.dkblue),
                                                           )),
                                                     ),
                                                     onChanged: (value) {
@@ -733,7 +699,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                       ])),
                                             ])),
                                         Padding(
-                                          padding: const EdgeInsets.only(top: 30),
+                                          padding: const EdgeInsets.only(top: 00),
                                           child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                                             SizedBox(
                                                 height: 60,

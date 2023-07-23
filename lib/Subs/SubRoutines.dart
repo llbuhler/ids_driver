@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 
 class SubRoutine {
   static bool test = false;
+  static String testDay = 'Mon';
 
   static date2string(DateTime dt) {
     String rtn = dt.year.toString();
@@ -49,7 +50,7 @@ class SubRoutine {
         rtn = 'Sun';
         break;
     }
-    return test ? 'Fri' : rtn;
+    return test ? testDay : rtn;
   }
 
   static String convertSeconds({required int q, required bool seconds}) {
